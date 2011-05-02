@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="mediaEdit" class="nz.ac.otago.edmedia.media.controller.MediaFormController">
+        <property name="formView" value="/admin/mediaEdit"/>
+        <property name="successView" value="redirect:/admin/mediaList.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="commandName" value="media"/>
+        <property name="validator" ref="mediaValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="mediaList" class="nz.ac.otago.edmedia.media.controller.MediaListController">
+        <property name="orderBy" value="title"/>
+        <property name="orderByDesc" value="false"/>
+        <property name="viewName" value="/admin/mediaList"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="mediaDelete" class="nz.ac.otago.edmedia.spring.controller.BaseDeleteController">
+        <property name="viewName" value="redirect:/admin/mediaList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="mediaView" class="nz.ac.otago.edmedia.spring.controller.BaseViewController">
+        <property name="viewName" value="/admin/mediaView"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="mediaValidator" class="nz.ac.otago.edmedia.media.validator.MediaValidator"/>
+
+</beans>

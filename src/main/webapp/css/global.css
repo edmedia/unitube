@@ -1,0 +1,996 @@
+@charset "utf-8";
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+     border: 0pt none;
+     font-family: inherit;
+     font-size: 100%;
+     font-style: inherit;
+     font-weight: inherit;
+     margin: 0pt;
+     outline: 0pt none;
+     padding: 0pt;
+     vertical-align: baseline;
+}
+
+:focus {
+     outline: 0pt none;
+}
+
+body {
+     background: none repeat scroll 0% 0% white;
+     color: #000000;
+     line-height: 1.2em;
+}
+
+ul {
+     list-style: none outside none;
+}
+
+table {
+     border-collapse: separate;
+     border-spacing: 0pt;
+}
+
+caption, th, td {
+     font-weight: normal;
+     text-align: left;
+}
+
+tr.greyRow {
+     background-color: #E8E8E8;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+     content: "";
+}
+
+blockquote, q {
+     quotes: "" "";
+}
+
+.alignC {
+     text-align: center;
+}
+
+body {
+     background-color: #9FC4D9;
+     font-family: Verdana,Arial,Helvetica,sans-serif;
+     font-size: small;
+     text-align: center;
+}
+
+#container {
+     background-color: #FFFFFF;
+     background-image: url("../images/sideLine.png");
+     background-repeat: repeat-y;
+     border: 1px solid #999999;
+     margin: 20px auto;
+     position: relative;
+     text-align: left;
+     width: 955px;
+}
+
+* html #container {
+     height: 1%;
+}
+
+.clear {
+     clear: both;
+}
+
+#header {
+     background-image: url("../images/UniTube_01.png");
+     height: 153px;
+     width: 955px;
+}
+
+.uniLogo {
+     background-image: url("../images/university_web_logo.gif");
+     height: 128px;
+     left: 16px;
+     position: absolute;
+     top: 14px;
+     width: 87px;
+}
+
+.tubeLogo {
+     background-image: url("../images/logo_03.png");
+     height: 44px;
+     left: 113px;
+     position: absolute;
+     top: 27px;
+     width: 154px;
+}
+
+.home {
+     height: 36px;
+     left: 271px;
+     position: absolute;
+     top: 59px;
+     width: 64px;
+}
+
+.media {
+     height: 37px;
+     left: 459px;
+     position: absolute;
+     top: 90px;
+     width: 54px;
+}
+
+.unitubasLink {
+     height: 36px;
+     left: 371px;
+     position: absolute;
+     top: 123px;
+     width: 83px;
+}
+
+.uploadLink {
+     height: 36px;
+     left: 530px;
+     position: absolute;
+     top: 91px;
+     width: 59px;
+}
+
+.albumsLink {
+     height: 35px;
+     left: 601px;
+     position: absolute;
+     top: 124px;
+     width: 62px;
+}
+
+.topNavLinks {
+     font-size: 10px;
+     height: 23px;
+     left: 683px;
+     position: absolute;
+     text-align: right;
+     top: 124px;
+     width: 241px;
+     word-spacing: 10px;
+}
+
+.topNavLinks a {
+     font-size: 10px;
+}
+
+.headerText {
+     display: inline;
+     float: right;
+     margin-right: 280px;
+     margin-top: 20px;
+}
+
+.loging {
+     left: 784px;
+     position: absolute;
+     top: 63px;
+     width: 83px;
+}
+
+.registration {
+     font-size: medium;
+     height: 42px;
+     left: 768px;
+     position: absolute;
+     text-align: center;
+     top: 20px;
+     width: 127px;
+}
+
+.mytube {
+     height: 60px;
+     left: 700px;
+     line-height: 20px;
+     position: relative;
+     text-align: right;
+     top: 50px;
+     width: 230px;
+}
+
+.mytube a {
+     font-size: 10px;
+     margin-left: 10px;
+}
+
+.topLine {
+     background-image: url("../images/UniTube_10.png");
+     background-position: center bottom;
+     background-repeat: repeat-x;
+     height: 1%;
+     line-height: 20px;
+     overflow: hidden;
+     padding-left: 50px;
+     width: 905px;
+}
+
+html > body .topLine {
+     height: 77px;
+}
+
+.sideBar {
+     float: left;
+     margin-left: 30px;
+     margin-top: 30px;
+     width: 50px;
+}
+
+.mainStage {
+     float: left;
+     margin-bottom: 30px;
+     margin-left: 35px;
+     width: 900px;
+}
+
+.mediaArea {
+     float: left;
+     margin-left: 20px;
+     margin-top: 30px;
+     width: 620px;
+}
+
+.mediaDisplay {
+     float: left;
+     margin-top: 40px;
+     width: 630px;
+}
+
+.mediaDisplay2 {
+     float: left;
+     margin-top: 40px;
+}
+
+.mediaArea2 {
+     clear: both;
+     left: 22px;
+     position: relative;
+     width: 680px;
+}
+
+.mediaFiles {
+     display: inline;
+     float: left;
+     height: 205px;
+     margin: 0px 18px 0px 0px;
+     width: 150px;
+}
+
+.mediaHeader, .mediaTop, .mediaContent, .mediaFooter {
+     overflow: hidden;
+     width: 150px;
+}
+
+.mediaHeader {
+     background-image: url("../images/UniTube_13.png");
+     background-repeat: no-repeat;
+     height: 17px;
+}
+
+.mediaHeader2 {
+     height: 17px;
+}
+
+.mediaTop {
+     background-image: url("../images/UniTube_16.png");
+     background-repeat: no-repeat;
+     height: 12px;
+}
+
+.mediaContent {
+     background-image: url("../images/UniTube_28.png");
+     height: 164px;
+     width: 150px;
+}
+
+.mediaPicture {
+     display: inline;
+     float: left;
+     height: 83px;
+     margin: 0px 14px;
+     text-align: center;
+     width: 118px;
+}
+
+.mediaPicture img {
+     border: 1px solid #006699;
+     padding: 1px;
+}
+
+.mediaDetails {
+     display: inline;
+     float: left;
+     font-size: 9px;
+     height: 50px;
+     line-height: 12px;
+     margin: 7px 14px 0px;
+     overflow: hidden;
+     padding: 5px;
+     width: 100px;
+}
+
+.mediaFooter {
+     background-image: url("../images/media_footer.png");
+     background-repeat: no-repeat;
+     height: 12px;
+}
+
+.infoBox {
+     float: right;
+     margin-top: 30px;
+     overflow: hidden;
+     width: 236px;
+}
+
+.infoHeader, .infoFooter {
+     overflow: hidden;
+}
+
+.infoHeader {
+     background-image: url("../images/UniTube_04.png");
+     height: 15px;
+     width: 236px;
+}
+
+.infoHeaderTxt {
+     clear: both;
+     font-size: 18px;
+     height: 40px;
+     width: 200px;
+}
+
+.search {
+     float: right;
+     height: 25px;
+     margin-top: 40px;
+     width: 500px;
+}
+
+.searchText {
+     width: 120px;
+}
+
+.searchOptions {
+     float: left;
+     font-size: 10px;
+     height: 20px;
+     margin-bottom: 15px;
+     margin-right: 10px;
+     text-align: right;
+     width: 250px;
+}
+
+.upload {
+     float: left;
+     font-size: 15px;
+     height: 23px;
+     width: 40px;
+}
+
+.private {
+     float: left;
+     margin-left: 25px;
+     margin-top: 5px;
+}
+
+.jumpMenu2 {
+     margin: 10px auto;
+}
+
+.infoContent {
+     background-image: url("../images/UniTube_07.png");
+     padding: 0px 20px 20px;
+     text-align: left;
+     width: 196px;
+}
+
+.info {
+     clear: both;
+}
+
+.infoFooter {
+     background-image: url("../images/info_footer.png");
+     clear: both;
+     height: 15px;
+     width: 236px;
+}
+
+div.clearMe {
+     clear: both;
+}
+
+.footer {
+     clear: both;
+     color: #777777;
+     font-size: 10px;
+     line-height: 10px;
+     margin-bottom: 40px;
+     padding-top: 40px;
+     text-align: center;
+     width: 955px;
+}
+
+.hedcLogo {
+     background-image: url("../images/hedcLogo.png");
+     float: left;
+     height: 48px;
+     margin: -100px auto auto 300px;
+     width: 70px;
+}
+
+.lastPage {
+     float: left;
+     height: 20px;
+     line-height: 20px;
+     padding-left: 180px;
+     width: 30px;
+}
+
+.nextPage {
+     float: left;
+     height: 20px;
+}
+
+.pageNumber {
+     clear: both;
+     float: left;
+     font-size: 14px;
+     font-weight: bold;
+     line-height: 20px;
+     margin-top: 30px;
+     padding-left: 7px;
+     padding-right: 7px;
+     width: 650px;
+     word-spacing: 6px;
+}
+
+.pageNumber p {
+     text-align: center;
+}
+
+.uniTubas {
+     float: left;
+     margin-top: 40px;
+}
+
+a {
+     color: #006699;
+     font-size: small;
+     text-decoration: none;
+}
+
+a:hover {
+     color: #FF9900;
+}
+
+.watching {
+     line-height: 35px;
+     overflow: hidden;
+     padding-top: 25px;
+}
+
+.stage {
+     padding-left: 30px;
+     position: relative;
+     top: 30px;
+     width: 850px;
+}
+
+.mediaBorder {
+     border: 5px solid #006699;
+     float: left;
+     margin-bottom: 40px;
+     margin-top: 20px;
+     padding: 10px;
+}
+
+div.sociable {
+     margin: 15px 0pt;
+}
+
+span.sociable_tagline {
+     position: relative;
+}
+
+span.sociable_tagline span {
+     display: none;
+     width: 500px;
+}
+
+span.sociable_tagline:hover span {
+     background: none repeat scroll 0% 0% #FFFFEE;
+     border: 1px solid #CCCCCC;
+     color: black;
+     display: block;
+     line-height: 1.25em;
+     position: absolute;
+     top: -3em;
+}
+
+.sociable span {
+     display: block;
+}
+
+.sociable ul {
+     display: inline;
+     margin: 0pt ! important;
+     padding: 0pt ! important;
+}
+
+.sociable li {
+     background: none repeat scroll 0% 0% transparent;
+     display: inline;
+     list-style-type: none;
+     margin: 0pt;
+     padding: 0px;
+}
+
+.sociable ul li:before {
+     content: "";
+}
+
+.sociable img {
+     border: 0pt none;
+     float: none;
+     height: 16px;
+     margin: 10px;
+     padding: 5px 0pt 0pt;
+     width: 16px;
+}
+
+.sociable-hovers:hover {
+     opacity: 0.4;
+}
+
+.sociable-hovers {
+     opacity: 1;
+}
+
+table {
+     border-spacing: 2px;
+     margin-bottom: 20px;
+     margin-left: 20px;
+     margin-top: 20px;
+}
+
+.rss {
+     height: 33px;
+     width: 28px;
+}
+
+.mediaForAlbums {
+     line-height: 35px;
+     margin-left: 15px;
+     overflow: hidden;
+     width: 380px;
+}
+
+.jumpMenu3 {
+     overflow: hidden;
+     width: 150px;
+}
+
+.actionBtn {
+     float: right;
+     margin-right: 120px;
+}
+
+.mediaImg {
+     width: 60px;
+}
+
+.checkAlbum {
+     float: left;
+     line-height: 60px;
+}
+
+.mymediaT {
+     text-align: center;
+}
+
+th {
+     background-color: #F6AF3F;
+     color: #FFFFFF;
+     line-height: 25px;
+     padding: 3px;
+     text-align: center;
+}
+
+.blackBoard {
+     clear: both;
+     float: left;
+     height: 28px;
+     margin: 10px 30px 60px 0pt;
+     width: 152px;
+}
+
+.tubeLog {
+     background-image: url("../images/logo_03.png");
+     clear: both;
+     float: left;
+     height: 44px;
+     margin-left: -10px;
+     width: 152px;
+}
+
+.inputT, .select {
+     margin-bottom: 5px;
+     width: 200px;
+}
+
+.editMediaT th {
+     background-color: #99CCFF;
+     color: #000000;
+}
+
+.thumbnail {
+     width: 300px;
+}
+
+.albumMedia {
+     min-height: 200px;
+     overflow: auto;
+     width: 150px;
+}
+
+.size {
+     height: 30px;
+     width: 490px;
+}
+
+th {
+     border-left: 1px solid white;
+     border-right: 1px solid white;
+     font-weight: bold;
+}
+
+th, td {
+     vertical-align: middle;
+}
+
+.hidden {
+     display: none;
+}
+
+.album, .album_with_right_border {
+     background-color: #F7F7EF;
+     color: #03257D;
+     padding: 1px 4px;
+     text-decoration: none;
+}
+
+.album_with_right_border {
+     border-right: 1px solid #03257D;
+}
+
+.album:hover, .album_with_right_border:hover {
+     background-color: #03257D;
+     color: #FFFFFF;
+}
+
+h1 {
+     font-size: 17px;
+     font-weight: normal;
+     margin-top: 40px;
+}
+
+h1 a img {
+     vertical-align: middle;
+}
+
+h2 {
+     font-size: 14px;
+     font-weight: bold;
+     padding: 1em 0pt;
+}
+
+p {
+     color: #444444;
+     padding: 0.5em 0pt;
+}
+
+.bold {
+     font-weight: bold;
+}
+
+.mediaArea ol {
+     list-style-position: inside;
+}
+
+.mediaArea li {
+     margin: 0.5em 0pt 0.5em 1em;
+}
+
+.mediaArea ul {
+     list-style: square inside none;
+}
+
+.mediaArea ul ul {
+     list-style: disc inside none;
+}
+
+.infoBox ul {
+     list-style: square inside none;
+}
+
+.infoBox li {
+     padding-left: 1em;
+}
+
+.vid input {
+     background: none repeat scroll 0% 0% #FFFFFF;
+     width: 30em;
+}
+
+strong {
+     font-weight: bold;
+}
+
+div#status {
+     width: 480px;
+}
+
+.navDiv {
+     margin-top: 20px;
+}
+
+form .text {
+     width: 420px;
+}
+
+.mediaBox {
+     float: left;
+     margin-bottom: 20px;
+     width: 202px;
+}
+
+.mediaLine {
+     border-bottom: 1px solid #CCCCCC;
+     float: left;
+     height: 40px;
+     width: 15px;
+}
+
+.mediacontent {
+     background: none repeat scroll 0% 0% #F7F7F7;
+     border: 1px solid #CCCCCC;
+     float: left;
+     height: 80px;
+     width: 185px;
+}
+
+.mediaImage {
+     background: none repeat scroll 0% 0% #FFFFFF;
+     border: 1px solid #CCCCCC;
+     float: left;
+     height: 50px;
+     margin: 10px auto auto 10px;
+     padding: 5px;
+     width: 60px;
+}
+
+.mediadetails {
+     float: left;
+     font-size: 11px;
+     height: 40px;
+     overflow: hidden;
+     padding: 10px;
+     width: 75px;
+}
+
+.mediaTitle {
+     background: none repeat scroll 0% 0% #FFFFFF;
+     border-bottom: 1px solid #CCCCCC;
+     color: #321277;
+     font-weight: bold;
+     height: 40px;
+     text-align: center;
+     width: 202px;
+}
+
+.titleText {
+     background: none repeat scroll 0% 0% #FFFFFF;
+     border-left: 1px solid #CCCCCC;
+     border-right: 1px solid #CCCCCC;
+     height: 20px;
+     left: 30px;
+     margin: 0pt;
+     padding: 5px;
+     position: relative;
+     top: 25px;
+     width: 140px;
+}
+
+#comments {
+     margin-right: 30px;
+     margin-top: 60px;
+     padding-left: 30px;
+}
+
+#comments ul {
+     background: none repeat scroll 0% 0% #EBF0F2;
+     margin-top: 20px;
+     padding-top: 0.1px;
+}
+
+#comments li {
+     background: none repeat scroll 0% 0% #FFFFFF;
+     border-top: 1px solid #CCCCCC;
+     margin-top: 3px;
+     padding: 10px 0pt 10px 10px;
+}
+
+#comments ul ul {
+     margin-top: 10px;
+     padding-top: 0px;
+}
+
+#comments ul ul li {
+     border-top: 1px dashed #CCCCCC;
+     margin-top: 0px;
+     padding-left: 30px;
+}
+
+#comments li div {
+     color: #CCCCCC;
+     font-size: 9px;
+}
+
+#comments li div a {
+     font-size: 9px;
+}
+
+#comments li div div {
+     color: #333333;
+     font-size: small;
+     padding-top: 10px;
+     width: 500px;
+}
+
+.commentLink {
+     border-left: 2px solid #FF9933;
+     float: right;
+     padding-left: 5px;
+}
+
+.imageAlign {
+     vertical-align: middle;
+}
+
+#comments li .commentForm, .commentForm {
+     color: #FF9933;
+     font-size: small;
+     font-weight: bold;
+     margin-top: 10px;
+}
+
+table input {
+     margin-bottom: 10px;
+     margin-top: 10px;
+}
+
+ul.pagination {
+     text-align: center;
+     width: 800px;
+}
+
+ul.pagination li {
+     display: inline;
+     margin: 2px;
+}
+
+ul.pagination li.current {
+     font-weight: bold;
+}
+
+div#user-lookup-form {
+    text-align: left;
+}
+
+div#user-lookup-form div {
+    margin: 1em;
+}
+
+div#pagination {
+     background: none repeat scroll 0pt 0pt #333333;
+     border: 1px solid #555555;
+     height: 260px;
+     margin: 0pt auto;
+     overflow: auto;
+     padding: 10px;
+     width: 400px;
+}
+
+#pagination ul li a.current {
+     color: #FFFFFF;
+}
+
+#pagination ul li {
+     margin: 2px 0pt;
+}
+
+#pagination ul li a {
+     padding: 1px 5px;
+}
+
+div#avpContainer {
+     background: none repeat scroll 0pt 0pt #222222;
+     border: 6px solid #222;
+     margin: 10px;
+     width: 880px;
+}
+
+div#avpContainer h2 {
+     color: #CCCCCC;
+     font-size: 12px;
+     font-weight: normal;
+     padding: 0px 0pt 5px 30px;
+}
+
+div#leftColumn {
+     color: #000000;
+     float: left;
+     padding: 5px 0pt 0pt 5px;
+     width: 430px;
+}
+
+div#rightColumn {
+    color: #000000;
+    float: right;
+    /**
+     margin: 5px 5px 0pt 0pt;
+     */
+    padding: 5px 0pt 0pt 5px;
+    width: 430px;
+}
+
+div.slide {
+     display: none;
+}
+
+span#current-time, span#current-time2, span#current-slide {
+    color: #CCCCCC;
+    font-size: 10px;
+}
+
+#player, #player2 {
+    border: 2px solid #000000;
+}
+
+div.info {
+    margin-bottom: 10px;
+}
+
+#userName {
+    width: 200px;
+}
+
+#share-dialog {
+    text-align: left;
+}
+
+#share-dialog ul {
+    margin-bottom: 20px;
+}
+
+
+#share-dialog ul li {
+    list-style: none;
+    border: 1px solid #f6af3f;
+    padding: 5px 10px;
+}
+
+span.left {
+    margin-right: 100px;
+}
+
+span.splitter {
+    display: none;
+}
+
+span.right {
+    float: right;
+}
+

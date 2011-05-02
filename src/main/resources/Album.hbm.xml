@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="Album" table="media_album">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- Album Name -->
+        <property name="albumName">
+            <column name="albumname"/>
+        </property>
+
+        <!-- Album Description -->
+        <property name="description" type="text">
+            <column name="description"/>
+        </property>
+
+        <!-- Random Code -->
+        <property name="randomCode">
+            <column name="randomcode"/>
+        </property>
+
+        <!-- access type(0: public, 10: hidden, 20: private) -->
+        <property name="accessType">
+            <column name="accesstype"/>
+        </property>
+
+        <!-- Owner of this album -->
+        <many-to-one name="owner" column="ownerid"/>
+
+        <!-- All AlbumMedias -->
+        <set name="albumMedias" cascade="all,delete-orphan" order-by="" inverse="true">
+            <key column="albumid"/>
+            <one-to-many class="AlbumMedia"/>
+        </set>
+
+        <!-- All UserAlbums -->
+        <set name="userAlbums" cascade="all,delete-orphan" order-by="" inverse="true">
+            <key column="albumid"/>
+            <one-to-many class="UserAlbum"/>
+        </set>
+
+    </class>
+
+</hibernate-mapping>

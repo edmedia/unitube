@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="Author" content="Educational Media, HEDC, University of Otago"/>
+    <meta name="keywords" content="UniTube, Educational Media, HEDC, University of Otago"/>
+    <title>UniTube - Readme</title>
+</head>
+
+<body>
+
+<h1>UniTube installation</h1>
+
+<h2>System requirements</h2>
+<ul>
+    <li>Modern Operating Systems, such as Windows XP, Windows Vista, Windows 2003 Server, Linux (Ubuntu).
+        Although UniTube has no problem to run under Windows, it is highly recommended to use a Linux server, especially
+        a Ubuntu server. All our testings are carried under Ubuntu .
+    </li>
+    <li>Java JDK 5.0 or JDK 6.0</li>
+    <li>Java application server (sucn as Tomcat 5.5, Tomcat 6)</li>
+    <li>FFmpeg</li>
+    <li>OpenOffice</li>
+    <li>SWFTools</li>
+    <li>ImageMagick</li>
+</ul>
+
+<h2>Download</h2>
+
+<p>To run UniTube on you server, all you need to do is downloading unitube.war from our web site. If you want to
+    customize UniTube to meet your requirement, you can download source code.</p>
+
+<h2>Install</h2>
+
+<p>UniTube is a standard Java web application. If you have already had Java JDK and Java web application server (such as
+    Tomcat) installed, all you need to do is dropping unitube.war to right place (for Tomcat, it's under
+    ${TOMCAT_HOME}/webapps/). It will be uncompressed automatically.</p>
+
+<p>To access it, just point your browser to http://localhost:8080/unitube/ (assume you are running your Java application
+    server on port 8080). If you have no problem to access it, congratulations, you have installed UniTube web
+    application successfully.</p>
+
+<p>Unfortunately, that's not all (I wish it's as simple as that).</p>
+
+<p>UniTube is using many external open source and free software. To be able to use all function of UniTube, you have to
+    install others software as well.</p>
+
+<h3>FFmpeg</h3>
+
+<p>We use FFmpeg to do audio and video conversion.</p>
+
+<h3>OpenOffice</h3>
+
+<p>We use OpenOffice to convert office files to flash or PDF files.</p>
+
+<h3>SWFTools</h3>
+
+<p>We use SWFTools to get dimension information from flash (.swf) files.</p>
+
+<h3>ImageMagick</h3>
+
+<p>We use ImageMagick to do image conversion, also we use ImageMagick to convert PDF files to a bunch of images.</p>
+
+<h2>Links</h2>
+
+<ul>
+    <li><a href="http://java.sun.com/javase/downloads/index.jsp">Sun Java JDK</a></li>
+
+
+    <li><a href="http://tomcat.apache.org/">Tomcat</a></li>
+
+
+    <li><a href="http://ffmpeg.mplayerhq.hu/">FFmpeg</a></li>
+
+
+    <li><a href="http://www.openoffice.org/">OpenOffice</a></li>
+
+
+    <li><a href="http://www.swftools.org/">SWFTools</a></li>
+
+
+    <li><a href="http://www.imagemagick.org/">ImageMagick</a></li>
+
+</ul>
+
+</body>
+</html>

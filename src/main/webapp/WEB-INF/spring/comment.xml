@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="commentEdit" class="nz.ac.otago.edmedia.media.controller.CommentFormController">
+        <property name="formView" value="/admin/commentEdit"/>
+        <property name="successView" value="redirect:/admin/commentList.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Comment"/>
+        <property name="commandName" value="comment"/>
+        <property name="validator" ref="commentValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="commentList" class="nz.ac.otago.edmedia.spring.controller.BaseListController">
+        <property name="orderBy" value="msg"/>
+        <property name="orderByDesc" value="false"/>
+        <property name="viewName" value="/admin/commentList"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Comment"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="commentDelete" class="nz.ac.otago.edmedia.spring.controller.BaseDeleteController">
+        <property name="viewName" value="redirect:/admin/commentList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Comment"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="commentView" class="nz.ac.otago.edmedia.spring.controller.BaseViewController">
+        <property name="viewName" value="/admin/commentView"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Comment"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="commentValidator" class="nz.ac.otago.edmedia.media.validator.CommentValidator"/>
+
+</beans>

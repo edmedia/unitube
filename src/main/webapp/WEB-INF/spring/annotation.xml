@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="annotationEdit" class="nz.ac.otago.edmedia.media.controller.AnnotationFormController">
+        <property name="formView" value="/admin/annotationEdit"/>
+        <property name="successView" value="redirect:/admin/annotationList.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Annotation"/>
+        <property name="commandName" value="annotation"/>
+        <property name="validator" ref="annotationValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="annotationList" class="nz.ac.otago.edmedia.spring.controller.BaseListController">
+        <property name="orderBy" value="annotName"/>
+        <property name="orderByDesc" value="false"/>
+        <property name="viewName" value="/admin/annotationList"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Annotation"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="annotationDelete" class="nz.ac.otago.edmedia.spring.controller.BaseDeleteController">
+        <property name="viewName" value="redirect:/admin/annotationList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Annotation"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="annotationView" class="nz.ac.otago.edmedia.spring.controller.BaseViewController">
+        <property name="viewName" value="/admin/annotationView"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Annotation"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="annotationValidator" class="nz.ac.otago.edmedia.media.validator.AnnotationValidator"/>
+
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="UserAlbum" table="media_useralbum">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- User -->
+        <many-to-one name="user" column="userid"/>
+
+        <!-- Album -->
+        <many-to-one name="album" column="albumid"/>
+
+    </class>
+
+</hibernate-mapping>

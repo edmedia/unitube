@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="AccessRule" table="media_accessrule">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- Media -->
+        <many-to-one name="media" column="mediaid"/>
+
+        <!-- User -->
+        <many-to-one name="user" column="userid"/>
+
+        <!-- Group Name -->
+        <property name="groupName">
+            <column name="groupname"/>
+        </property>
+
+        <!-- Group Users Link -->
+        <property name="groupUsersLink">
+            <column name="groupuserslink"/>
+        </property>
+
+        <!-- User Input -->
+        <property name="userInput">
+            <column name="userinput"/>
+        </property>
+
+    </class>
+
+</hibernate-mapping>

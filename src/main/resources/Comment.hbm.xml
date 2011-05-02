@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="Comment" table="media_comment">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- Message -->
+        <property name="msg">
+            <column name="msg"/>
+        </property>
+
+        <!-- Message Time -->
+        <property name="msgTime">
+            <column name="msgtime"/>
+        </property>
+
+        <!-- Comment Credits -->
+        <property name="credits">
+            <column name="credits"/>
+        </property>
+
+        <!-- Media -->
+        <many-to-one name="media" column="mediaid"/>
+
+        <!-- Author -->
+        <many-to-one name="author" column="authorid"/>
+
+        <!-- Parent Comment -->
+        <many-to-one name="comment" column="commentid"/>
+
+        <!-- Child Comments -->
+        <set name="childComments" cascade="all,delete-orphan" order-by="msgtime desc" inverse="true">
+            <key column="commentid"/>
+            <one-to-many class="Comment"/>
+        </set>
+
+    </class>
+
+</hibernate-mapping>

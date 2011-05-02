@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="home" class="nz.ac.otago.edmedia.media.controller.HomeController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="media" class="nz.ac.otago.edmedia.media.controller.MediaController">
+        <property name="viewName" value="media"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="uniTubas" class="nz.ac.otago.edmedia.media.controller.UniTubasController">
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="albums" class="nz.ac.otago.edmedia.media.controller.AlbumsController">
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Album"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="login" class="nz.ac.otago.edmedia.media.controller.LoginController">
+        <property name="successView" value="redirect:/myTube/list.do"/>
+        <property name="formView" value="main"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
+        <property name="commandName" value="user"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="resetPassword" class="nz.ac.otago.edmedia.media.controller.ResetPasswordController">
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+    </bean>
+
+    <bean id="copyright" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
+    </bean>
+
+    <bean id="credits" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
+    </bean>
+
+    <bean id="help" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
+    </bean>
+
+    <bean id="feedback" class="nz.ac.otago.edmedia.media.controller.FeedbackController">
+        <property name="username" value="${twitter.username}"/>
+    </bean>
+
+    <bean id="sendFeedback" class="nz.ac.otago.edmedia.media.controller.SendFeedbackController">
+        <property name="consumerKey" value="${twitter.consumer.key}"/>
+        <property name="consumerSecret" value="${twitter.consumer.secret}"/>
+        <property name="accessToken" value="${twitter.access.token}"/>
+        <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+    </bean>
+
+    <bean id="register" class="nz.ac.otago.edmedia.media.controller.RegisterController">
+        <property name="formView" value="register"/>
+        <property name="successView" value="registerSuccess"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
+        <property name="commandName" value="user"/>
+        <property name="validator" ref="userRegisterValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+    </bean>
+
+    <bean id="userRegisterValidator" class="nz.ac.otago.edmedia.media.validator.UserRegisterValidator">
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="upload" class="nz.ac.otago.edmedia.media.controller.UploadController">
+        <property name="consumerKey" value="${twitter.consumer.key}"/>
+        <property name="consumerSecret" value="${twitter.consumer.secret}"/>
+        <property name="accessToken" value="${twitter.access.token}"/>
+        <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+        <property name="formView" value="main"/>
+        <property name="successView" value="uploadSuccess"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="commandName" value="media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="post" class="nz.ac.otago.edmedia.media.controller.PostController">
+        <property name="consumerKey" value="${twitter.consumer.key}"/>
+        <property name="consumerSecret" value="${twitter.consumer.secret}"/>
+        <property name="accessToken" value="${twitter.access.token}"/>
+        <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="commandName" value="media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="myMediaEdit" class="nz.ac.otago.edmedia.media.controller.MyMediaEditController">
+        <property name="formView" value="myMediaEdit"/>
+        <property name="successView" value="redirect:/myTube/list.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="commandName" value="media"/>
+        <property name="validator" ref="mediaValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="myMediaList" class="nz.ac.otago.edmedia.media.controller.MyMediaListController">
+        <property name="viewName" value="myMediaList"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="myMediaDelete" class="nz.ac.otago.edmedia.media.controller.MyMediaDeleteController">
+        <property name="viewName" value="redirect:/myTube/list.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="myAlbumEdit" class="nz.ac.otago.edmedia.media.controller.MyAlbumEditController">
+        <property name="formView" value="myAlbumEdit"/>
+        <property name="successView" value="redirect:/myTube/albumList.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Album"/>
+        <property name="commandName" value="album"/>
+        <property name="validator" ref="albumValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="myAlbumList" class="nz.ac.otago.edmedia.media.controller.MyAlbumListController">
+        <property name="viewName" value="myAlbumList"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Album"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="myAlbumDelete" class="nz.ac.otago.edmedia.media.controller.MyAlbumDeleteController">
+        <property name="viewName" value="redirect:/myTube/albumList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Album"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="myApplyAlbum" class="nz.ac.otago.edmedia.media.controller.MyApplyAlbumController">
+        <property name="viewName" value="redirect:/myTube/list.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="myRemoveAlbumMedia" class="nz.ac.otago.edmedia.media.controller.MyRemoveAlbumMediaController">
+        <property name="viewName" value="redirect:/myTube/list.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.AlbumMedia"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="myApplyUser" class="nz.ac.otago.edmedia.media.controller.MyApplyUserController">
+        <property name="viewName" value="redirect:/myTube/albumList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Album"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="myRemoveUserAlbum" class="nz.ac.otago.edmedia.media.controller.MyRemoveUserAlbumController">
+        <property name="viewName" value="redirect:/myTube/albumList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.UserAlbum"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="myUserEdit" class="nz.ac.otago.edmedia.media.controller.MyUserEditController">
+        <property name="formView" value="myUserEdit"/>
+        <property name="successView" value="redirect:/myTube/list.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
+        <property name="commandName" value="user"/>
+        <property name="validator" ref="userValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="view" class="nz.ac.otago.edmedia.media.controller.ViewController">
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="normalView" value="redirect:/view"/>
+        <property name="loginView" value="redirect:/myTube/view.do"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="player" class="nz.ac.otago.edmedia.media.controller.PlayerController">
+        <property name="viewName" value="player"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="album" class="nz.ac.otago.edmedia.media.controller.AlbumController">
+        <property name="viewName" value="album"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="feed" class="nz.ac.otago.edmedia.media.controller.SyndFeedController">
+        <property name="viewName" value="empty"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="monitor" class="nz.ac.otago.edmedia.media.controller.MonitorController">
+        <property name="viewName" value="monitor"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="logout" class="nz.ac.otago.edmedia.media.controller.LogoutController">
+        <property name="viewName" value="redirect:/home.do"/>
+    </bean>
+
+    <bean id="createAdmin" class="nz.ac.otago.edmedia.media.controller.CreateAdminController">
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="createIndex" class="nz.ac.otago.edmedia.media.controller.CreateIndexController">
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="search" class="nz.ac.otago.edmedia.media.controller.SearchController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="appBean" class="nz.ac.otago.edmedia.media.listener.ApplicationInitListener">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="postComment" class="nz.ac.otago.edmedia.media.controller.PostCommentController">
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Comment"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="deleteComment" class="nz.ac.otago.edmedia.media.controller.DeleteCommentController">
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="viewAllComment" class="nz.ac.otago.edmedia.media.controller.ViewAllCommentController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="imageViewer" class="nz.ac.otago.edmedia.media.controller.ImageViewerController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="myAnnotationEdit" class="nz.ac.otago.edmedia.media.controller.MyAnnotationEditController">
+        <property name="formView" value="myAnnotationEdit"/>
+        <property name="successView" value="redirect:/myTube/list.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Annotation"/>
+        <property name="commandName" value="annotation"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="annotAuthor" class="nz.ac.otago.edmedia.media.controller.AnnotationAuthorController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="annotSave" class="nz.ac.otago.edmedia.media.controller.AnnotationSaveController">
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Annotation"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="iva" class="nz.ac.otago.edmedia.media.controller.IVAController">
+        <property name="viewName" value="iva"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="ivOption" class="nz.ac.otago.edmedia.media.controller.MyIVOptionEditController">
+        <property name="formView" value="ivOption"/>
+        <property name="successView" value="redirect:/myTube/edit.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.IVOption"/>
+        <property name="commandName" value="iVOption"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="userNameSearch" class="nz.ac.otago.edmedia.media.controller.UserNameSearchController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="transferOwner" class="nz.ac.otago.edmedia.media.controller.TransferOwnerController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="accessRuleAdd" class="nz.ac.otago.edmedia.media.controller.AccessRuleAddController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="accessRuleDelete" class="nz.ac.otago.edmedia.media.controller.AccessRuleDeleteController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="tmp" class="nz.ac.otago.edmedia.media.controller.TmpController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="avp" class="nz.ac.otago.edmedia.media.controller.AVPController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="avpData" class="nz.ac.otago.edmedia.media.controller.AVPDataController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="handlerMappingCustom" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="openSessionInViewInterceptor"/>
+            </list>
+        </property>
+        <property name="mappings">
+            <value>
+                /home.do=home
+                /media.do=media
+                /uniTubas.do=uniTubas
+                /albums.do=albums
+                /login.do=login
+                /resetPassword.do=resetPassword
+                /copyright.do=copyright
+                /help.do=help
+                /credits.do=credits
+                /feedback.do=feedback
+                /sendFeedback.do=sendFeedback
+                /register.do=register
+                /myTube/upload.do=upload
+                /__post__.do=post
+                /myTube/edit.do=myMediaEdit
+                /myTube/list.do=myMediaList
+                /myTube/delete.do=myMediaDelete
+                /myTube/albumList.do=myAlbumList
+                /myTube/albumEdit.do=myAlbumEdit
+                /myTube/albumDelete.do=myAlbumDelete
+                /myTube/applyAlbum.do=myApplyAlbum
+                /myTube/removeAlbumMedia.do=myRemoveAlbumMedia
+                /myTube/applyUser.do=myApplyUser
+                /myTube/removeUserAlbum.do=myRemoveUserAlbum
+                /myTube/profile.do=myUserEdit
+                /myTube/view.do=view
+                /view=view
+                /player=player
+                /album=album
+                /feed.do=feed
+                /admin/monitor.do=monitor
+                /logout.do=logout
+                /createAdmin.do=createAdmin
+                /createIndex.do=createIndex
+                /search.do=search
+                /myTube/postComment.do=postComment
+                /myTube/deleteComment.do=deleteComment
+                /viewAllComment.do=viewAllComment
+                /imageViewer.do=imageViewer
+                /myTube/annotationEdit.do=myAnnotationEdit
+                /myTube/annotAuthor.do=annotAuthor
+                /annotSave.do=annotSave
+                /iva.do=iva
+                /myTube/ivOption.do=ivOption
+                /myTube/userNameSearch.do=userNameSearch
+                /myTube/transferOwner.do=transferOwner
+                /myTube/accessRuleAdd.do=accessRuleAdd
+                /myTube/accessRuleDelete.do=accessRuleDelete
+                /admin/tmp.do=tmp
+                /avp.do=avp
+                /avpData.do=avpData
+            </value>
+        </property>
+    </bean>
+
+    <bean id="mediaConverter" class="nz.ac.otago.edmedia.media.converter.MediaConverter">
+        <property name="ffmpeg" value="${command.ffmpeg}"/>
+        <property name="qt_faststart" value="${command.qt-faststart}"/>
+        <property name="convert" value="${command.convert}"/>
+        <property name="identify" value="${command.identify}"/>
+        <property name="swfdump" value="${command.swfdump}"/>
+        <property name="pdf2swf" value="${command.pdf2swf}"/>
+        <property name="swfcombine" value="${command.swfcombine}"/>
+    </bean>
+
+    <!-- scheduled task here: convert video when necessary -->
+    <bean id="convertTimerTask" class="nz.ac.otago.edmedia.media.timer.ConvertTimerTask">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+        <property name="mediaConverter" ref="mediaConverter"/>
+    </bean>
+
+    <bean id="convertScheduledTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" value="${new.media.check.delay}"/>
+        <property name="period" value="${new.media.check.period}"/>
+        <property name="timerTask" ref="convertTimerTask"/>
+    </bean>
+
+    <!-- scheduled task here: convert video when necessary -->
+    <bean id="checkEmailTimerTask" class="nz.ac.otago.edmedia.media.timer.CheckEmailTimerTask">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+        <property name="consumerKey" value="${twitter.consumer.key}"/>
+        <property name="consumerSecret" value="${twitter.consumer.secret}"/>
+        <property name="accessToken" value="${twitter.access.token}"/>
+        <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+        <property name="emailProtocol" value="${email.upload.protocol}"/>
+        <property name="emailServer" value="${email.upload.server}"/>
+        <property name="emailUsername" value="${email.upload.username}"/>
+        <property name="emailPassword" value="${email.upload.password}"/>
+        <property name="appURL" value="${app.url}"/>
+    </bean>
+
+    <bean id="checkEmailScheduledTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" value="${new.email.check.delay}"/>
+        <property name="period" value="${new.email.check.period}"/>
+        <property name="timerTask" ref="checkEmailTimerTask"/>
+    </bean>
+
+    <bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <ref bean="convertScheduledTimerTask"/>
+                <ref bean="checkEmailScheduledTimerTask"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

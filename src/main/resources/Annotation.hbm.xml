@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="Annotation" table="media_annotation">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- Annotation Name -->
+        <property name="annotName">
+            <column name="annotname"/>
+        </property>
+
+        <!-- Annotation Description -->
+        <property name="description" type="text">
+            <column name="description"/>
+        </property>
+
+        <!-- Annotation File -->
+        <property name="annotFileUserName">
+            <column name="annotfileusername"/>
+        </property>
+
+        <!-- Annotation Time -->
+        <property name="annotTime">
+            <column name="annottime"/>
+        </property>
+
+        <!-- Random Code -->
+        <property name="randomCode">
+            <column name="randomcode"/>
+        </property>
+
+        <!-- Media -->
+        <many-to-one name="media" column="mediaid"/>
+
+        <!-- Author -->
+        <many-to-one name="author" column="authorid"/>
+
+    </class>
+
+</hibernate-mapping>

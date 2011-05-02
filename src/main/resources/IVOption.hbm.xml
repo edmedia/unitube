@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="IVOption" table="media_ivoption">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- Actual Width -->
+        <property name="actualWidth">
+            <column name="actualwidth"/>
+        </property>
+
+        <!-- Actual Width Unit -->
+        <property name="acturalWidthUnit">
+            <column name="acturalwidthunit"/>
+        </property>
+
+        <!-- Minimum Zoom -->
+        <property name="minZoom">
+            <column name="minzoom"/>
+        </property>
+
+        <!-- Maximum Zoom -->
+        <property name="maxZoom">
+            <column name="maxzoom"/>
+        </property>
+
+        <!-- Display Measurement tool and grid? -->
+        <property name="displayMeasureTool">
+            <column name="displaymeasuretool"/>
+        </property>
+
+        <!-- Other can annotate this image? -->
+        <property name="otherCanAnnotate">
+            <column name="othercanannotate"/>
+        </property>
+
+        <!-- Which Image for ImageViewer to use? -->
+        <property name="whichImageForIV">
+            <column name="whichimageforiv"/>
+        </property>
+
+        <!-- Media -->
+        <many-to-one name="media" column="mediaid"/>
+
+    </class>
+
+</hibernate-mapping>

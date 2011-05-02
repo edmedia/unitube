@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="openSessionInViewInterceptor"/>
+            </list>
+        </property>
+        <property name="mappings">
+            <value>
+                /admin/accessRuleEdit.do=accessRuleEdit
+                /admin/accessRuleList.do=accessRuleList
+                /admin/accessRuleDelete.do=accessRuleDelete
+                /admin/accessRuleView.do=accessRuleView
+
+                /admin/albumEdit.do=albumEdit
+                /admin/albumList.do=albumList
+                /admin/albumDelete.do=albumDelete
+                /admin/albumView.do=albumView
+
+                /admin/albumMediaEdit.do=albumMediaEdit
+                /admin/albumMediaList.do=albumMediaList
+                /admin/albumMediaDelete.do=albumMediaDelete
+                /admin/albumMediaView.do=albumMediaView
+
+                /admin/annotationEdit.do=annotationEdit
+                /admin/annotationList.do=annotationList
+                /admin/annotationDelete.do=annotationDelete
+                /admin/annotationView.do=annotationView
+
+                /admin/commentEdit.do=commentEdit
+                /admin/commentList.do=commentList
+                /admin/commentDelete.do=commentDelete
+                /admin/commentView.do=commentView
+
+                /admin/iVOptionEdit.do=iVOptionEdit
+                /admin/iVOptionList.do=iVOptionList
+                /admin/iVOptionDelete.do=iVOptionDelete
+                /admin/iVOptionView.do=iVOptionView
+
+                /admin/mediaEdit.do=mediaEdit
+                /admin/mediaList.do=mediaList
+                /admin/mediaDelete.do=mediaDelete
+                /admin/mediaView.do=mediaView
+
+                /admin/userEdit.do=userEdit
+                /admin/userList.do=userList
+                /admin/userDelete.do=userDelete
+                /admin/userView.do=userView
+
+                /admin/userAlbumEdit.do=userAlbumEdit
+                /admin/userAlbumList.do=userAlbumList
+                /admin/userAlbumDelete.do=userAlbumDelete
+                /admin/userAlbumView.do=userAlbumView
+
+            </value>
+        </property>
+    </bean>
+
+</beans>

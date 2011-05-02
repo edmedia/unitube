@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+
+    <display-name>UniTube</display-name>
+    <description>
+        Media sharing platform for universities
+    </description>
+
+    <filter>
+        <filter-name>charsetFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>nz.ac.otago.edmedia.media.filter.MediaFilter</filter-class>
+        <init-param>
+            <param-name>nz.ac.otago.edmedia.auth.filter.allowAccessWithoutLogin</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>nz.ac.otago.edmedia.auth.filter.usingEmbeddedAuthentication</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>nz.ac.otago.edmedia.auth.filter.embeddedLoginUrl</param-name>
+            <param-value>/login.do</param-value>
+        </init-param>
+        <init-param>
+            <param-name>nz.ac.otago.edmedia.auth.filter.usingCAS</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>nz.ac.otago.edmedia.auth.filter.instructors</param-name>
+            <param-value>Admin</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>InstructorOnlyFilter</filter-name>
+        <filter-class>nz.ac.otago.edmedia.auth.filter.AuthorizationFilter</filter-class>
+        <init-param>
+            <param-name>instructorAccess</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>charsetFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/myTube/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>InstructorOnlyFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>nz.ac.otago.edmedia.media.listener.MediaServletListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>unitube</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>unitube</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <!-- for view media -->
+    <servlet-mapping>
+        <servlet-name>unitube</servlet-name>
+        <url-pattern>/view</url-pattern>
+    </servlet-mapping>
+
+    <!-- for media player -->
+    <servlet-mapping>
+        <servlet-name>unitube</servlet-name>
+        <url-pattern>/player</url-pattern>
+    </servlet-mapping>
+
+    <!-- for list all medias in an album -->
+    <servlet-mapping>
+        <servlet-name>unitube</servlet-name>
+        <url-pattern>/album</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+</web-app>

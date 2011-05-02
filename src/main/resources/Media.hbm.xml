@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="Media" table="media_media">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- Title -->
+        <property name="title">
+            <column name="title"/>
+        </property>
+
+        <!-- Description -->
+        <property name="description" type="text">
+            <column name="description"/>
+        </property>
+
+        <!-- Upload File -->
+        <property name="uploadFileUserName">
+            <column name="uploadfileusername"/>
+        </property>
+
+        <!-- Real File Name -->
+        <property name="realFilename">
+            <column name="realfilename"/>
+        </property>
+
+        <!-- Thumbnail -->
+        <property name="thumbnail">
+            <column name="thumbnail"/>
+        </property>
+
+        <!-- Media Type(1: Other, 5: Image, 10: Audio, 20: Video) -->
+        <property name="mediaType">
+            <column name="mediatype"/>
+        </property>
+
+        <!-- convert to a different format -->
+        <property name="convertTo">
+            <column name="convertto"/>
+        </property>
+
+        <!-- File name of other format -->
+        <property name="otherFormatFilename">
+            <column name="otherformatfilename"/>
+        </property>
+
+        <!-- Width -->
+        <property name="width">
+            <column name="width"/>
+        </property>
+
+        <!-- Height -->
+        <property name="height">
+            <column name="height"/>
+        </property>
+
+        <!-- Video or Audio Duration (in ms), Or image number -->
+        <property name="duration">
+            <column name="duration"/>
+        </property>
+
+        <!-- Snapshot Position -->
+        <property name="snapshotPosition">
+            <column name="snapshotposition"/>
+        </property>
+
+        <!-- Tags -->
+        <property name="tags">
+            <column name="tags"/>
+        </property>
+
+        <!-- Status(0:waiting, 1:processing, 2:finished, 9:unrecognized) -->
+        <property name="status">
+            <column name="status"/>
+        </property>
+
+        <!-- Put this media on other server? -->
+        <property name="isOnOtherServer">
+            <column name="isonotherserver"/>
+        </property>
+
+        <!-- access type(0: public, 10: hidden, 20: private) -->
+        <property name="accessType">
+            <column name="accesstype"/>
+        </property>
+
+        <!-- Upload via Email? -->
+        <property name="viaEmail">
+            <column name="viaemail"/>
+        </property>
+
+        <!-- Upload via MMS? -->
+        <property name="viaMMS">
+            <column name="viamms"/>
+        </property>
+
+        <!-- Upload Only? -->
+        <property name="uploadOnly">
+            <column name="uploadonly"/>
+        </property>
+
+        <!-- Random Code -->
+        <property name="randomCode">
+            <column name="randomcode"/>
+        </property>
+
+        <!-- Location Code(where to put media file) -->
+        <property name="locationCode">
+            <column name="locationcode"/>
+        </property>
+
+        <!-- Upload Time -->
+        <property name="uploadTime">
+            <column name="uploadtime"/>
+        </property>
+
+        <!-- Access Times -->
+        <property name="accessTimes">
+            <column name="accesstimes"/>
+        </property>
+
+        <!-- Process Times -->
+        <property name="processTimes">
+            <column name="processtimes"/>
+        </property>
+
+        <!-- User -->
+        <many-to-one name="user" column="userid" lazy="false"/>
+
+        <!-- All AlbumMedias -->
+        <set name="albumMedias" cascade="all,delete-orphan" order-by="" inverse="true">
+            <key column="mediaid"/>
+            <one-to-many class="AlbumMedia"/>
+        </set>
+
+        <!-- All User Comments -->
+        <set name="comments" cascade="all,delete-orphan" order-by="msgtime desc" inverse="true">
+            <key column="mediaid"/>
+            <one-to-many class="Comment"/>
+        </set>
+
+        <!-- All User Annotations -->
+        <set name="annotations" cascade="all,delete-orphan" order-by="annottime" inverse="true">
+            <key column="mediaid"/>
+            <one-to-many class="Annotation"/>
+        </set>
+
+        <!-- Access Rules -->
+        <set name="accessRules" cascade="all,delete-orphan" order-by="id" inverse="true">
+            <key column="mediaid"/>
+            <one-to-many class="AccessRule"/>
+        </set>
+
+    </class>
+
+</hibernate-mapping>
