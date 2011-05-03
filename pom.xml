@@ -176,6 +176,12 @@
 
         <dependency>
             <groupId>org.openoffice</groupId>
+            <artifactId>ridl</artifactId>
+            <version>${openoffice.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openoffice</groupId>
             <artifactId>unoil</artifactId>
             <version>${openoffice.version}</version>
         </dependency>
