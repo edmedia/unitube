@@ -14,8 +14,8 @@ System requirements
 -------------------
 
     * Modern Operating Systems, such as Windows XP, Windows Vista, Windows 2003 Server, Linux (Ubuntu).
-    Although UniTube has no problem to run under Windows, it is highly recommended to use a Linux server, especially
-    a Ubuntu server. All our testings are carried under Ubuntu .
+      Although UniTube has no problem to run under Windows, it is highly recommended to use a Linux server, especially
+      a Ubuntu server. All our testings are carried under Ubuntu .
     * Java JDK 5.0 or JDK 6.0
     * Java application server (sucn as Tomcat 5.5, Tomcat 6)
     * FFmpeg
@@ -26,11 +26,11 @@ System requirements
 Installation
 ------------
 
-After download all source code from github, run:
+After download all source code, run:
 
-    * `mvn jetty:run`
+    * mvn jetty:run
 
-To access UniTube, just point your browser to http://localhost:8080/unitube/.
+To access UniTube, just point your browser to <http://localhost:8080/unitube/>.
 If you have no problem to access it, congratulations, you have installed UniTube web
 application successfully.
 
@@ -48,12 +48,12 @@ The config file for log is src/main/resources/log4j.properties.
 Links
 -----
 
-    * <a href="http://java.sun.com/javase/downloads/index.jsp">Sun Java JDK</a>
-    * <a href="http://tomcat.apache.org/">Tomcat</a>
-    * <a href="http://ffmpeg.mplayerhq.hu/">FFmpeg</a>
-    * <a href="http://www.openoffice.org/">OpenOffice</a>
-    * <a href="http://www.swftools.org/">SWFTools</a>
-    * <a href="http://www.imagemagick.org/">ImageMagick</a>
+    * <http://java.sun.com/javase/downloads/index.jsp>
+    * <http://tomcat.apache.org/>
+    * <http://ffmpeg.mplayerhq.hu>
+    * <http://www.openoffice.org>
+    * <http://www.swftools.org>
+    * <http://www.imagemagick.org>
 
 License
 -------
