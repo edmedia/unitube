@@ -1,21 +1,26 @@
 UniTube - Media sharing platform for universities
 =================================================
 
-UniTube is a media sharing platform. You can share video,
-audio, Microsoft office, OpenOffice, PDF and many more file types with UniTube.
+UniTube is a media sharing platform designed for use in tertiary education
+institutions. It has been developed by Educational Media, Higher Education
+Development Centre, University of Otago, Dunedin, NZ.
+
+You can share video, audio, Microsoft office, OpenOffice, PDF and many more
+file types with UniTube.
 
 Features
 --------
 
     * Supports many file types
-    * media file can be embedded to any html page
+    * media files can be embedded in any html page
 
 System requirements
 -------------------
 
-    * Modern Operating Systems, such as Windows XP, Windows Vista, Windows 2003 Server, Linux (Ubuntu).
-      Although UniTube has no problem to run under Windows, it is highly recommended to use a Linux server, especially
-      a Ubuntu server. All our testings are carried under Ubuntu .
+    * Modern Operating Systems, such as Windows XP, Windows Vista, Windows
+      2003 Server, Linux (Ubuntu). Although UniTube has no problem to run
+      under Windows, it is highly recommended to use a Linux server,
+      especially a Ubuntu server. All our testings are carried under Ubuntu.
     * Java JDK 5.0 or JDK 6.0
     * Java application server (sucn as Tomcat 5.5, Tomcat 6)
     * FFmpeg
@@ -31,12 +36,12 @@ After download all source code, run:
     * mvn jetty:run
 
 To access UniTube, just point your browser to <http://localhost:8080/unitube/>.
-If you have no problem to access it, congratulations, you have installed UniTube web
-application successfully.
+If you can access UniTube without any errors, congratulations! You have
+installed the UniTube web application successfully.
 
-UniTube is using many external open source and free software. To be able to use
-all function of UniTube, you have to install others software as well,
-include FFmpeg, OpenOffice, SWFTools, ImageMagick.
+UniTube utilises many external open source and free software tools. To be able
+to use all the functions of UniTube, you have to install other software as well,
+including FFmpeg, OpenOffice, SWFTools, ImageMagick.
 
 Configuration
 -------------
@@ -48,12 +53,12 @@ The config file for log is src/main/resources/log4j.properties.
 Links
 -----
 
-    * <http://java.sun.com/javase/downloads/index.jsp>
-    * <http://tomcat.apache.org/>
-    * <http://ffmpeg.mplayerhq.hu>
-    * <http://www.openoffice.org>
-    * <http://www.swftools.org>
-    * <http://www.imagemagick.org>
+    * JDK <http://java.sun.com/javase/downloads/index.jsp>
+    * Tomcat <http://tomcat.apache.org/>
+    * FFmpeg <http://ffmpeg.mplayerhq.hu>
+    * OpenOffice <http://www.openoffice.org>
+    * SWFTools <http://www.swftools.org>
+    * ImageMagick <http://www.imagemagick.org>
 
 License
 -------
