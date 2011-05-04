@@ -30,6 +30,7 @@
     <script type="text/javascript" src="${baseUrl}/javascript/login.js"></script>
     <#if this_url?? && this_url?contains("myTube/")>
     <script type="text/javascript" src="${baseUrl}/javascript/jquery-ui-1.8.12.custom.min.js"></script>
+    <script type="text/javascript" src="${baseUrl}/ckeditor/ckeditor.js"></script>
     </#if>
     <#if this_url?? && this_url?contains('avp')>
     <script type="text/javascript" src="${baseUrl}/jwplayer/jwplayer.js"></script>

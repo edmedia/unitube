@@ -108,8 +108,16 @@
             <th>Description</th>
             <td>
                 <@spring.bind "media.description" />
+                <@displayTextArea/>
+              <script type="text/javascript">
+                <!--
+                    CKEDITOR.replace( '${spring.status.expression}', {
+                        customConfig : '${baseUrl}/javascript/ckeditor_config.js'
+                    });
+                -->
+              </script>
+                       <#--
                 <script type="text/javascript">
-                    <!--
                     var fck_${spring.status.expression} = new FCKeditor('${spring.status.expression}');
                     fck_${spring.status.expression}.BasePath = '<@spring.url "/fckeditor/"/>';
                     fck_${spring.status.expression}.Value = '<#if spring.status.value??><#if spring.status.value?is_number>${spring.status.value?c}<#else>${spring.status.value?js_string}</#if></#if>';
@@ -118,9 +126,8 @@
                     fck_${spring.status.expression}.Height = '200px';
                     fck_${spring.status.expression}.ToolbarSet = 'CUSTOM';
                     fck_${spring.status.expression}.Create();
-                    //-->
                 </script>
-
+                -->
             </td>
             <td>
                 <@displayError/>
