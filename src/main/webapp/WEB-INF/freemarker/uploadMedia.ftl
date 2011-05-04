@@ -1,6 +1,32 @@
 <#-- display upload form -->
 <#if user?has_content>
 <h2>Upload your media file</h2>
+
+<div>
+    <h3>UniTube Security and Privacy <a href="#">Hide this</a></h3>
+
+    <p>Please be aware that at this time, anyone who has access to the web
+        address (URL) of material posted on UniTube can access that material
+        without having to login. Making files hidden on UniTube simply means
+        that the URL is not listed on UniTube itself and is not discoverable by
+        search engines. It does not however protect against access by
+        unauthorised persons who obtain the URL.</p>
+
+    <p>For this reason we strongly advise against uploading any sensitive or
+        private material to UniTube at this time.</p>
+
+    <p>Also, please do ensure that you only upload material that you have
+        created or have permission to share. See
+        <a href="${baseUrl}/copyright.do">${baseUrl}/copyright.do</a>
+        for further information.</p>
+
+    <p>If you become aware of any material on UniTube that you feel is
+        inappropriate for any reason or is in possible breach of copyright
+        please do let us know. E-mail <a href="mailto:unitube@otago.ac.nz">unitube@otago.ac.nz</a></p>
+
+    <p>&nbsp; </p>
+</div>
+
 <form action="upload.do" name="mediaForm" method="post" enctype="multipart/form-data">
     <div>
         <input class="browse" name="uploadFile" type="file"/>
@@ -86,6 +112,10 @@
         else
             $('#changeOption').text("+ More options");
     }
+
+    $('h3 a').click(function() {
+        $(this).parent().parent().hide();
+    });
 
     //-->
 </script>
