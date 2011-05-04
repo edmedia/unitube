@@ -3,7 +3,7 @@
 <h2>Upload your media file</h2>
 
 <div>
-    <h3>UniTube Security and Privacy <a href="#">Hide this</a></h3>
+    <h3>UniTube Security and Privacy (<a href="#">Hide this</a>)</h3>
 
     <p>Please be aware that at this time, anyone who has access to the web
         address (URL) of material posted on UniTube can access that material
@@ -42,10 +42,12 @@
                    title="<@spring.message "media.access.hidden"/>"
                    <#if user.uploadAccessType == 10>checked="checked"</#if>/>
             <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
+            <#--
             <input type="radio" name="accessType" value="20"
                    title="<@spring.message "media.access.private"/>"
                    <#if user.uploadAccessType == 20>checked="checked"</#if>/>
             <span title="<@spring.message "media.access.private"/>">Private</span>
+            -->
             <a id="changeOption" href="#">+ More options</a>
         </div>
     </div>
