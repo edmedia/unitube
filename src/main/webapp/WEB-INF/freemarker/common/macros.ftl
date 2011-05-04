@@ -200,7 +200,7 @@
 </#function>
 
 <#macro thumbnailLink media>
-<#if !uploadLocation.absolutePath>${baseUrl}/</#if>${uploadLocation.baseLink}${media.user.accessCode}/${media.randomCode}/<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#macro>
+<#if !uploadLocation.absolutePath>${baseUrl}/</#if>${uploadLocation.baseLink}${media.user.accessCode}/<#if media.locationCode??>${media.locationCode}<#else>${media.randomCode}</#if>/<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#macro>
 
 <#macro viewLinkWithThumbnail media>
 <#-- default width and height -->
