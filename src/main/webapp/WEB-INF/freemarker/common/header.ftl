@@ -1,18 +1,3 @@
-<#if context_url!?starts_with('http://unitube.otago.ac.nz')>
-<script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-    try {
-        // page tracker for http://unitube.otago.ac.nz
-        var pageTracker = _gat._getTracker("UA-1164659-9");
-        pageTracker._trackPageview();
-        // page tracker for http://media.otago.ac.nz
-        var mediaTracker = _gat._getTracker("UA-1164659-10");
-    } catch(err) {
-    }</script>
-</#if>
 <div id="container">
     <div id="header">
         <div class="uniLogo"><a href="http://www.otago.ac.nz"><img src="${baseUrl}/images/university_web_logo.gif"

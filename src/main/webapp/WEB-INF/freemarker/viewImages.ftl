@@ -1,5 +1,6 @@
 <#-- TODO: display a bunch of images -->
 <#assign embedCode><a href="${mediaFileLink}" title="${obj.title?html}"><img src="${mediaFileLink}" width="${width?c}" height="${height?c}" alt="${obj.title?html}" title="${obj.title?html}"/></a></#assign>
+<#assign embedCode><iframe width="${width?c}" height="${(height+20)?c}" src="${embedURL?html}" frameborder="0" allowfullscreen></iframe></#assign>
 
 <#if obj.duration &gt; 1>
 <#assign usingSlides=true/>
@@ -8,7 +9,7 @@
     <div class="slides_container">
  <#list 1..obj.duration as i>
         <div class="slide">
-            <img src="${mediaFileLink?replace('-(\\d)+\\.', '-' + (i-1) + '.', 'r')}" width="${width?c}" height="${height?c}" alt="Slide ${i}"/>
+            <img src="${mediaFileLink?replace('-(\\d)+\\.', '-' + (i-1) + '.', 'r')?html}" width="${width?c}" height="${height?c}" alt="Slide ${i}"/>
         </div>
  </#list>
     </div>
@@ -19,6 +20,7 @@
     $('ul.pagination').css('width', '${width?c}px');
     $('#slides').slides({
         preload: true,
+        preloadImage: '',
         bigTarget: true,
         hoverPause: true
     });
@@ -53,6 +55,6 @@
 </#if>
 <#else>
 <div>
-    <a href="${mediaFileLink}"><img src="${mediaFileLink}" width="${width?c}" height="${height?c}" alt="${obj.title?html}"/></a>
+    <a href="${mediaFileLink?html}" title="${obj.title?html}"><img src="${mediaFileLink?html}" width="${width?c}" height="${height?c}" alt="${obj.title?html}"/></a>
 </div>
 </#if>

@@ -14,14 +14,16 @@
 
     <#if (annotation?? && (obj.annotations?size &gt; 1)) || (obj.annotations?size &gt; 0)>
     <p><strong>Annotations:</strong>
+        <#assign alreadDoneFirstAnnotation = false/>
         <#list obj.annotations as a>
         <#if !annotation?? || annotation.id != a.id>
-        <a href="${baseUrl}/imageViewer.do?a=${a.accessCode}">${a.annotName?html}</a> by <a
-                href="">${a.author.firstName} ${a.author.lastName}</a>
-        <#if a_has_next>
+        <#if alreadDoneFirstAnnotation>
         |
         </#if>
-        </#if>
+        <a href="${baseUrl}/imageViewer.do?a=${a.accessCode}">${a.annotName?html}</a> by <a
+                href="">${a.author.firstName} ${a.author.lastName}</a>
+        <#assign alreadDoneFirstAnnotation = true/>
+         </#if>
         </#list>
     </p>
     </#if>
