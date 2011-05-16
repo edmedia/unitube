@@ -42,19 +42,14 @@
 <th>Album Description</th>
 <td>
 <@spring.bind "album.description" />
-<script type="text/javascript">
-<!--
-  var fck_${spring.status.expression} = new FCKeditor('${spring.status.expression}');
-  fck_${spring.status.expression}.BasePath = '${baseUrl}/fckeditor/';
-  fck_${spring.status.expression}.Value = '<#if spring.status.value??><#if spring.status.value?is_number>${spring.status.value?c}<#else>${spring.status.value?js_string}</#if></#if>';
-  fck_${spring.status.expression}.Config['CustomConfigurationsPath'] = '${baseUrl}/fckeditor/custom/config.js';
-  fck_${spring.status.expression}.Width = '430px';
-  fck_${spring.status.expression}.Height = '200px';
-  fck_${spring.status.expression}.ToolbarSet = 'CUSTOM';
-  fck_${spring.status.expression}.Create();
-//-->
-</script>
-
+    <@displayTextArea/>
+  <script type="text/javascript">
+    <!--
+        CKEDITOR.replace( '${spring.status.expression}', {
+            customConfig : '${baseUrl}/javascript/ckeditor_config.js'
+        });
+    -->
+  </script>
 </td>
 <td>
 
