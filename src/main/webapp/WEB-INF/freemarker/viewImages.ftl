@@ -1,6 +1,10 @@
 <#-- TODO: display a bunch of images -->
+<#assign extraHeight=0>
+<#if obj.duration &gt; 1>
+<#assign extraHeight=20>
+</#if>
 <#assign embedCode><a href="${mediaFileLink}" title="${obj.title?html}"><img src="${mediaFileLink}" width="${width?c}" height="${height?c}" alt="${obj.title?html}" title="${obj.title?html}"/></a></#assign>
-<#assign embedCode><iframe width="${width?c}" height="${(height+20)?c}" src="${embedURL?html}" frameborder="0" allowfullscreen></iframe></#assign>
+<#assign embedCode><iframe width="${width?c}" height="${(height+extraHeight)?c}" src="${embedURL?html}" frameborder="0" allowfullscreen></iframe></#assign>
 
 <#if obj.duration &gt; 1>
 <#assign usingSlides=true/>

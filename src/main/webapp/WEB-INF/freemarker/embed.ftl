@@ -1,17 +1,19 @@
 <#include "common/head.ftl" />
+<#if obj??>
 <#include "viewHelper.ftl" />
-
+<#-- image -->
 <#if obj.mediaType == 5>
 <a href="${imageFileLink}" title="${obj.title?html}">
     <img src="${mediaFileLink}" width="${width?c}" height="${height?c}" alt="${obj.title?html}"
          title="${obj.title?html}"/>
 </a>
 <#elseif (obj.mediaType == 1) && obj.realFilename?ends_with(".png")>
+<#-- images -->
 <#include "viewImages.ftl"/>
 <#elseif obj.mediaType == 10>
+<#-- audio format -->
 <#assign width=480/>
 <#assign height=24/>
-<#-- audio format -->
 <audio width="${width?c}" height="${height?c}"
        src="${mediaFileLink?html}"
        controls preload="auto" id="avPlayer">
@@ -33,7 +35,6 @@
        src="${mediaFileLink?html}"
        allowfullscreen="true" allowscripaccess="always" scale="showall"/>
 </#if>
-
 <#if (obj.mediaType == 10) || (obj.mediaType == 20)>
 <script type="text/javascript">
     <!--
@@ -66,6 +67,14 @@
     //-->
 </script>
 </#if>
-
+<#else>
+<div class="info">
+    <#if accessDenied>
+    <@spring.message "media.access.deny"/>
+    <#else>
+    <@spring.message "media.not.found"/>
+    </#if>
+</div>
+</#if>
 </body>
 </html>

@@ -91,9 +91,9 @@
 </#if>
 <#-- add "Hosted by UniTube" and link to embed code -->
 <#if obj.accessType == 0>
-<#assign embedCode><div id="__unitube_${obj.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align: center"><a href="${viewURL}">Hosted by UniTube</a></div></div></#assign>
+<#assign embedCode><div id="__unitube_${obj.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align:center"><a href="${viewURL}">Hosted by UniTube</a></div></div></#assign>
 <#else>
-<#assign embedCode><div id="__unitube_${obj.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align: center"><a href="${context_url}">Hosted by UniTube</a></div></div></#assign>
+<#assign embedCode><div id="__unitube_${obj.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align:center"><a href="${context_url}">Hosted by UniTube</a></div></div></#assign>
 </#if>
 
 <!--
