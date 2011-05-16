@@ -36,11 +36,13 @@ public class AnnotationAuthorController extends BaseOperationController {
         if (mediaID > 0)
             // get media object
             media = (Media) service.get(Media.class, mediaID);
-        Long annotID = ServletUtil.getParameter(request, "a", 0L);
-        if (annotID > 0) {
-            // get annotation object
-            annotation = (Annotation) service.get(Annotation.class, annotID);
-            media = annotation.getMedia();
+        else {
+            Long annotID = ServletUtil.getParameter(request, "a", 0L);
+            if (annotID > 0) {
+                // get annotation object
+                annotation = (Annotation) service.get(Annotation.class, annotID);
+                media = annotation.getMedia();
+            }
         }
         Map model = errors.getModel();
         model.put("title", "Image Viewer: Edit Annotation");
