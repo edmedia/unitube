@@ -42,9 +42,7 @@
     <#assign idDiv="unitube___media___"/>
     <div id="unitube_media">
         <#if obj.mediaType == 5>
-        <#-- display image -->
-        <#assign embedCode><a href="${imageFileLink}" title="${obj.title?html}"><img src="${mediaFileLink}" width="${width?c}" height="${height?c}" alt="${obj.title?html}" title="${obj.title?html}"/></a></#assign>
-        ${embedCode}
+        <#include "viewImage.ftl"/>
         <#elseif (obj.mediaType == 1) && obj.realFilename?ends_with(".png")>
         <#include "viewImages.ftl"/>
         <#else>
@@ -54,21 +52,25 @@
              will be replaced with flash if supported and up to date.
             -->
             <#if obj.mediaType == 10>
+            <#assign width=480/>
+            <#assign height=24/>
             <#-- audio format -->
-            <audio src="${mediaFileLink}" controls preload="auto">
+            <audio width="${width?c}" height="${height?c}"
+                   src="${mediaFileLink?html}"
+                   controls preload="auto" id="avPlayer">
                 Your browser does not support the audio element.
             </audio>
             <#elseif obj.mediaType == 20>
             <#-- video format-->
-            <video src="${mediaFileLink}" controls preload="auto"
-                width="${width?c}" height="${height?c}"
-            <#if obj.thumbnail?has_content>
-                poster="${thumnailFileLink}"
+            <video width="${width?c}" height="${height?c}"
+                   src="${mediaFileLink?html}"
+            <#if thumnailFileLink?has_content>
+                   poster="${thumnailFileLink?html}"
             </#if>
-            >
+                   controls preload="auto" id="avPlayer">
                 Your browser does not support the video element.
     	    </video>
-            <#else>
+    	    <#else>
             <#-- flash format-->
             You need to install Adobe Flash Player.<br/>
             <a href="http://www.macromedia.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Click
@@ -88,18 +90,10 @@
 <#include "viewVideo.ftl"/>
 </#if>
 <#-- add "Hosted by UniTube" and link to embed code -->
-<#if (obj.mediaType != 10) && (obj.mediaType != 20) >
-<#assign embedCode><div>${embedCode}</div><div><a href="${viewURL}">Hosted by UniTube</a></div></#assign>
-</#if>
-
-<#if uploadLocation.baseLink?starts_with('http://media.otago.ac.nz')>
-<script type="text/javascript">
-    <!--
-    // track media file
-    if (window.mediaTracker)
-        mediaTracker._trackPageview('${mediaFileLinkRelative}');
-    //-->
-</script>
+<#if obj.accessType == 0>
+<#assign embedCode><div id="__unitube_${obj.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align: center"><a href="${viewURL}">Hosted by UniTube</a></div></div></#assign>
+<#else>
+<#assign embedCode><div id="__unitube_${obj.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align: center"><a href="${context_url}">Hosted by UniTube</a></div></div></#assign>
 </#if>
 
 <!--
@@ -107,7 +101,7 @@
     // original size: ${obj.width}x${obj.height}
     // display size:${width}x${height}
     // flowPlayer=${flowPlayer}
-    // Controller Heights: ${controllerHeight}
+    // JWPLAYER=${JWPLAYER}
     // originalFileLink=${originalFileLink!}
     // mediaFileLink=${mediaFileLink!}
     // otherFormatFileLink=${otherFormatFileLink!}
@@ -136,9 +130,9 @@
 <p><strong>From:</strong>
     <a href="${baseUrl}/media.do?u=${obj.user.accessCode}">${obj.user.firstName} ${obj.user.lastName}</a>
     <a href="${baseUrl}/feed.do?topic=media&amp;u=${obj.user.accessCode}"
-       title="Feed for ${obj.user.firstName} ${obj.user.lastName}">
-        <img src="${baseUrl}/images/feed-icon.png" alt="Feed for ${obj.user.firstName} ${obj.user.lastName}"
-             title="Feed for ${obj.user.firstName} ${obj.user.lastName}"/>
+       title="Feed for ${obj.user.firstName?html} ${obj.user.lastName?html}">
+        <img src="${baseUrl}/images/feed-icon.png" alt="Feed for ${obj.user.firstName?html} ${obj.user.lastName?html}"
+             title="Feed for ${obj.user.firstName?html} ${obj.user.lastName?html}"/>
     </a>
 </p>
 
@@ -149,7 +143,7 @@
 <#if obj.albumMedias?has_content>
 <p><strong>Album(s):</strong>
     <#list obj.albumMedias as albumMedia>
-    <a href="${baseUrl}/album?a=${albumMedia.album.accessCode}">${albumMedia.album.albumName}</a>
+    <a href="${baseUrl}/album?a=${albumMedia.album.accessCode}">${albumMedia.album.albumName?html}</a>
     </#list>
 </p>
 </#if>
@@ -262,35 +256,27 @@
     <strong>Download:</strong>
     <#-- proviod original file link for upload only, swf, unrecognized, images-->
     <#if obj.uploadOnly || obj.realFilename!?ends_with(".swf") || (obj.status == 9) || (obj.mediaType == 5) || obj.realFilename!?ends_with(".png")>
-    <a href="${originalFileLink}"
-       onclick="if(window.mediaTracker) mediaTracker._trackPageView('${originalFileLinkRelative}');">original file</a>
+    <a href="${originalFileLink?html}">original file</a>
     <#elseif mediaFileLink?has_content>
-    <a href="${mediaFileLink}"
-       onclick="if(window.mediaTracker) mediaTracker._trackPageView('${mediaFileLinkRelative}');">media file</a>
+    <a href="${mediaFileLink?html}">media file</a>
     </#if>
     <#-- for image files, display different size images -->
     <#if obj.mediaType == 5>
     <#if mediaFileLink??>
-    | <a href="${mediaFileLink}"
-       onclick="if(window.mediaTracker) mediaTracker._trackPageView('${mediaFileLinkRelative}');">medium size</a>
+    | <a href="${mediaFileLink?html}">medium size</a>
     </#if>
     <#if largeImageFileLink??>
-    | <a href="${largeImageFileLink}"
-       onclick="if(window.mediaTracker) mediaTracker._trackPageView('${largeImageFileLinkRelative}');">large size</a>
+    | <a href="${largeImageFileLink?html}">large size</a>
     </#if>
     <#if veryLargeImageFileLink??>
-    | <a href="${veryLargeImageFileLink}"
-       onclick="if(window.mediaTracker) mediaTracker._trackPageView('${veryLargeImageFileLinkRelative}');">very large size</a>
+    | <a href="${veryLargeImageFileLink?html}">very large size</a>
     </#if>
     <#if extraLargeImageFileLink??>
-    | <a href="${extraLargeImageFileLink}"
-       onclick="if(window.mediaTracker) mediaTracker._trackPageView('${extraLargeImageFileLinkRelative}');">extra large size</a>
+    | <a href="${extraLargeImageFileLink?html}">extra large size</a>
     </#if>
     </#if>
     <#if obj.convertTo?has_content && otherFormatFileLink?has_content>
-    | <a href="${otherFormatFileLink}"
-         onclick="if(window.mediaTracker) mediaTracker._trackPageView('${otherFormatFileLinkRelative}');">MPEG
-    format</a>
+    | <a href="${otherFormatFileLink?html}">MPEG format</a>
     </#if>
 </p>
 

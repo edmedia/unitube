@@ -12,7 +12,7 @@
                         href="mailto:unitube@otago.ac.nz">unitube@otago.ac.nz</a>.</p>
 
             <p><strong>A</strong>fter you log in, you can easily upload media files and share them. You can
-                share your files with all users (public) or you can share the file's URL with specific users (private).
+                share your files with all users (public) or you can share the file's URL with specific users (hidden).
             </p>
 
             <p>If you want more information first, go to <a href="${baseUrl}/help.do">help</a>. Unsure about copyright

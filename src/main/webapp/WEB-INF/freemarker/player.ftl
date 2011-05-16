@@ -19,7 +19,7 @@
         'audio': { 'url': '${audioPlugin}' },
         'c1': {
             'url': '${contentPlugin}',
-<#-- link to media file for public file, link to home page for private file -->
+<#-- link to media file for public file, link to home page for hidden and private file -->
 <#if obj.accessType == 0>
             'html': '<p align=\"center\"><b><a href=\"${viewURL}\">Hosted by UniTube</a></b></p>',
 <#else>
@@ -53,7 +53,7 @@
         },
         'c1': {
             'url': '${contentPlugin}',
-<#-- link to media file for public file, link to home page for private file -->
+<#-- link to media file for public file, link to home page for hidden and private file -->
 <#if obj.accessType == 0>
             'html': '<p align=\"center\"><b><a href=\"${viewURL}\">Hosted by UniTube</a></b></p>',
 <#else>

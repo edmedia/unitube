@@ -195,8 +195,23 @@
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
 
+    <bean id="embed" class="nz.ac.otago.edmedia.media.controller.ViewController">
+        <property name="viewName" value="embed"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="normalView" value="redirect:/embed.do"/>
+        <property name="loginView" value="redirect:/myTube/embed.do"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
     <bean id="player" class="nz.ac.otago.edmedia.media.controller.PlayerController">
         <property name="viewName" value="player"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="file" class="nz.ac.otago.edmedia.media.controller.FileController">
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
@@ -366,7 +381,10 @@
                 /myTube/profile.do=myUserEdit
                 /myTube/view.do=view
                 /view=view
+                /myTube/embed.do=embed
+                /embed.do=embed
                 /player=player
+                /file.do=file
                 /album=album
                 /feed.do=feed
                 /admin/monitor.do=monitor

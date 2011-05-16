@@ -45,23 +45,21 @@
             </td>
         </tr>
 
-        <@spring.bind "media.locationCode" />
+        <@spring.bind "media.accessCode" />
         <#if (spring.status.value)??>
-        <#assign location>${spring.status.value}</#assign>
-        <#else>
-        <@spring.bind "media.randomCode" />
-        <#assign location>${spring.status.value}</#assign>
+        <#assign accessCode>${spring.status.value}</#assign>
+        <#assign mediaFileBaseUrl= baseUrl + "/file.do?m=" + accessCode />
         </#if>
-        <#assign personalDir>${user.accessCode}/${location}/</#assign>
 
         <!-- thumbnail: thumbnail picture-->
         <@spring.bind "media.thumbnail" />
         <#if spring.status.value??>
+        <#assign thumbUrl = mediaFileBaseUrl + "&name=" + spring.status.value />
         <tr>
             <th>Thumbnail</th>
             <td>
 
-                <img src="<#if !uploadLocation.absolutePath>${baseUrl}/</#if>${uploadLocation.baseLink}${personalDir}${spring.status.value?html}"
+                <img src="${thumbUrl?html}"
                         <@spring.bind "media.width"/>
  width="<#if spring.status.value?? && (spring.status.value &gt; 300)>300</#if>"
                      alt=""/>
@@ -118,18 +116,6 @@
                     });
                 -->
               </script>
-                       <#--
-                <script type="text/javascript">
-                    var fck_${spring.status.expression} = new FCKeditor('${spring.status.expression}');
-                    fck_${spring.status.expression}.BasePath = '<@spring.url "/fckeditor/"/>';
-                    fck_${spring.status.expression}.Value = '<#if spring.status.value??><#if spring.status.value?is_number>${spring.status.value?c}<#else>${spring.status.value?js_string}</#if></#if>';
-                    fck_${spring.status.expression}.Config['CustomConfigurationsPath'] = '<@spring.url "/fckeditor/custom/config.js"/>';
-                    fck_${spring.status.expression}.Width = '430px';
-                    fck_${spring.status.expression}.Height = '200px';
-                    fck_${spring.status.expression}.ToolbarSet = 'CUSTOM';
-                    fck_${spring.status.expression}.Create();
-                </script>
-                -->
             </td>
             <td>
                 <@displayError/>
@@ -147,7 +133,8 @@
                 <@displayError/>
                 <@spring.bind "media.uploadFileUserName" />
                 <#if spring.status.value??>
-                <a href="<#if !uploadLocation.absolutePath>${baseUrl}/</#if>${uploadLocation.baseLink}${personalDir}${spring.status.value?html}"><@getTitle spring.status.value! /></a>
+                <#assign uploadFileUrl = mediaFileBaseUrl + "&name=" + spring.status.value />
+                <a href="${uploadFileUrl?html}"><@getTitle spring.status.value! /></a>
                 </#if>
             </td>
         </tr>

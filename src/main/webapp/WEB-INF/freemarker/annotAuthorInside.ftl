@@ -14,6 +14,7 @@
         <param name="postUrl" value="${postURL}"/>
         <param name="imageId" value="${obj.accessCode}"/>
         <param name="userId" value="${user.accessCode}"/>
+        <param name="java_arguments" value="-Xmx256m">
     </applet>
 
     <p>

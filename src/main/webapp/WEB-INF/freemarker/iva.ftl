@@ -1,8 +1,9 @@
+<#-- only for image file -->
 <#if obj?? && obj.mediaType == 5>
 <#include "imageViewerHelper.ftl"/>
 <#if ivOption??>
     <#if ivOption.whichImageForIV??>
-        <#assign imageFileLink>${mediaFileBase}/${ivOption.whichImageForIV}</#assign>
+        <#assign imageFileLink>${fileURL}&name=${ivOption.whichImageForIV}</#assign>
     </#if>
     <#assign ivaMeasure=ivOption.displayMeasureTool />
     <#assign ivaWidth=ivOption.actualWidth />

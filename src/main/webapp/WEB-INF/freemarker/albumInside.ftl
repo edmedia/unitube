@@ -23,8 +23,8 @@
     <table summary="">
         <#list obj.albumMedias?sort_by(['media', 'uploadTime'])?reverse as albumMedia>
         <#assign entity=albumMedia.media />
-        <#-- display private media in private album -->
-        <#-- hide private media in public album -->
+        <#-- display hidden media in hidden album -->
+        <#-- hide hidden media in public album -->
         <#if ((obj.accessType == 10) && (entity.accessType == 10)) || (entity.accessType == 0)>
         <#assign linkTitle>${entity.title!?html}</#assign>
         <tr valign="top">

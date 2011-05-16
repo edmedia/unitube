@@ -200,7 +200,8 @@
 </#function>
 
 <#macro thumbnailLink media>
-<#if !uploadLocation.absolutePath>${baseUrl}/</#if>${uploadLocation.baseLink}${media.user.accessCode}/<#if media.locationCode??>${media.locationCode}<#else>${media.randomCode}</#if>/<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#macro>
+<#local link>${baseUrl}/file.do?m=${media.accessCode}&name=<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#local>
+${link?html}</#macro>
 
 <#macro viewLinkWithThumbnail media>
 <#-- default width and height -->
@@ -219,24 +220,20 @@
 </#if>
 </#if>
 <#local linkTitle>${media.title!?html}</#local>
-<a href="${baseUrl}/view?m=${media.accessCode}" title="${linkTitle}">
-    <#if media.uploadOnly>
-    <img src="${baseUrl}/images/general.gif" width="${defaultHeight}" height="${defaultHeight}"
-         title="${linkTitle}"
-         alt="${linkTitle}"/>
-    <#elseif media.thumbnail?has_content>
+<a href="${baseUrl}/view?m=${media.accessCode}" title="${linkTitle?html}">
+    <#if media.thumbnail?has_content>
     <img src="<@thumbnailLink media/>"
-         width="${realWidth}" height="${realHeight}"
-         title="${linkTitle}"
-         alt="${linkTitle}"/>
+         width="${realWidth?c}" height="${realHeight?c}"
+         title="${linkTitle?html}"
+         alt="${linkTitle?html}"/>
     <#elseif media.realFilename!?ends_with("mp3")>
-    <img src="${baseUrl}/images/mp3.jpg" width="${defaultWidth}" height="${defaultHeight}"
-         title="${linkTitle}"
-         alt="${linkTitle}"/>
+    <img src="${baseUrl}/images/mp3.jpg" width="${defaultWidth?c}" height="${defaultHeight?c}"
+         title="${linkTitle?html}"
+         alt="${linkTitle?html}"/>
     <#else>
-    <img src="${baseUrl}/images/general.gif" width="${defaultHeight}" height="${defaultHeight}"
-         title="${linkTitle}"
-         alt="${linkTitle}"/>
+    <img src="${baseUrl}/images/general.gif" width="${defaultHeight?c}" height="${defaultHeight?c}"
+         title="${linkTitle?html}"
+         alt="${linkTitle?html}"/>
     </#if>
 </a>
 </#macro>

@@ -128,18 +128,21 @@
             <th>Default Upload Access Type</th>
             <td>
                 <@spring.bind "user.uploadAccessType" />
-                <input type="radio" name="${spring.status.expression}"
-                       value="0"
+                <input type="radio" name="${spring.status.expression}" value="0"
+                       title="<@spring.message "media.access.public"/>"
                        <#if spring.status.value?? && spring.status.value==0>checked="checked"</#if>/>
-                Public
-                <input type="radio" name="${spring.status.expression}"
-                       value="10"
+                <span title="<@spring.message "media.access.public"/>">Public</span>
+                <input type="radio" name="${spring.status.expression}" value="10"
+                       title="<@spring.message "media.access.hidden"/>"
                        <#if spring.status.value?? && spring.status.value==10>checked="checked"</#if>/>
-                Hidden
-                <input type="radio" name="${spring.status.expression}"
-                       value="20"
+                <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
+                <#--
+                <input type="radio" name="${spring.status.expression}" value="20"
+                title="<@spring.message "media.access.private"/>"
+
                        <#if spring.status.value?? && spring.status.value==20>checked="checked"</#if>/>
-                Private
+                <span title="<@spring.message "media.access.private"/>">Private</span>
+                -->
             </td>
             <td>
                 <@displayError/>
@@ -150,18 +153,21 @@
             <th>Default Email Upload Access Type</th>
             <td>
                 <@spring.bind "user.emailUploadAccessType" />
-                <input type="radio" name="${spring.status.expression}"
-                       value="0"
-                        <#if spring.status.value?? && spring.status.value==0> checked="checked"</#if>/>
-                Public
-                <input type="radio" name="${spring.status.expression}"
-                       value="10"
-                        <#if spring.status.value?? && spring.status.value==10> checked="checked"</#if>/>
-                Hidden
-                <input type="radio" name="${spring.status.expression}"
-                       value="20"
-                        <#if spring.status.value?? && spring.status.value==20> checked="checked"</#if>/>
-                Private
+                <input type="radio" name="${spring.status.expression}" value="0"
+                       title="<@spring.message "media.access.public"/>"
+                       <#if spring.status.value?? && spring.status.value==0>checked="checked"</#if>/>
+                <span title="<@spring.message "media.access.public"/>">Public</span>
+                <input type="radio" name="${spring.status.expression}" value="10"
+                       title="<@spring.message "media.access.hidden"/>"
+                       <#if spring.status.value?? && spring.status.value==10>checked="checked"</#if>/>
+                <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
+                <#--
+                <input type="radio" name="${spring.status.expression}" value="20"
+                title="<@spring.message "media.access.private"/>"
+
+                       <#if spring.status.value?? && spring.status.value==20>checked="checked"</#if>/>
+                <span title="<@spring.message "media.access.private"/>">Private</span>
+                -->
             </td>
             <td>
                 <@displayError/>
