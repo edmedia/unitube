@@ -31,7 +31,7 @@ public class AVPController extends BaseOperationController {
         String av1 = request.getParameter("av1");
         Media audioVideo1 = null;
         if (StringUtils.isBlank(av1))
-            av1 = "sBXp6nYV8A";
+            av1 = "hYeo7fPJat";
         if (StringUtils.isNotBlank(av1)) {
             // get id from access code
             long id = CommonUtil.getId(av1);
