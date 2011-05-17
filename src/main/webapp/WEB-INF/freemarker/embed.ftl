@@ -46,7 +46,9 @@
             flashplayer: '${JWPLAYER?html}',
             bufferlength: 5,
             controlbar: {position: 'bottom', idlehide: false},
+            <#if obj.duration &gt; 0>
             duration: ${(obj.duration/1000)?c},
+            </#if>
             width: $(window).width(),
             height: $(window).height(),
             provider: 'sound'
@@ -56,14 +58,18 @@
             flashplayer: '${JWPLAYER?html}',
             bufferlength: 5,
             controlbar: {position: 'bottom', idlehide: false},
+            <#if obj.duration &gt; 0>
             duration: ${(obj.duration/1000)?c},
+            </#if>
             provider: 'sound'
         });
     <#elseif obj.mediaType == 20>
     jwplayer('avPlayer').setup({
         flashplayer: '${JWPLAYER}',
         bufferlength: 5,
+        <#if obj.duration &gt; 0>
         duration: ${(obj.duration/1000)?c},
+        </#if>
         width: $(window).width(),
         height: $(window).height(),
         provider: 'video'

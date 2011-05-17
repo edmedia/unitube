@@ -14,7 +14,9 @@
 <#assign playerURL>${context_url}/player?m=${obj.accessCode}</#assign>
 <#assign originalFileLink>${fileURL}&name=${obj.uploadFileUserName}</#assign>
 <#assign mediaFileLink>${fileURL}</#assign>
-<#if obj.mediaType == 1>
+<#-- add realFilename to the end of url for other media file (non-uploadOnly), 
+     because it only contains filename for first slide -->
+<#if (obj.mediaType == 1) && !obj.uploadOnly>
 <#assign mediaFileLink>${fileURL}&name=${obj.realFilename}</#assign>
 </#if>
 <#if obj.otherFormatFilename?has_content>
