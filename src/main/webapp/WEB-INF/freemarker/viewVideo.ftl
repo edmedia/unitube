@@ -5,8 +5,6 @@
 <#assign embedCode><iframe width="${width?c}" height="${height?c}" src="${embedURL?html}" frameborder="0" allowfullscreen></iframe></#assign>
 <script type="text/javascript">
     <!--
-    //var deviceAgent = navigator.userAgent.toLowerCase();
-	//var iDevice = deviceAgent.match(/(iphone|ipod|ipad)/);
     jwplayer('avPlayer').setup({
         flashplayer: '${JWPLAYER}',
         bufferlength: 5,

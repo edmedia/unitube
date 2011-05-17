@@ -7,7 +7,7 @@
 <script type="text/javascript">
     <!--
     var deviceAgent = navigator.userAgent.toLowerCase();
-	var iDevice = deviceAgent.match(/(iphone|ipod|ipad)/);
+    var iDevice = deviceAgent.match(/(iphone|ipod|ipad)/);
     var width = ${width?c};
     var height = ${height?c};
     if(iDevice) {
