@@ -7,6 +7,7 @@ import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,26 +78,28 @@ public class ConvertTimerTask extends TimerTask {
                     for (File file : files)
                         // only deal with files, not direcoties
                         if (file.exists() && file.isFile()) {
-                            String accessCode = file.getName();
-                            Media media = (Media) service.get(Media.class, CommonUtil.getId(accessCode));
-                            // if media doesn't exist, or has finished or unrecongized, remove tmp file
-                            if ((media == null) ||
-                                    (!media.getUser().getIsGuest() && ((media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED) ||
-                                            (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED)))
-                                    ) {
-                                MediaUtil.removeTmpFile(uploadLocation, accessCode);
-                                log.info("remove tmp file: {} {}", accessCode, CommonUtil.getId(accessCode));
-                            } else if (media.getUser().getIsGuest() &&
-                                    ((media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED) ||
-                                            (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED))
-                                    ) {
-                                if (MediaUtil.removeMediaAfter24FromGuest(uploadLocation, media, service))
-                                    log.info("remove guest media file after 24 hours.");
-
-                            } else if (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_PROCESSING) {
-                                log.info("media file {} {} already in process.", accessCode, CommonUtil.getId(accessCode));
-                            } else
-                                processMedia(media);
+                            // only deal with files without extension
+                            if (StringUtils.isBlank(FilenameUtils.getExtension(file.getAbsolutePath()))) {
+                                String accessCode = file.getName();
+                                Media media = (Media) service.get(Media.class, CommonUtil.getId(accessCode));
+                                // if media doesn't exist, or has finished or unrecongized, remove tmp file
+                                if ((media == null) ||
+                                        (!media.getUser().getIsGuest() && ((media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED) ||
+                                                (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED)))
+                                        ) {
+                                    MediaUtil.removeTmpFile(uploadLocation, accessCode);
+                                    log.info("remove tmp file: {} {}", accessCode, CommonUtil.getId(accessCode));
+                                } else if (media.getUser().getIsGuest() &&
+                                        ((media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED) ||
+                                                (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED))
+                                        ) {
+                                    if (MediaUtil.removeMediaAfter24FromGuest(uploadLocation, media, service))
+                                        log.info("remove guest media file after 24 hours.");
+                                } else if (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_PROCESSING) {
+                                    log.info("media file {} {} already in process.", accessCode, CommonUtil.getId(accessCode));
+                                } else
+                                    processMedia(media);
+                            }
                         }
                 }
 
