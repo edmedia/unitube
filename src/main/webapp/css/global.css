@@ -962,7 +962,7 @@ span#current-time1, span#current-time2, span#current-slide {
     border: 2px solid #000000;
 }
 
-div.info {
+#avpContainer div.info {
     margin-top: 5px;
     margin-bottom: 10px;
 }
