@@ -41,6 +41,9 @@
         <property name="service" ref="myBaseService"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
     </bean>
 
     <bean id="copyright" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
@@ -73,6 +76,9 @@
         <property name="uploadLocation" ref="uploadLocation"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
     </bean>
 
     <bean id="userRegisterValidator" class="nz.ac.otago.edmedia.media.validator.UserRegisterValidator">
@@ -86,6 +92,9 @@
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
         <property name="formView" value="main"/>
         <property name="successView" value="uploadSuccess"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
@@ -101,6 +110,9 @@
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="commandName" value="media"/>
         <property name="service" ref="myBaseService"/>
@@ -445,6 +457,9 @@
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
         <property name="emailProtocol" value="${email.upload.protocol}"/>
         <property name="emailServer" value="${email.upload.server}"/>
         <property name="emailUsername" value="${email.upload.username}"/>

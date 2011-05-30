@@ -28,12 +28,30 @@ public class RegisterController extends BaseFormController {
 
     private String fromEmail;
 
+    private String smtpUsername;
+
+    private String smtpPassword;
+
+    private int smtpPort;
+
     public void setMailHost(String mailHost) {
         this.mailHost = mailHost;
     }
 
     public void setFromEmail(String fromEmail) {
         this.fromEmail = fromEmail;
+    }
+
+    public void setSmtpUsername(String smtpUsername) {
+        this.smtpUsername = smtpUsername;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
     }
 
     @Override
@@ -60,7 +78,8 @@ public class RegisterController extends BaseFormController {
                 user.getUserName(), // username
                 password // password
         });
-        OtherUtil.sendEmail(mailHost, fromEmail, user.getEmail(), subject, body);
+        OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                user.getEmail(), subject, body);
 
         Map model = errors.getModel();
         return getModelAndView(model, request);

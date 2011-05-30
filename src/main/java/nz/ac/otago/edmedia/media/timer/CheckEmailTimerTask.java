@@ -57,6 +57,12 @@ public class CheckEmailTimerTask
 
     private String fromEmail;
 
+    private String smtpUsername;
+
+    private String smtpPassword;
+
+    private int smtpPort;
+
     private String emailProtocol;
 
     private String emailServer;
@@ -103,6 +109,18 @@ public class CheckEmailTimerTask
 
     public void setFromEmail(String fromEmail) {
         this.fromEmail = fromEmail;
+    }
+
+    public void setSmtpUsername(String smtpUsername) {
+        this.smtpUsername = smtpUsername;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
     }
 
     public void setEmailProtocol(String emailProtocol) {
@@ -462,11 +480,13 @@ public class CheckEmailTimerTask
                 youSubject = "You just uploaded " + filename + " to UniTube via Mobile";
 
             String youBody = "Here is the link to your media file: " + url;
-            OtherUtil.sendEmail(mailHost, fromEmail, user.getEmail(), youSubject, youBody);
+            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    user.getEmail(), youSubject, youBody);
             // send an email to unitube email address
             String body = "Here is the link to the media file: " + url;
             subject = user.getFirstName() + " just uploaded " + filename + " to UniTube";
-            OtherUtil.sendEmail(mailHost, fromEmail, fromEmail, subject, body);
+            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    fromEmail, subject, body);
             // delete this email
             message.setFlag(Flags.Flag.DELETED, true);
         } catch (DataAccessException e) {

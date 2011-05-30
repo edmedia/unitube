@@ -16,8 +16,7 @@
         private material to UniTube at this time.</p>
 
     <p>Also, please do ensure that you only upload material that you have
-        created or have permission to share. See
-        <a href="${baseUrl}/copyright.do">${baseUrl}/copyright.do</a>
+        created or have permission to share. See <a href="${baseUrl}/copyright.do">here</a>
         for further information.</p>
 
     <p>If you become aware of any material on UniTube that you feel is

@@ -40,6 +40,12 @@ public class PostController extends BaseOperationController {
 
     private String fromEmail;
 
+    private String smtpUsername;
+
+    private String smtpPassword;
+
+    private int smtpPort;
+
     public void setConsumerKey(String consumerKey) {
         this.consumerKey = consumerKey;
     }
@@ -62,6 +68,18 @@ public class PostController extends BaseOperationController {
 
     public void setFromEmail(String fromEmail) {
         this.fromEmail = fromEmail;
+    }
+
+    public void setSmtpUsername(String smtpUsername) {
+        this.smtpUsername = smtpUsername;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
     }
 
     @Override
@@ -155,11 +173,13 @@ public class PostController extends BaseOperationController {
             // send an email to user
             String youSubject = msa.getMessage("upload.email.subject", new String[]{originalFilename});
             String youBody = msa.getMessage("upload.email.body", new String[]{url});
-            OtherUtil.sendEmail(mailHost, fromEmail, user.getEmail(), youSubject, youBody);
+            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    user.getEmail(), youSubject, youBody);
             // send an email to unitube email address
             String body = msa.getMessage("upload.email.unitube.body", new String[]{url});
             subject = msa.getMessage("upload.email.subject", new String[]{originalFilename, user.getFirstName()});
-            OtherUtil.sendEmail(mailHost, fromEmail, fromEmail, subject, body);
+            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    fromEmail, subject, body);
         } catch (DataAccessException e) {
             logger.error(e);
             throw new ServletException("Exception when saving media", e);
