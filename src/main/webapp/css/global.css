@@ -96,7 +96,7 @@ body {
 }
 
 .tubeLogo {
-    background-image: url("../images/logo_03.png");
+    background-image: url("../images/unitube_logo.png");
     height: 44px;
     left: 113px;
     position: absolute;
@@ -209,7 +209,7 @@ body {
     width: 905px;
 }
 
-html > body .topLine {
+div.topLine {
     height: 77px;
 }
 
@@ -435,21 +435,26 @@ div.clearMe {
     height: 20px;
 }
 
-.pageNumber {
+div.pageNumber {
     clear: both;
     float: left;
     font-size: 14px;
     font-weight: bold;
     line-height: 20px;
     margin-top: 30px;
-    padding-left: 7px;
-    padding-right: 7px;
-    width: 650px;
+    margin-left: 55px;
+    width: 700px;
     word-spacing: 6px;
+    text-align: center;
 }
 
-.pageNumber p {
-    text-align: center;
+div.pageNumber ul li {
+    display: inline;
+}
+
+div.pageNumber ul li.current {
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .uniTubas {
@@ -609,7 +614,7 @@ th {
 }
 
 .tubeLog {
-    background-image: url("../images/logo_03.png");
+    background-image: url("../images/unitube_logo.png");
     clear: both;
     float: left;
     height: 44px;
@@ -776,10 +781,10 @@ form .text {
 .mediadetails {
     float: left;
     font-size: 11px;
-    height: 40px;
+    height: 50px;
     overflow: hidden;
     padding: 10px;
-    width: 75px;
+    width: 78px;
 }
 
 .mediaTitle {

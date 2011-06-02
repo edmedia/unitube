@@ -29,7 +29,7 @@
         </h2>
 
         <div id="uniTubeLogin">
-            <img src="${baseUrl}/images/logo_03.png" alt=""/><br/>
+            <img src="${baseUrl}/images/unitube_logo.png" alt=""/><br/>
             <#if error??>
             <p style="color: red">${error}</p>
             </#if>

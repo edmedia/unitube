@@ -4,13 +4,13 @@
     @param: fieldName field name
 -->
 <#function orderByLink fieldName>
-<#local link = pager.linkWithoutOrderBy + "&orderBy=" + fieldName + "&"/>
-<#if orderBy! == fieldName>
-<#local link = link + "orderByDesc=" + (!orderByDesc)?string/>
-<#else>
-<#local link = link + "orderByDesc=false"/>
-</#if>
-<#return link/>
+    <#local link = pager.linkWithoutOrderBy + "&orderBy=" + fieldName + "&"/>
+    <#if orderBy! == fieldName>
+        <#local link = link + "orderByDesc=" + (!orderByDesc)?string/>
+        <#else>
+            <#local link = link + "orderByDesc=false"/>
+    </#if>
+    <#return link/>
 </#function>
 
 <#--
@@ -36,16 +36,17 @@
     desc: dispaly error messages for each field
 -->
 <#macro displayError>
-<#if spring.status.errorMessages?has_content>
-<div class="errorMessage">
-    <#list spring.status.errorMessages as error>
-    <p>${error}</p>
-    </#list>
-</div>
-</#if>
+    <#if spring.status.errorMessages?has_content>
+    <div class="errorMessage">
+        <#list spring.status.errorMessages as error>
+            <p>${error}</p>
+        </#list>
+    </div>
+    </#if>
 </#macro>
 
 <#assign maxTitleLength = 32 />
+<#assign maxShortTitleLength = 16 />
 <#assign maxDescriptionLength = 256 />
 
 <#--
@@ -56,14 +57,37 @@
 <#macro displayMediaList elements>
 <div class="mediaDisplay2">
     <#if elements?has_content>
-    <#list elements as entity>
-    <@displayMediaInList entity />
-    </#list>
-    <#else>
-    <div class="info"><@spring.message "no.record"/></div>
+        <#list elements as entity>
+        <@displayMediaInList entity />
+        </#list>
+        <#else>
+            <div class="info"><@spring.message "no.record"/></div>
     </#if>
 </div>
 </#macro>
+
+<#assign pagesBeforeCurrent = 10 />
+<#assign maxPages = 20 />
+
+<#function getStartPage currentPage, totalPage>
+    <#local startPage = 1/>
+    <#if currentPage &gt; (pagesBeforeCurrent+1)>
+        <#if totalPage &gt; (currentPage + maxPages - pagesBeforeCurrent -2) >
+            <#local startPage = currentPage - pagesBeforeCurrent/>
+            <#else>
+                <#local startPage = totalPage - maxPages + 1/>
+        </#if>
+    </#if>
+    <#return startPage/>
+</#function>
+
+<#function getEndPage currentPage, totalPage>
+    <#local endPage = getStartPage(currentPage, totalPage) + maxPages -1/>
+    <#if endPage &gt; totalPage>
+        <#local endPage = totalPage/>
+    </#if>
+    <#return endPage/>
+</#function>
 
 <#--
     name: displayPager
@@ -71,33 +95,53 @@
     @param: pager pager object
 -->
 <#macro displayPager pager>
-<#if pager.lastPageNumber &gt; 1>
-<div class="pageNumber">
-    <p>
-        <#if pager.pageNumber &gt; 1>
-        <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=1">
-            &lt;&lt; </a>
-        <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${pager.pageNumber-1}">
-            &lt; </a>
-        </#if>
-        <#list 1..pager.lastPageNumber as p>
-        <#if (p_index+1) == pager.pageNumber>
-        <span class="pagerCurrent">${p}</span>
-        </#if>
-        <#if (p_index+1) != pager.pageNumber>
-        <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${p_index+1}"
-           class="pagerNotCurrent">${p}</a>
-        </#if>
-        </#list>
-        <#if pager.pageNumber &lt; pager.lastPageNumber>
-        <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${pager.pageNumber+1}">
-            &gt; </a>
-        <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${pager.lastPageNumber}">
-            &gt;&gt; </a>
-        </#if>
-    </p>
-</div>
-</#if>
+    <#if pager.lastPageNumber &gt; 1>
+    <div class="pageNumber">
+        <ul>
+            <#if (pager.pageNumber-1) &gt; 1>
+                <li>
+                    <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=1"
+                       title="first page">
+                        &lt;&lt; </a>
+                </li>
+            </#if>
+            <#if pager.pageNumber &gt; 1>
+                <li>
+                    <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${pager.pageNumber-1}"
+                       title="prvious page">
+                        &lt; </a>
+                </li>
+            </#if>
+        <#-- if there are more than 20 pages, always display 20 pages.
+             10 pages before current page and 9 pages after current page  -->
+            <#local sPage=getStartPage(pager.pageNumber, pager.lastPageNumber)/>
+            <#local ePage=getEndPage(pager.pageNumber, pager.lastPageNumber)/>
+            <#list sPage..ePage as p>
+                <#if p == pager.pageNumber>
+                    <li class="current">${p}</li>
+                    <#else>
+                        <li>
+                            <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${p?c}">${p}</a>
+                        </li>
+                </#if>
+            </#list>
+            <#if pager.pageNumber &lt; pager.lastPageNumber>
+                <li>
+                    <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${pager.pageNumber+1}"
+                       title="next page">
+                        &gt; </a>
+                </li>
+            </#if>
+            <#if (pager.pageNumber+1) &lt; pager.lastPageNumber>
+                <li>
+                    <a href="${this_url}?<#if searchWords??>q=${searchWords}&amp;</#if><#if pageSize??>s=${pager.pageSize?c}&amp;</#if><#if user??>u=${user.accessCode}&amp;</#if><#if mediaType??>t=${mediaType}&amp;</#if>p=${pager.lastPageNumber}"
+                       title="last page">
+                        &gt;&gt; </a>
+                </li>
+            </#if>
+        </ul>
+    </div>
+    </#if>
 </#macro>
 
 <#--
@@ -106,32 +150,39 @@
     @param: pager pager object
 -->
 <#macro displayGmailStylePager pager>
-<#if pager.lastPageNumber &gt; 1>
-<span class="pageNav">
+    <#if pager.lastPageNumber &gt; 1>
+    <span class="pageNav">
 <#if pager.pageNumber &gt; 2>
-<a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=1">&lt;&lt; Newest</a>
+    <a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=1">&lt;&lt; Newest</a>
 </#if>
-<#if pager.pageNumber &gt; 1>
-<a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=${pager.previousPageNumber?c}">&lt; Newer</a>
-</#if>
-<strong>${(pager.pageNumber-1)*pager.pageSize+1}
-    - <#if pager.pageNumber == pager.lastPageNumber>${pager.totalNumberOfElements}<#else>${pager.pageNumber*pager.pageSize}</#if></strong> of <strong>${pager.totalNumberOfElements}</strong>
-<#if pager.pageNumber &lt; pager.lastPageNumber>
-<a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=${pager.nextPageNumber?c}">Older &gt;</a>
-</#if>
-<#if (pager.pageNumber+1) &lt; pager.lastPageNumber>
-<a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=${pager.lastPageNumber?c}">Oldest &gt;&gt;</a>
-</#if>
+        <#if pager.pageNumber &gt; 1>
+            <a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=${pager.previousPageNumber?c}">&lt;
+                Newer</a>
+        </#if>
+        <strong>${(pager.pageNumber-1)*pager.pageSize+1}
+            - <#if pager.pageNumber == pager.lastPageNumber>${pager.totalNumberOfElements}<#else>${pager.pageNumber*pager.pageSize}</#if></strong> of <strong>${pager.totalNumberOfElements}</strong>
+        <#if pager.pageNumber &lt; pager.lastPageNumber>
+            <a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=${pager.nextPageNumber?c}">Older
+                &gt;</a>
+        </#if>
+        <#if (pager.pageNumber+1) &lt; pager.lastPageNumber>
+            <a href="${this_url}?<#if pageSize??>s=${pager.pageSize?c}&amp;</#if>p=${pager.lastPageNumber?c}">Oldest
+                &gt;&gt;</a>
+        </#if>
 </span>
-</#if>
+    </#if>
+</#macro>
+
+<#macro getShortTitle realTitle>
+    <#if realTitle?? && (realTitle?length &gt; maxShortTitleLength)>${realTitle?substring(0, maxShortTitleLength-3)?html} ...<#else>${realTitle?html}</#if>
 </#macro>
 
 <#macro getTitle realTitle>
-<#if realTitle?? && (realTitle?length &gt; maxTitleLength)>${realTitle?substring(0, maxTitleLength-3)?html}...<#else>${realTitle?html}</#if>
+    <#if realTitle?? && (realTitle?length &gt; maxTitleLength)>${realTitle?substring(0, maxTitleLength-3)?html} ...<#else>${realTitle?html}</#if>
 </#macro>
 
 <#macro getDesc realDesc>
-<#if realDesc?? && (realDesc?length &gt; maxDescriptionLength)>${realDesc?substring(0, maxDescriptionLength-3)?html}...<#else>${realDesc}</#if>
+    <#if realDesc?? && (realDesc?length &gt; maxDescriptionLength)>${realDesc?substring(0, maxDescriptionLength-3)?html} ...<#else>${realDesc?html}</#if>
 </#macro>
 
 <#--
@@ -140,100 +191,100 @@
     @param: entity a media object to be displayed
 -->
 <#macro displayMediaInList entity>
-<#if entity != '-'>
-<#local linkTitle>${entity.title!?html}</#local>
-<div class="mediaBox">
-    <div class="mediaLine"></div>
-    <div class="mediacontent">
-        <div class="mediaImage">
+    <#if entity != '-'>
+    <div class="mediaBox">
+        <div class="mediaLine"></div>
+        <div class="mediacontent">
+            <div class="mediaImage">
             <@viewLinkWithThumbnail entity />
-        </div>
-        <div class="mediadetails">
-            <a href="${baseUrl}/view?m=${entity.accessCode}" title="${linkTitle}">
-                <@getTitle entity.title/>
-            </a>
-            <br/>
-            From: <a
-                href="${baseUrl}/media.do?u=${entity.user.accessCode}">${entity.user.firstName} ${entity.user.lastName}</a>
+            </div>
+            <div class="mediadetails">
+                <a href="${baseUrl}/view?m=${entity.accessCode}" title="${entity.title!?html}">
+                <@getShortTitle entity.title/>
+                </a>
+                <br/>
+                From: <a
+                    href="${baseUrl}/media.do?u=${entity.user.accessCode}"
+                    title="${entity.user.firstName?html} ${entity.user.lastName?html}">${entity.user.firstName?html} ${entity.user.lastName?html}</a>
+            </div>
         </div>
     </div>
-</div>
-<#else>
-&nbsp;
-</#if>
+        <#else>
+        &nbsp;
+    </#if>
 </#macro>
 
 <#function countMediaNum mediaList>
-<#local num = 0 />
-<#if mediaList?has_content>
-<#list mediaList as media>
-<#if media.accessType == 0>
-<#local num=num+1 />
-</#if>
-</#list>
-</#if>
-<#return num />
+    <#local num = 0 />
+    <#if mediaList?has_content>
+        <#list mediaList as media>
+            <#if media.accessType == 0>
+                <#local num=num+1 />
+            </#if>
+        </#list>
+    </#if>
+    <#return num />
 </#function>
 
 <#function countMediaNumFromAlbumMediaList albumMediaList>
-<#local num = 0 />
-<#if albumMediaList?has_content>
-<#list albumMediaList as albumMedia>
-<#if albumMedia.media.accessType == 0>
-<#local num=num+1 />
-</#if>
-</#list>
-</#if>
-<#return num />
+    <#local num = 0 />
+    <#if albumMediaList?has_content>
+        <#list albumMediaList as albumMedia>
+            <#if albumMedia.media.accessType == 0>
+                <#local num=num+1 />
+            </#if>
+        </#list>
+    </#if>
+    <#return num />
 </#function>
 
 <#function countAlbumNum user>
-<#local num = 0 />
-<#if user.userAlbums?has_content>
-<#list user.userAlbums as userAlbum>
-<#if (userAlbum.album.accessType == 0) && (countMediaNumFromAlbumMediaList(userAlbum.album.albumMedias) &gt; 0)>
-<#local num=num+1 />
-</#if>
-</#list>
-</#if>
-<#return num />
+    <#local num = 0 />
+    <#if user.userAlbums?has_content>
+        <#list user.userAlbums as userAlbum>
+            <#if (userAlbum.album.accessType == 0) && (countMediaNumFromAlbumMediaList(userAlbum.album.albumMedias) &gt; 0)>
+                <#local num=num+1 />
+            </#if>
+        </#list>
+    </#if>
+    <#return num />
 </#function>
 
 <#macro thumbnailLink media>
-<#local link>${baseUrl}/file.do?m=${media.accessCode}&name=<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#local>
+    <#local link>${baseUrl}/file.do?m=${media.accessCode}&name=<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#local>
 ${link?html}</#macro>
 
 <#macro viewLinkWithThumbnail media>
 <#-- default width and height -->
-<#local defaultWidth = 60 />
-<#local defaultHeight = 50 />
-<#local realWidth = defaultWidth />
-<#local realHeight = defaultHeight />
+    <#local defaultWidth = 60 />
+    <#local defaultHeight = 50 />
+    <#local realWidth = defaultWidth />
+    <#local realHeight = defaultHeight />
 <#-- calculate real width and height according media's width and height -->
-<#if media.width != 0 && media.height != 0>
-<#if (defaultWidth/defaultHeight) &gt; (media.width/media.height)>
-<#local realWidth = (defaultHeight*media.width/media.height)?round />
-<#local realHeight = defaultHeight/>
-<#else>
-<#local realWidth = defaultWidth/>
-<#local realHeight = (defaultWidth*media.height/media.width)?round />
-</#if>
-</#if>
-<#local linkTitle>${media.title!?html}</#local>
+    <#if media.width != 0 && media.height != 0>
+        <#if (defaultWidth/defaultHeight) &gt; (media.width/media.height)>
+            <#local realWidth = (defaultHeight*media.width/media.height)?round />
+            <#local realHeight = defaultHeight/>
+            <#else>
+                <#local realWidth = defaultWidth/>
+                <#local realHeight = (defaultWidth*media.height/media.width)?round />
+        </#if>
+    </#if>
+    <#local linkTitle>${media.title!?html}</#local>
 <a href="${baseUrl}/view?m=${media.accessCode}" title="${linkTitle?html}">
     <#if media.thumbnail?has_content>
-    <img src="<@thumbnailLink media/>"
-         width="${realWidth?c}" height="${realHeight?c}"
-         title="${linkTitle?html}"
-         alt="${linkTitle?html}"/>
-    <#elseif media.realFilename!?ends_with("mp3")>
-    <img src="${baseUrl}/images/mp3.jpg" width="${defaultWidth?c}" height="${defaultHeight?c}"
-         title="${linkTitle?html}"
-         alt="${linkTitle?html}"/>
-    <#else>
-    <img src="${baseUrl}/images/general.gif" width="${defaultHeight?c}" height="${defaultHeight?c}"
-         title="${linkTitle?html}"
-         alt="${linkTitle?html}"/>
+        <img src="<@thumbnailLink media/>"
+             width="${realWidth?c}" height="${realHeight?c}"
+             title="${linkTitle?html}"
+             alt="${linkTitle?html}"/>
+        <#elseif media.realFilename!?ends_with("mp3")>
+            <img src="${baseUrl}/images/mp3.jpg" width="${defaultWidth?c}" height="${defaultHeight?c}"
+                 title="${linkTitle?html}"
+                 alt="${linkTitle?html}"/>
+        <#else>
+            <img src="${baseUrl}/images/general.gif" width="${defaultHeight?c}" height="${defaultHeight?c}"
+                 title="${linkTitle?html}"
+                 alt="${linkTitle?html}"/>
     </#if>
 </a>
 </#macro>
@@ -248,16 +299,16 @@ ${link?html}</#macro>
 
         <div>
             <a name="comment_${comment.id?c}"></a>
-            ${comment.msg?html}
+        ${comment.msg?html}
         </div>
     </div>
-    <@displayCommentForm comment/>
+<@displayCommentForm comment/>
     <#if comment.childComments?has_content>
-    <ul>
-        <#list comment.childComments as c>
+        <ul>
+            <#list comment.childComments as c>
         <@displayComment c/>
         </#list>
-    </ul>
+        </ul>
     </#if>
 </li>
 </#macro>
@@ -267,7 +318,7 @@ ${link?html}</#macro>
     <form action="">
         <input type="hidden" name="mediaID" value="${obj.id?c}"/>
         <#if comment?? && comment!="">
-        <input type="hidden" name="commentID" value="${comment.id?c}"/>
+            <input type="hidden" name="commentID" value="${comment.id?c}"/>
         </#if>
         <textarea cols="60" rows="4" name="msg"></textarea><br/>
         <input type="button" name="postCommentButton" value="Post Comment"/>

@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="Author" content="Educational Media, HEDC, University of Otago"/>
     <meta name="keywords" content="UniTube, Educational Media, HEDC, University of Otago"/>
-    <link rel="shortcut icon" href="${baseUrl}/images/logoTop.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="${baseUrl}/images/icon.png" type="image/x-icon"/>
     <#if this_url?? && this_url?contains("myTube/") >
     <link rel="stylesheet" type="text/css" media="screen"
           href="${baseUrl}/css/ui-lightness/jquery-ui-1.8.12.custom.css"/>
