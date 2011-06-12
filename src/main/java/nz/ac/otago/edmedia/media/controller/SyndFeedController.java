@@ -98,8 +98,7 @@ public class SyndFeedController extends BaseOperationController {
 
             List entries = new ArrayList();
 
-            for (Iterator it = album.getAlbumMedias().iterator(); it.hasNext();) {
-                AlbumMedia albumMedia = (AlbumMedia) it.next();
+            for (AlbumMedia albumMedia : album.getAlbumMedias()) {
                 Media media = albumMedia.getMedia();
                 // display private media in private album
                 // hide private media in public album
@@ -143,9 +142,8 @@ public class SyndFeedController extends BaseOperationController {
         if (user != null)
             builder = builder.eq("user", user);
         SearchCriteria criteria = builder.build();
-        List records = service.search(Media.class, criteria);
-        for (Iterator it = records.iterator(); it.hasNext();) {
-            Media media = (Media) it.next();
+        List<Media> records = (List<Media>) service.search(Media.class, criteria);
+        for (Media media : records) {
             if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC) {
                 SyndEntry entry = getEntry(media);
                 entries.add(entry);
@@ -166,16 +164,17 @@ public class SyndFeedController extends BaseOperationController {
                 media.getMediaType() == MediaUtil.MEDIA_TYPE_VIDEO ||
                 media.getUploadFileUserName().endsWith(".pdf")) {
             SyndEnclosure enclosure = new SyndEnclosureImpl();
+            String url = contextUrl + "/file.do?m=" + media.getAccessCode();
             // get media directory
             File mediaDir = MediaUtil.getMediaDirectory(getUploadLocation(), media);
             String filename;
-            if (media.getUploadFileUserName().endsWith(".pdf"))
+            if (media.getUploadFileUserName().endsWith(".pdf")) {
                 filename = media.getUploadFileUserName();
-            else
+                url += "&name=" + media.getUploadFileUserName();
+            } else
                 filename = media.getRealFilename();
             File file = new File(mediaDir, filename);
-            String url = getUploadLocation().getBaseLink() + media.getUser().getAccessCode() + "/" + media.getRandomCode() + "/";
-            enclosure.setUrl(url + filename);
+            enclosure.setUrl(url);
             enclosure.setLength(file.length());
             if (media.getMediaType() == MediaUtil.MEDIA_TYPE_AUDIO)
                 enclosure.setType("audio/mpeg");
