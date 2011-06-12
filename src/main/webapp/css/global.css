@@ -494,64 +494,28 @@ a:hover {
 }
 
 div.sociable {
-    margin: 15px 0pt;
+    margin: 10px 0;
 }
 
-span.sociable_tagline {
-    position: relative;
-}
-
-span.sociable_tagline span {
-    display: none;
-    width: 500px;
-}
-
-span.sociable_tagline:hover span {
-    background: none repeat scroll 0% 0% #FFFFEE;
-    border: 1px solid #CCCCCC;
-    color: black;
-    display: block;
-    line-height: 1.25em;
-    position: absolute;
-    top: -3em;
-}
-
-.sociable span {
-    display: block;
-}
-
-.sociable ul {
+div.sociable ul {
     display: inline;
-    margin: 0pt ! important;
-    padding: 0pt ! important;
 }
 
-.sociable li {
-    background: none repeat scroll 0% 0% transparent;
+div.sociable li {
     display: inline;
     list-style-type: none;
-    margin: 0pt;
-    padding: 0px;
 }
 
-.sociable ul li:before {
-    content: "";
+div.sociable img {
+    border: none;
+    margin:  0 10px;
 }
 
-.sociable img {
-    border: 0pt none;
-    float: none;
-    height: 16px;
-    margin: 10px;
-    padding: 5px 0pt 0pt;
-    width: 16px;
-}
-
-.sociable-hovers:hover {
+div.sociable .sociable-hovers:hover {
     opacity: 0.4;
 }
 
-.sociable-hovers {
+div.sociable .sociable-hovers {
     opacity: 1;
 }
 
@@ -726,9 +690,20 @@ p {
     padding-left: 1em;
 }
 
+
 .vid input {
     background: none repeat scroll 0% 0% #FFFFFF;
     width: 30em;
+}
+
+span.title {
+    color: #444444;
+    padding: 0.5em 0pt;
+    font-weight: bold;
+}
+
+input.linkURL {
+    background: none repeat scroll 0% 0% #FFFFFF;
 }
 
 strong {
