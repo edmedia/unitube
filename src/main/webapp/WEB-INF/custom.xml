@@ -439,6 +439,8 @@
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
         <property name="mediaConverter" ref="mediaConverter"/>
+        <property name="maxThreadNumber" value="${max.thread.number}"/>
+        <property name="maxProcessTimes" value="${max.process.times}"/>
     </bean>
 
     <bean id="convertScheduledTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">

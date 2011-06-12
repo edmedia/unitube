@@ -15,7 +15,9 @@ CVS
 .cvsignore
 
 # IntelliJ IDEA project files
-*.i*
+*.iml
+*.ipr
+*.iws
 
 2*.sh
 

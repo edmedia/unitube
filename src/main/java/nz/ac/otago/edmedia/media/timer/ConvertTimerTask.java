@@ -30,22 +30,21 @@ public class ConvertTimerTask extends TimerTask {
 
     private final static Logger log = LoggerFactory.getLogger(ConvertTimerTask.class);
 
+    private final static int DEFAULT_MAXIMUM_THREAD_NUMBER = 5;
+
+    private final static int DEFATUL_MAXIMUM_PROCESS_TIMES = 9;
+
     private static boolean isRunning = false;
 
-    private static final int MAXIMUM_PROCESS_TIMES = 9;
-
-    // service
     protected BaseService service;
 
     private UploadLocation uploadLocation;
 
     private MediaConverter mediaConverter;
 
-    private ExecutorService exec = Executors.newFixedThreadPool(5);
+    private int maxThreadNumber;
 
-    public BaseService getService() {
-        return service;
-    }
+    private int maxProcessTimes;
 
     public void setService(BaseService service) {
         this.service = service;
@@ -59,6 +58,22 @@ public class ConvertTimerTask extends TimerTask {
         this.mediaConverter = mediaConverter;
     }
 
+    public void setMaxThreadNumber(int maxThreadNumber) {
+        if (maxThreadNumber > 0)
+            this.maxThreadNumber = maxThreadNumber;
+        else
+            this.maxThreadNumber = DEFAULT_MAXIMUM_THREAD_NUMBER;
+    }
+
+    public void setMaxProcessTimes(int maxProcessTimes) {
+        if (maxProcessTimes > 0)
+            this.maxProcessTimes = maxProcessTimes;
+        else
+            this.maxProcessTimes = DEFATUL_MAXIMUM_PROCESS_TIMES;
+    }
+
+    private ExecutorService executor;
+
     /**
      * Run timer task.
      */
@@ -69,6 +84,10 @@ public class ConvertTimerTask extends TimerTask {
             isRunning = true;
             log.info("ConvertTimerTask is running.");
             try {
+                if (executor == null) {
+                    log.info("executor = Executors.newFixedThreadPoll({})", maxThreadNumber);
+                    executor = Executors.newFixedThreadPool(maxThreadNumber);
+                }
                 // where to store uploaded file?
                 File uploadDir = uploadLocation.getUploadDir();
                 File[] files = null;
@@ -76,19 +95,19 @@ public class ConvertTimerTask extends TimerTask {
                     files = uploadDir.listFiles();
                 if (files != null) {
                     for (File file : files)
-                        // only deal with files, not direcoties
+                        // only deal with files, not directories
                         if (file.exists() && file.isFile()) {
                             // only deal with files without extension
                             if (StringUtils.isBlank(FilenameUtils.getExtension(file.getAbsolutePath()))) {
                                 String accessCode = file.getName();
                                 Media media = (Media) service.get(Media.class, CommonUtil.getId(accessCode));
-                                // if media doesn't exist, or has finished or unrecongized, remove tmp file
+                                // if media doesn't exist, or has finished or unrecognized, remove tmp file
                                 if ((media == null) ||
                                         (!media.getUser().getIsGuest() && ((media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED) ||
                                                 (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED)))
                                         ) {
                                     MediaUtil.removeTmpFile(uploadLocation, accessCode);
-                                    log.info("remove tmp file: {} {}", accessCode, CommonUtil.getId(accessCode));
+                                    log.info("remove tmp file: accessCode = {}, id = {}", accessCode, CommonUtil.getId(accessCode));
                                 } else if (media.getUser().getIsGuest() &&
                                         ((media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED) ||
                                                 (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED))
@@ -96,7 +115,7 @@ public class ConvertTimerTask extends TimerTask {
                                     if (MediaUtil.removeMediaAfter24FromGuest(uploadLocation, media, service))
                                         log.info("remove guest media file after 24 hours.");
                                 } else if (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_PROCESSING) {
-                                    log.info("media file {} {} already in process.", accessCode, CommonUtil.getId(accessCode));
+                                    log.info("media file (accessCode = {}, id = {}) is already in process.", accessCode, CommonUtil.getId(accessCode));
                                 } else
                                     processMedia(media);
                             }
@@ -138,16 +157,16 @@ public class ConvertTimerTask extends TimerTask {
         log.info("Processing media {} {}", media.getAccessCode(), media.getId());
         // process all waiting media files
         if (media.getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_WAITING) {
-            if (media.getProcessTimes() < MAXIMUM_PROCESS_TIMES) {
-                // set status to processing
-                media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_PROCESSING);
+            if (media.getProcessTimes() < maxProcessTimes) {
                 try {
+                    // set status to processing
+                    media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_PROCESSING);
                     media.setProcessTimes(media.getProcessTimes() + 1);
                     // update database
                     service.update(media);
                     // put it into running queue
                     log.info("Put media {} into running queue", media.getId());
-                    exec.execute(new MediaTask(service, uploadLocation, mediaConverter, media));
+                    executor.execute(new MediaTask(service, uploadLocation, mediaConverter, media));
                 } catch (DataAccessException e) {
                     log.error("Can not set status to " + media.getStatus(), e);
                 }
