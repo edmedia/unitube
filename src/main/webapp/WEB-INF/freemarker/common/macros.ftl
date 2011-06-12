@@ -1,4 +1,9 @@
 <#--
+    DO NOT REFORMAT CODE!!!
+    IT WILL MESS UP EMBED CODE
+-->
+
+<#--
     name: orderByLink
     desc: add a link to headers of the list, which will order by the field name
     @param: fieldName field name
@@ -182,7 +187,7 @@
 </#macro>
 
 <#macro getDesc realDesc>
-    <#if realDesc?? && (realDesc?length &gt; maxDescriptionLength)>${realDesc?substring(0, maxDescriptionLength-3)?html} ...<#else>${realDesc?html}</#if>
+    <#if realDesc?? && (realDesc?length &gt; maxDescriptionLength)>${realDesc?replace("<.+>", " ", "r")?substring(0, maxDescriptionLength-3)} ...<#else>${realDesc}</#if>
 </#macro>
 
 <#--
@@ -328,3 +333,78 @@ ${link?html}</#macro>
     </form>
 </div>
 </#macro>
+
+<#--
+    name: getEmbedCode
+    desc: get embed code for given media
+    @param: media media object
+-->
+<#function getEmbedCode media>
+    <#local embedCode=""/>
+    <#if media?has_content>
+        <#local embedURL>${context_url}/embed.do?m=${obj.accessCode}</#local>
+        <#local fileURL>${context_url}/file.do?m=${obj.accessCode}</#local>
+        <#local mediaFileLink>${fileURL}</#local>
+        <#local viewURL>${context_url}/view?m=${obj.accessCode}</#local>
+
+    <#-- for image files -->
+        <#if media.mediaType == 5>
+            <#local imageFileLink>${mediaFileLink}</#local>
+        <#-- if image is wider or higher than 800, display medium size by default -->
+            <#if (media.width &gt; 800) || (media.height &gt; 800)>
+                <#local mediaFileLink>${fileURL}&name=image-m.jpg</#local>
+            </#if>
+            <#if (media.width &gt; 1024) || (media.height &gt; 1024)>
+                <#local largeImageFileLink>${fileURL}&name=image-l.jpg</#local>
+                <#local imageFileLink>${largeImageFileLink}</#local>
+            </#if>
+            <#if (media.width &gt; 2048) || (media.height &gt; 2048)>
+                <#local veryLargeImageFileLink>${fileURL}&name=image-v.jpg</#local>
+            </#if>
+            <#if (media.width &gt; 4096) || (media.height &gt; 4096)>
+                <#local extraLargeImageFileLink>${fileURL}&name=image-e.jpg</#local>
+            </#if>
+        </#if>
+
+    <#-- maximum width to display media file -->
+        <#local MAX_WIDTH=800 />
+    <#-- default width -->
+        <#local width=320/>
+        <#if media.width &gt; 0>
+            <#local width=media.width/>
+        </#if>
+    <#-- default height -->
+        <#local height=240/>
+        <#if media.height &gt; 0>
+            <#local height=media.height/>
+        </#if>
+        <#if width &gt; MAX_WIDTH>
+            <#local height=(height*MAX_WIDTH/width)?round/>
+            <#local width=MAX_WIDTH/>
+        </#if>
+        <#if media.mediaType == 10>
+            <#local width=480/>
+            <#local height=24/>
+        </#if>
+
+        <#-- for image files -->
+        <#if media.mediaType == 5>
+            <#local embedCode><a href="${imageFileLink?html}" title="${media.title?html}"><img src="${mediaFileLink?html}" width="${width?c}" height="${height?c}" alt="${media.title?html}" title="${media.title?html}"/></a></#local>
+            <#else>
+                <#local extraHeight=0>
+                 <#if media.realFilename?ends_with(".png")>
+                    <#if obj.duration &gt; 1>
+                        <#local extraHeight=20>
+                    </#if>
+                 </#if>
+                <#local embedCode><iframe width="${width?c}" height="${(height+extraHeight)?c}" src="${embedURL?html}" frameborder="0" allowfullscreen></iframe></#local>
+        </#if>
+        <#-- add "Hosted by UniTube" and link to embed code -->
+        <#if media.accessType == 0>
+            <#local embedCode><div id="__unitube_${media.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align:center"><a href="${viewURL}">Hosted by UniTube</a></div></div></#local>
+            <#else>
+                <#local embedCode><div id="__unitube_${media.id?c}" style="width:${width?c}px">${embedCode}<div style="text-align:center"><a href="${context_url}">Hosted by UniTube</a></div></div></#local>
+        </#if>
+    </#if>
+    <#return embedCode/>
+</#function>
