@@ -26,6 +26,7 @@
     </#if>
     <#if this_url?? && (this_url?contains("login") || this_url?contains("feedback")|| this_url?contains("view")) >
     <script type="text/javascript" src="${baseUrl}/javascript/jquery.form.js"></script>
+        <script type="text/javascript" src="${baseUrl}/javascript/swfobject.js"></script>
     </#if>
     <#if this_url?? && (this_url?contains("login") || this_url?contains("myTube/profile")|| this_url?contains("admin/userEdit")) >
     <script type="text/javascript" src="${baseUrl}/javascript/md5.js"></script>

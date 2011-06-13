@@ -5,7 +5,7 @@
 <#assign JWPLAYER_SKIN_SIMPLE>${context_url}/jwplayer/simple.zip</#assign>
 <#assign JWPLAYER_CONFIG>${context_url}/jwPlayerConfig.do?m=${obj.accessCode}</#assign>
 <#-- links to flowplayer -->
-<#assign installerURL>${context_url}/FlowPlayer/expressInstall.swf</#assign>
+<#assign installerURL>${context_url}/javascript/expressInstall.swf</#assign>
 <#assign flowPlayer>${context_url}/FlowPlayer/flowplayer-3.1.swf</#assign>
 <#assign contentPlugin>${context_url}/FlowPlayer/flowplayer.content-3.1.swf</#assign>
 <#assign audioPlugin>${context_url}/FlowPlayer/flowplayer.audio-3.1.swf</#assign>
