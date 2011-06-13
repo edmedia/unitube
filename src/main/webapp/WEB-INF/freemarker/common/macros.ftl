@@ -342,10 +342,10 @@ ${link?html}</#macro>
 <#function getEmbedCode media>
     <#local embedCode=""/>
     <#if media?has_content>
-        <#local embedURL>${context_url}/embed.do?m=${obj.accessCode}</#local>
-        <#local fileURL>${context_url}/file.do?m=${obj.accessCode}</#local>
+        <#local embedURL>${context_url}/embed.do?m=${media.accessCode}</#local>
+        <#local fileURL>${context_url}/file.do?m=${media.accessCode}</#local>
         <#local mediaFileLink>${fileURL}</#local>
-        <#local viewURL>${context_url}/view?m=${obj.accessCode}</#local>
+        <#local viewURL>${context_url}/view?m=${media.accessCode}</#local>
 
     <#-- for image files -->
         <#if media.mediaType == 5>
@@ -393,7 +393,7 @@ ${link?html}</#macro>
             <#else>
                 <#local extraHeight=0>
                  <#if media.realFilename?ends_with(".png")>
-                    <#if obj.duration &gt; 1>
+                    <#if media.duration &gt; 1>
                         <#local extraHeight=20>
                     </#if>
                  </#if>
