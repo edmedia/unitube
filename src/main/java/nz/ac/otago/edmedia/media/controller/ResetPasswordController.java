@@ -8,6 +8,7 @@ import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
+ * Reset Password Controller.
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
  *         Date: 21/01/2009
@@ -55,8 +56,8 @@ public class ResetPasswordController extends BaseOperationController {
         this.smtpPort = smtpPort;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -64,47 +65,56 @@ public class ResetPasswordController extends BaseOperationController {
             throws Exception {
 
         boolean success = false;
+        String detail = null;
         String q = request.getParameter("u");
         if (q != null) {
             User user = null;
-            List list;
+            List<User> list;
             // search username first
             SearchCriteria criteria = new SearchCriteria.Builder()
                     .eq("userName", q)
                     .eq("wayf", AuthUser.EMBEDDED_WAYF)
                     .build();
-            list = service.search(User.class, criteria);
+            list = (List<User>) service.search(User.class, criteria);
             if (!list.isEmpty())
-                user = (User) list.get(0);
+                user = list.get(0);
             if (user == null) {
                 // if not found, then search email
                 criteria = new SearchCriteria.Builder()
                         .eq("email", q)
                         .eq("wayf", AuthUser.EMBEDDED_WAYF)
                         .build();
-                list = service.search(User.class, criteria);
+                list = (List<User>) service.search(User.class, criteria);
                 if (!list.isEmpty())
-                    user = (User) list.get(0);
+                    user = list.get(0);
             }
+            MessageSourceAccessor msa = getMessageSourceAccessor();
             if (user != null) {
-                // generate new password
-                String password = CommonUtil.generateRandomCode();
-                user.setPassWord(DigestUtils.md5Hex(password));
-                service.save(user);
+                if (StringUtils.isNotBlank(user.getEmail())) {
+                    // generate new password
+                    String password = CommonUtil.generateRandomCode();
+                    user.setPassWord(DigestUtils.md5Hex(password));
+                    service.save(user);
 
-                MessageSourceAccessor msa = getMessageSourceAccessor();
-                String subject = msa.getMessage("reset.email.subject");
-                String body = msa.getMessage("reset.email.body", new String[]{
-                        user.getFirstName(), // name
-                        ServletUtil.getContextURL(request), // url
-                        user.getUserName(), // username
-                        password //password
-                });
-                success = OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
-                        user.getEmail(), subject, body);
+                    String subject = msa.getMessage("reset.password.email.subject");
+                    String body = msa.getMessage("reset.password.email.body", new String[]{
+                            user.getFirstName(), // name
+                            ServletUtil.getContextURL(request), // url
+                            user.getUserName(), // username
+                            password //password
+                    });
+                    OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                            user.getEmail(), subject, body);
+                    detail = msa.getMessage("reset.password.success");
+                    success = true;
+                } else
+                    detail = msa.getMessage("reset.password.user.has.no.email");
+            } else {
+                detail = msa.getMessage("reset.password.user.not.found", new String[]{q});
             }
         }
-        OtherUtil.responseXml(response, "resetPassword", success);
+
+        OtherUtil.responseXml(response, "resetPassword", success, detail);
         return null;
     }
 }

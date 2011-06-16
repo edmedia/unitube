@@ -67,11 +67,8 @@
     </bean>
 
     <bean id="register" class="nz.ac.otago.edmedia.media.controller.RegisterController">
-        <property name="formView" value="register"/>
-        <property name="successView" value="registerSuccess"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
         <property name="commandName" value="user"/>
-        <property name="validator" ref="userRegisterValidator"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
         <property name="mailHost" value="${email.smtp.server}"/>
@@ -79,10 +76,6 @@
         <property name="smtpUsername" value="${email.smtp.username}"/>
         <property name="smtpPassword" value="${email.smtp.password}"/>
         <property name="smtpPort" value="${email.smtp.port}"/>
-    </bean>
-
-    <bean id="userRegisterValidator" class="nz.ac.otago.edmedia.media.validator.UserRegisterValidator">
-        <property name="service" ref="myBaseService"/>
     </bean>
 
     <bean id="upload" class="nz.ac.otago.edmedia.media.controller.UploadController">
@@ -247,11 +240,12 @@
         <property name="service" ref="myBaseService"/>
     </bean>
 
-    <bean id="logout" class="nz.ac.otago.edmedia.media.controller.LogoutController">
+    <bean id="logout" class="nz.ac.otago.edmedia.spring.controller.LogoutController">
         <property name="viewName" value="redirect:/home.do"/>
     </bean>
 
     <bean id="createAdmin" class="nz.ac.otago.edmedia.media.controller.CreateAdminController">
+        <property name="fromEmail" value="${email.from.address}"/>
         <property name="service" ref="myBaseService"/>
     </bean>
 

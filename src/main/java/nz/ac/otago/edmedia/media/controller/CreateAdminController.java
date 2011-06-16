@@ -4,9 +4,9 @@ import nz.ac.otago.edmedia.auth.bean.AuthUser;
 import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
-import nz.ac.otago.edmedia.spring.util.ModelUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,6 +23,12 @@ import java.util.Map;
  *         Time: 14:04:55
  */
 public class CreateAdminController extends BaseOperationController {
+
+    private String fromEmail;
+
+    public void setFromEmail(String fromEmail) {
+        this.fromEmail = fromEmail;
+    }
 
     @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
@@ -42,6 +48,8 @@ public class CreateAdminController extends BaseOperationController {
             user.setFirstName(AuthUser.ADMIN_USERNAME);
             user.setLastName(AuthUser.ADMIN_USERNAME);
             user.setRandomCode(CommonUtil.generateRandomCode());
+            if (StringUtils.isNotBlank(fromEmail))
+                user.setEmail(fromEmail);
             service.save(user);
         }
         Map model = new HashMap();
