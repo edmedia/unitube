@@ -236,7 +236,7 @@
         </p>
     </#if>
 <#-- hide embed for private media file -->
-    <#if obj.accessType != 20>
+    <#if (obj.accessType != 20) && !obj.uploadOnly>
         <p>
             <span class="title">Embed:</span>
             <input type="text"

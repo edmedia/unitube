@@ -387,16 +387,16 @@ ${link?html}</#macro>
             <#local height=24/>
         </#if>
 
-        <#-- for image files -->
+    <#-- for image files -->
         <#if media.mediaType == 5>
             <#local embedCode><a href="${imageFileLink?html}" title="${media.title?html}"><img src="${mediaFileLink?html}" width="${width?c}" height="${height?c}" alt="${media.title?html}" title="${media.title?html}"/></a></#local>
             <#else>
                 <#local extraHeight=0>
-                 <#if media.realFilename?ends_with(".png")>
+                <#if media.realFilename?? && media.realFilename?ends_with(".png")>
                     <#if media.duration &gt; 1>
                         <#local extraHeight=20>
                     </#if>
-                 </#if>
+                </#if>
                 <#local embedCode><iframe width="${width?c}" height="${(height+extraHeight)?c}" src="${embedURL?html}" frameborder="0" allowfullscreen></iframe></#local>
         </#if>
         <#-- add "Hosted by UniTube" and link to embed code -->

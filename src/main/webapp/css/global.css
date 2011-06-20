@@ -690,18 +690,13 @@ p {
     padding-left: 1em;
 }
 
-
-.vid input {
-    background: none repeat scroll 0% 0% #FFFFFF;
-    width: 30em;
-}
-
 span.title {
     color: #444444;
     padding: 0.5em 0pt;
     font-weight: bold;
 }
 
+/** link and embed code */
 input.linkURL {
     background: none repeat scroll 0% 0% #FFFFFF;
 }
@@ -975,4 +970,10 @@ span.splitter {
 
 span.right {
     float: right;
+}
+
+/** jQuery validation error */
+label.error {
+    margin: 0 10px;
+    color: red;
 }
