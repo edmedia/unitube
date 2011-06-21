@@ -45,8 +45,11 @@ public class SendFeedbackController extends AbstractController {
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String status = request.getParameter("status");
+        String detail = null;
         boolean success = MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, status);
-        OtherUtil.responseXml(response, "feedback", success);
+        if (!success)
+            detail = "Can not send feedback.";
+        OtherUtil.responseXml(response, "feedback", success, detail);
         return null;
     }
 
