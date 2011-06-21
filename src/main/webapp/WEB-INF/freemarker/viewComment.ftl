@@ -76,7 +76,7 @@
                         location.href = url;
                         location.reload(true);
                     } else
-                        alert("action", xml).attr("detail"));
+                        alert($("action", xml).attr("detail"));
                 }
             });
 
