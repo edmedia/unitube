@@ -71,7 +71,7 @@
         <div class="navDiv">
             <input type="button" value="Delete"/>
             <select name="userID_1" title="<@spring.message "add.user.to.album"/>">
-                <option value="0">Apply User</option>
+                <option value="0">Add User</option>
                 <#list userList?sort_by("lastName") as u>
                 <#if (u.userName != user.userName) && !u.isGuest>
                 <option value="${u.id?c}">${u.userName} (${u.firstName} ${u.lastName})</option>

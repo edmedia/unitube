@@ -56,9 +56,9 @@
         // info tag which will display information
         info = $("<div/>").appendTo(document.body);
         info.dialog({
-            autoOpen: false,
-            title: 'Information'
-        });
+                    autoOpen: false,
+                    title: 'Information'
+                });
 
         transferOwner();
     });
@@ -77,17 +77,6 @@
         return true;
     }
 
-    function removeAlbumFromMedia(albumMediaID) {
-        $.get('removeAlbumMedia.do?id=' + albumMediaID, function(xml) {
-            if ($("action", xml).attr("success") == "true") {
-                if ($('#albumMediaID_' + albumMediaID))
-                    $('#albumMediaID_' + albumMediaID).hide();
-            } else {
-                alert("<@spring.message "ajax.request.fail"/>");
-            }
-        });
-        return false;
-    }
 
     function transferOwner() {
         $('a.transferOwner').click(function() {
@@ -100,14 +89,14 @@
             if (userName) {
                 // add auto complete to username
                 userName.autocomplete({
-                    minLength: 2,
-                    source: userName.attr("rel"),
-                    select: function(e, ui) {
-                        if (window.console) console.log("select " + ui.item.value);
-                        userName.val(ui.item.value);
-                        // $('#user-lookup-form').children().first().submit();
-                    }
-                });
+                            minLength: 2,
+                            source: userName.attr("rel"),
+                            select: function(e, ui) {
+                                if (window.console) console.log("select " + ui.item.value);
+                                userName.val(ui.item.value);
+                                // $('#user-lookup-form').children().first().submit();
+                            }
+                        });
                 userName.keydown(function(e) {
                     // when press "enter" key
                     if (e.keyCode == 13) {
@@ -138,25 +127,25 @@
 
             // user lookup form dialog
             $("#user-lookup-form").dialog({
-                autoOpen: false,
-                width: 540,
-                modal: true,
-                buttons: {
-                    'Transfer Owner': function() {
-                        var bValid = true;
-                        userName.removeClass("ui-state-error");
-                        bValid = bValid && required(userName, "username");
-                        if (bValid)
-                            $(this).children().first().submit();
-                    },
-                    Cancel: function() {
-                        $(this).dialog('close');
-                    }
-                },
-                close: function() {
-                    userName.val("").removeClass("ui-state-error");
-                }
-            });
+                        autoOpen: false,
+                        width: 540,
+                        modal: true,
+                        buttons: {
+                            'Transfer Owner': function() {
+                                var bValid = true;
+                                userName.removeClass("ui-state-error");
+                                bValid = bValid && required(userName, "username");
+                                if (bValid)
+                                    $(this).children().first().submit();
+                            },
+                            Cancel: function() {
+                                $(this).dialog('close');
+                            }
+                        },
+                        close: function() {
+                            userName.val("").removeClass("ui-state-error");
+                        }
+                    });
 
             // when submitting user lookup form
             $('#user-lookup-form').children().first().submit(function() {

@@ -55,19 +55,18 @@
                 return;
             }
             $('#feedback').ajaxSubmit({
-                url: "sendFeedback.do",
-                type: "POST",
-                dataType: "xml",
-                success: function(xml) {
-                    if ($("action", xml).attr("success") == "true") {
-                        alert("<@spring.message "feedback.success"/>");
-                        // reload this page
-                        location.reload(true);
-                    } else {
-                        alert("<@spring.message "ajax.request.fail"/>");
-                    }
-                }
-            });
+                        url: "sendFeedback.do",
+                        type: "POST",
+                        dataType: "xml",
+                        success: function(xml) {
+                            if ($("action", xml).attr("success") == "true") {
+                                alert("<@spring.message "feedback.success"/>");
+                                // reload this page
+                                location.reload(true);
+                            } else
+                                alert($("action", xml).attr("detail"));
+                        }
+                    });
         });
     });
     //-->

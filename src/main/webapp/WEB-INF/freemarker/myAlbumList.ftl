@@ -65,17 +65,6 @@
         return true;
     }
 
-    function removeUserFromAlbum(userAlbumID) {
-        $.get('removeUserAlbum.do?id=' + userAlbumID, function(xml) {
-            if ($("action", xml).attr("success") == "true") {
-                if ($('#userAlbumID_' + userAlbumID))
-                    $('#userAlbumID_' + userAlbumID).hide();
-            } else {
-                alert("<@spring.message "ajax.request.fail"/>");
-            }
-        });
-        return false;
-    }
     //-->
 </script>
 <#include "common/head_2.ftl" />

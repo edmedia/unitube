@@ -75,9 +75,8 @@
                         url = url + "#comment_" + $("action", xml).attr("detail");
                         location.href = url;
                         location.reload(true);
-                    } else {
-                        alert("<@spring.message "ajax.request.fail"/>");
-                    }
+                    } else
+                        alert("action", xml).attr("detail"));
                 }
             });
 

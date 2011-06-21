@@ -18,10 +18,12 @@
             <td>
 
                 <#list spring.status.value as albumMedia>
+                    <#assign albumName=["${albumMedia.album.albumName}"]/>
                 <span id="albumMediaID_${albumMedia.id?c}"><a class="album_with_right_border"
                                                               href="${baseUrl}/album?a=${albumMedia.album.accessCode}">${albumMedia.album.albumName}</a><a
-                        class="album" onclick="return removeAlbumFromMedia(${albumMedia.id?c})"
-                        href="#">X</a> &nbsp;</span>
+                        class="album"
+                        title="<@spring.messageArgs  "remove.album.from.media" albumName/>"
+                        href="#" rel="${albumMedia.id?c}">X</a> &nbsp;</span>
                 </#list>
 
             </td>
@@ -203,6 +205,11 @@
 <script type="text/javascript">
     <!--
     $(function() {
+
+        $('a.album').click(function() {
+            return removeAlbumFromMedia(this.rel);
+        });
+
     <@spring.bind "media.accessType" />
     <#if spring.status.value != 20>
         $('a.share').hide();
