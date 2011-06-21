@@ -279,23 +279,6 @@ $(function() {
         $('#pagination ul li a[href=#' + currentSeq + ']').addClass("current").focus();
     }
 
-    function convertSecondsToTimecode(seconds) {
-        var ss = Math.round(seconds);
-        minutes = Math.floor(ss / 60);
-        minutes = (minutes >= 10) ? minutes : "0" + minutes;
-        ss = Math.floor(ss % 60);
-        ss = (ss >= 10) ? ss : "0" + ss;
-        return minutes + ":" + ss;
-    }
-
-    function convertTimecodeToSeconds(timecode) {
-        var seconds = 0;
-        var ss = timecode.split(":");
-        for (var i = ss.length; i > 0; i--)
-            seconds = seconds * 60 + parseFloat(ss[ss.length - i]);
-        return seconds;
-    }
-
     function checkReady() {
         <#if obj2??>
             if (window.console) console.log("check if players are ready");
