@@ -1,3 +1,15 @@
+<#if avp??>
+    <#if avp.av1??>
+        <#assign obj=avp.av1/>
+    </#if>
+    <#if avp.av2??>
+        <#assign obj2 = avp.av2/>
+    </#if>
+    <#if avp.presentation??>
+        <#assign presentation=avp.presentation/>
+    </#if>
+</#if>
+
 <#if obj?? && presentation??>
     <#include "viewHelper.ftl"/>
     <#if obj.mediaType == 10>
@@ -14,7 +26,7 @@
     </#if>
     <#assign presentationWidth = player1Width />
     <#assign presentationHeight = (presentationWidth*presentation.height/presentation.width)?round />
-    <#assign presentationFileLink>${context_url}/file.do?m=${presentation.accessCode}&name=${presentation.realFilename}</#assign>
+    <#assign presentationFileLink = context_url + "/file.do?m=" + presentation.accessCode+ "&name=" + presentation.realFilename/>
 <div id="avpContainer">
     <div id="leftColumn">
         <#if obj.mediaType == 10>
@@ -329,5 +341,5 @@ $(function() {
 </script>
 
     <#else>
-    Can not find this AV Presentation.
+    Can not find this Audio/Video Presentation.
 </#if>

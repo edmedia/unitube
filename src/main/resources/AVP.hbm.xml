@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="AVP" table="media_avp">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- AVP title -->
+        <property name="title">
+            <column name="title"/>
+        </property>
+
+        <!-- AVP description -->
+        <property name="description" type="text">
+            <column name="description"/>
+        </property>
+
+        <!-- Random Code -->
+        <property name="randomCode">
+            <column name="randomcode"/>
+        </property>
+
+        <!-- Owner -->
+        <many-to-one name="owner" column="ownerid"/>
+
+        <!-- Audio/Video one -->
+        <many-to-one name="av1" column="av1id"/>
+
+        <!-- Audio/Video two -->
+        <many-to-one name="av2" column="av2id"/>
+
+        <!-- Presentation -->
+        <many-to-one name="presentation" column="presentationid"/>
+
+        <!-- All Medias -->
+        <set name="slideInfos" cascade="delete-orphan" order-by="id" inverse="true">
+            <key column="avpid"/>
+            <one-to-many class="SlideInfo"/>
+        </set>
+
+    </class>
+
+</hibernate-mapping>

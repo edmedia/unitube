@@ -165,8 +165,6 @@
     </bean>
 
     <bean id="myRemoveAlbumMedia" class="nz.ac.otago.edmedia.media.controller.MyRemoveAlbumMediaController">
-        <property name="viewName" value="redirect:/myTube/list.do"/>
-        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.AlbumMedia"/>
         <property name="service" ref="myBaseService"/>
     </bean>
 
@@ -177,8 +175,6 @@
     </bean>
 
     <bean id="myRemoveUserAlbum" class="nz.ac.otago.edmedia.media.controller.MyRemoveUserAlbumController">
-        <property name="viewName" value="redirect:/myTube/albumList.do"/>
-        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.UserAlbum"/>
         <property name="service" ref="myBaseService"/>
     </bean>
 
@@ -188,6 +184,29 @@
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
         <property name="commandName" value="user"/>
         <property name="validator" ref="userValidator"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="avpEdit" class="nz.ac.otago.edmedia.media.controller.AVPEditController">
+        <property name="formView" value="main"/>
+        <property name="successView" value="redirect:/myTube/avpList.do"/>
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.AVP"/>
+        <property name="commandName" value="avp"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="avpList" class="nz.ac.otago.edmedia.media.controller.AVPListController">
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="avpSave" class="nz.ac.otago.edmedia.media.controller.AVPSaveController">
+        <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.AVP"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
+    <bean id="avpSync" class="nz.ac.otago.edmedia.media.controller.AVPController">
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
@@ -332,7 +351,7 @@
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
 
-    <bean id="accessRuleDelete" class="nz.ac.otago.edmedia.media.controller.AccessRuleDeleteController">
+    <bean id="accessRuleDeleteIt" class="nz.ac.otago.edmedia.media.controller.AccessRuleDeleteController">
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
@@ -385,6 +404,10 @@
                 /myTube/applyUser.do=myApplyUser
                 /myTube/removeUserAlbum.do=myRemoveUserAlbum
                 /myTube/profile.do=myUserEdit
+                /myTube/avpEdit.do=avpEdit
+                /myTube/avpList.do=avpList
+                /myTube/avpSave.do=avpSave
+                /myTube/avpSync.do=avpSync
                 /myTube/view.do=view
                 /view=view
                 /myTube/embed.do=embed
@@ -410,7 +433,7 @@
                 /myTube/userNameSearch.do=userNameSearch
                 /myTube/transferOwner.do=transferOwner
                 /myTube/accessRuleAdd.do=accessRuleAdd
-                /myTube/accessRuleDelete.do=accessRuleDelete
+                /myTube/accessRuleDelete.do=accessRuleDeleteIt
                 /admin/tmp.do=tmp
                 /avp.do=avp
                 /avpData.do=avpData

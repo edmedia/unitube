@@ -56,6 +56,7 @@
                 </a>
             </div>
             <div>
+                <a href="${baseUrl}/myTube/avpList.do">My AVPs</a>
                 <a href="${baseUrl}/myTube/profile.do">My Profile</a>
                 <#if authUser.isInstructor>
                     <a href="${baseUrl}/admin/userList.do">Admin</a>

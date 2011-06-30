@@ -24,9 +24,11 @@
                 <value>Album.hbm.xml</value>
                 <value>AlbumMedia.hbm.xml</value>
                 <value>Annotation.hbm.xml</value>
+                <value>AVP.hbm.xml</value>
                 <value>Comment.hbm.xml</value>
                 <value>IVOption.hbm.xml</value>
                 <value>Media.hbm.xml</value>
+                <value>SlideInfo.hbm.xml</value>
                 <value>User.hbm.xml</value>
                 <value>UserAlbum.hbm.xml</value>
             </list>

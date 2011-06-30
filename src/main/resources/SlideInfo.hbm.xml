@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="SlideInfo" table="media_slideinfo">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <!-- start time -->
+        <property name="sTime">
+            <column name="stime"/>
+        </property>
+
+        <!-- end time -->
+        <property name="eTime">
+            <column name="etime"/>
+        </property>
+
+        <!-- which slide -->
+        <property name="num">
+            <column name="num"/>
+        </property>
+
+        <!-- Title -->
+        <property name="title">
+            <column name="title"/>
+        </property>
+
+        <!-- AVP -->
+        <many-to-one name="avp" column="avpid"/>
+
+    </class>
+
+</hibernate-mapping>

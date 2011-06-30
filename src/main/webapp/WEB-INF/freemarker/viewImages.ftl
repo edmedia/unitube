@@ -19,14 +19,19 @@
                     preload: true,
                     preloadImage: '',
                     bigTarget: true,
-                    hoverPause: true
+                    hoverPause: true,
+                    dummy: true
                 });
+            <#if obj.duration &gt; 40>
+            // set float to left if there are more than 40 slides
+            $('ul.pagination li').css('float', 'left');
+            </#if>
     </script>
         <#else>
         <#-- try GalleryView here -->
         <ul id="gallaryView">
             <#list 1..obj.duration as i>
-                <li><img src="${mediaFileLink?replace('-(\\d)+\\.', '-' + (i-1) + '.', 'r')}" width="${width?c}"
+                <li><img src="${mediaFileLink?replace('-(\\d)+\\.', '-' + (i-1) + '.', 'r')?html}" width="${width?c}"
                          height="${height?c}" title="Slide ${i}" alt="Slide ${i}"/></li>
             </#list>
         </ul>
@@ -40,8 +45,8 @@
                         transition_interval: 10000,
                         panel_width: ${width?c},
                         panel_height: ${height?c},
-                        frame_width: ${(width/12)?c},
-                        frame_height: ${(height/12)?c},
+                        frame_width: ${(width/6)?c},
+                        frame_height: ${(height/6)?c},
                         //filmstrip_style: 'show all',
                         frame_opacity: 0.8,
                         show_captions: true,

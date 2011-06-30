@@ -22,7 +22,8 @@
             </select>
             </#if>
             <a href="albumEdit.do?aa=new">Create a new album</a>
-            | <a href="" title="" class="transferOwner">Transfer Owner</a>
+            | <a href="" title="Transfer Ownership to other user" class="transferOwner">Transfer Owner</a>
+            | <a href="avpEdit.do" title="" class="newAVP">Create a new AVP</a>
 
             <span class="emptySpace">&nbsp; &nbsp; </span>
             <@displayGmailStylePager pager/>

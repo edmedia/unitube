@@ -1,3 +1,5 @@
+var inDebugMode = true;
+
 function removeAlbumFromMedia(albumMediaID) {
     $.get('removeAlbumMedia.do?id=' + albumMediaID, function(xml) {
         if ($("action", xml).attr("success") == "true")
@@ -79,4 +81,8 @@ function goOn() {
     if (popUp != null)
         popUp.close();
     location.href = logoutUrl;
+}
+
+function log(msg) {
+    if(inDebugMode && window.console && console.log) console.log(msg);
 }
