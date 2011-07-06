@@ -35,23 +35,23 @@
                 </td>
             </tr>
             <!-- description: AVP Description -->
+            <#--
             <tr>
                 <th>Description</th>
                 <td>
                 <@spring.bind "avp.description" />
                     <@displayTextArea/>
                   <script type="text/javascript">
-                    <!--
                         CKEDITOR.replace( '${spring.status.expression}', {
                             customConfig : '${baseUrl}/javascript/ckeditor_config.js'
                         });
-                    -->
                   </script>
                 </td>
                 <td>
                 <@displayError/>
                 </td>
             </tr>
+                -->
             <!-- av1: Audio/Video one -->
             <tr>
             <th>Audio/Video one</th>
