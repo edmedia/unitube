@@ -301,7 +301,7 @@ public class AVP extends WebID {
         if (StringUtils.isNotBlank(getTitle()))
             sb.append(getTitle());
         else
-            sb.append(presentation.getTitle());
+            sb.append(av1.getTitle() + ' ' + presentation.getTitle());
         return sb.toString();
     }
 

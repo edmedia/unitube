@@ -22,6 +22,13 @@ function removeUserFromAlbum(userAlbumID) {
     return false;
 }
 
+// each slideInfo has start time, end time, which slide (1-based), title(optional)
+function slideInfo(sTime, eTime, num, title) {
+    this.sTime = sTime;
+    this.eTime = eTime;
+    this.num = num;
+    this.title = title;
+}
 
 function convertSecondsToTimecode(seconds) {
     var ss = Math.round(seconds);
@@ -84,5 +91,5 @@ function goOn() {
 }
 
 function log(msg) {
-    if(inDebugMode && window.console && console.log) console.log(msg);
+    if (inDebugMode && window.console && console.log) console.log(msg);
 }

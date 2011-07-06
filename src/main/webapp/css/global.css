@@ -985,13 +985,36 @@ label.error {
 }
 
 /** avp sync tool */
-#gallaryView {
+
+#actionButton {
     display: none;
 }
 
-#slider-container {
+#slidesSelector {
     display: none;
-    margin: 20px 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#slidesSelector ul {
+    list-style: none;
+}
+
+#slidesSelector ul  li {
+    float: left;
+    display: inline;
+    margin: 0 5px;
+    border: 1px solid #fff;
+    opacity: 0.75;
+}
+
+#slidesSelector ul  li:hover {
+    border: 1px solid #0c0;
+    opacity: 1.0;
+}
+
+#slidesSelector ul  li div.caption {
+    margin-top: 10px;
 }
 
 .left {
@@ -1002,31 +1025,31 @@ label.error {
     float: right;
 }
 
-.currentSlide {
-    color: #00c;
-    background-color: #f7b850;
-}
-
 #avContainer.mediaBorder {
     margin-top: 0;
     margin-bottom: 0;
 }
 
+/** time slider */
+#slider-container {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
 /** start time and end time for AVP sync */
 .startTime {
-             position: relative;
+    position: relative;
     left: 0;
     top: -16px;
-
 }
 
 .endTime {
     position: relative;
     left: -18px;
-    top: 16px;
-
+    top: 25px;
 }
 
+/** inline edit box */
 div.input input {
     border: none;
     background-color: #0d0;
@@ -1047,40 +1070,23 @@ div.input input {
     height: 210px;
     float: left;
     margin: 5px;
+    border: 1px solid #fff;
+    opacity: 0.75;
+}
+
+.scroll-content-item:hover {
+    border: 1px solid #0c0;
+    opacity: 1;
+}
+
+.currentSlide {
+    color: #00c;
+    font-weight: bold;
+    background-color: #f7b850;
+    opacity: 1;
 }
 
 * html .scroll-content-item {
     display: inline;
 }
 
-/* IE6 float double margin bug */
-.scroll-bar-wrap {
-    clear: left;
-    padding: 0 4px 0 2px;
-    margin: 0 -1px -1px -1px;
-}
-
-.scroll-bar-wrap .ui-slider {
-    background: none;
-    border: 0;
-    height: 2em;
-    margin: 0 auto;
-}
-
-.scroll-bar-wrap .ui-handle-helper-parent {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-}
-
-.scroll-bar-wrap .ui-slider-handle {
-    top: .2em;
-    height: 1.5em;
-}
-
-.scroll-bar-wrap .ui-slider-handle .ui-icon {
-    margin: -8px auto 0;
-    position: relative;
-    top: 50%;
-}

@@ -48,8 +48,8 @@ public class AVPSaveController extends BaseOperationController {
                 for (Object o : array) {
                     JSONObject obj = (JSONObject) o;
                     SlideInfo slideInfo = new SlideInfo();
-                    slideInfo.setsTime(Double.parseDouble(obj.get("sTime").toString()));
-                    slideInfo.seteTime(Double.parseDouble(obj.get("eTime").toString()));
+                    slideInfo.setsTime(Float.parseFloat(obj.get("sTime").toString()));
+                    slideInfo.seteTime(Float.parseFloat(obj.get("eTime").toString()));
                     slideInfo.setNum(Integer.parseInt(obj.get("num").toString()));
                     slideInfo.setTitle(obj.get("title").toString());
                     slideInfo.setAvp(avp);

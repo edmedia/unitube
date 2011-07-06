@@ -12,21 +12,23 @@
 
 <#if obj?? && presentation??>
     <#include "viewHelper.ftl"/>
+<#-- maximum width is 420 -->
+    <#assign maxWidth = 420/>
     <#if obj.mediaType == 10>
-        <#assign player1Width=420/>
+        <#assign player1Width=maxWidth/>
         <#assign player1Height=24/>
         <#else>
             <#assign player1Width = obj.width />
             <#assign player1Height = obj.height />
     </#if>
-<#-- maximum width is 420 -->
-    <#if player1Width &gt; 420>
-        <#assign player1Width = 420 />
+    <#if player1Width &gt; maxWidth>
+        <#assign player1Width = maxWidth />
         <#assign player1Height = (player1Width*height/width)?round />
     </#if>
-    <#assign presentationWidth = player1Width />
+    <#assign presentationWidth = maxWidth />
     <#assign presentationHeight = (presentationWidth*presentation.height/presentation.width)?round />
     <#assign presentationFileLink = context_url + "/file.do?m=" + presentation.accessCode+ "&name=" + presentation.realFilename/>
+
 <div id="avpContainer">
     <div id="leftColumn">
         <#if obj.mediaType == 10>
@@ -104,6 +106,8 @@
 <script type="text/javascript">
 $(function() {
 
+    var seekDelta = 0;
+    var avDuration = ${(obj.duration/1000)?c};
     // slides data, load from xml
     var slidesData = null;
     var lastSlide = -1;
@@ -119,41 +123,40 @@ $(function() {
     // maximum gap between player1 and player2 is 2 seconds
     var MAXIMUM_GAP = 2;
 
-    // each slideInfo has time, which slide (1 based), title(optional)
-    function slideInfo(time, num, title) {
-        this.time = time;
-        this.num = num;
-        this.title = title;
-    }
-
     // load data from xml and set all images, pagination, events, etc.
-    function getData(url) {
-        $.get(url, function(xml) {
+    function getData() {
+        <#if avp??>
             slidesData = new Array();
             var pagination = $('#pagination');
             // empty pagination first
             pagination.empty();
             var ul = $('<ul/>').appendTo(pagination);
-            $("avpData", xml).children().each(function(seq) {
-                slidesData[seq] = new slideInfo(convertTimecodeToSeconds($(this).attr("time")), $(this).attr("num"), $(this).attr("title"))
+            var seq;
+            <#list avp.slideInfos as si>
+                seq = ${si_index?c};
+                slidesData[${si_index?c}] = new slideInfo(
+                ${si.sTime?c},
+                ${si.eTime?c},
+                ${si.num?c},
+                        "${si.title?html}"
+                );
                 // which slide (0 based)
-                var slideNum = parseInt(slidesData[seq].num) - 1;
+                var slideNum = parseInt(slidesData[${si_index?c}].num) - 1;
                 var li = $('<li/>').appendTo(ul);
-                var text = $(this).attr("time") + " slide " + slidesData[seq].num;
-                if (slidesData[seq].title)
-                    text += " - " + slidesData[seq].title;
+                var text = convertSecondsToTimecode(slidesData[${si_index?c}].sTime) + " slide " + slidesData[${si_index?c}].num;
+                if (slidesData[${si_index?c}].title)
+                    text += " - " + slidesData[${si_index?c}].title;
                 $('<a/>').text(text)
                         .attr("href", "#" + seq).appendTo(li);
                 $('#slide_' + slideNum + " a").attr("title", $(this).attr("title"));
-            });
-
+            </#list>
             $('#pagination ul li a').click(
                     function() {
                         var seq = parseInt($(this).attr('href').substring(1));
                         // which slide to show (0 based)
                         var slideNum = parseInt(slidesData[seq].num) - 1;
                         if (window.console) console.log("jump to slide " + (slideNum + 1));
-                        jwplayer('player1').play(true).seek(parseFloat(slidesData[seq].time) + 5);
+                        jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
                         isShowingCurrentSlide = true;
                         currentSeq = seq;
                         showCurrentSlide();
@@ -174,15 +177,66 @@ $(function() {
                         showCurrentSlide();
                         return false;
                     });
-        });
+            <#else>
+
+                var url = "${baseUrl}/${xml}";
+
+                $.get(url, function(xml) {
+                    slidesData = new Array();
+                    var pagination = $('#pagination');
+                    // empty pagination first
+                    pagination.empty();
+                    var ul = $('<ul/>').appendTo(pagination);
+                    $("avpData", xml).children().each(function(seq) {
+                        slidesData[seq] = new slideInfo(convertTimecodeToSeconds($(this).attr("time")), 0, $(this).attr("num"), $(this).attr("title"))
+                        // which slide (0 based)
+                        var slideNum = parseInt(slidesData[seq].num) - 1;
+                        var li = $('<li/>').appendTo(ul);
+                        var text = $(this).attr("time") + " slide " + slidesData[seq].num;
+                        if (slidesData[seq].title)
+                            text += " - " + slidesData[seq].title;
+                        $('<a/>').text(text)
+                                .attr("href", "#" + seq).appendTo(li);
+                        $('#slide_' + slideNum + " a").attr("title", $(this).attr("title"));
+                    });
+
+                    $('#pagination ul li a').click(
+                            function() {
+                                var seq = parseInt($(this).attr('href').substring(1));
+                                // which slide to show (0 based)
+                                var slideNum = parseInt(slidesData[seq].num) - 1;
+                                if (window.console) console.log("jump to slide " + (slideNum + 1));
+                                jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
+                                isShowingCurrentSlide = true;
+                                currentSeq = seq;
+                                showCurrentSlide();
+                                return false;
+                            }).hover(function() {
+                                // show hovered slide
+                                var seq = parseInt($(this).attr('href').substring(1));
+                                // which slide to show (0 based)
+                                var slideNum = parseInt(slidesData[seq].num) - 1;
+                                showSlide(slideNum);
+                                // set isShowingCurrentSlide flag to false
+                                isShowingCurrentSlide = false;
+                                return false;
+                            }, function() {
+                                // set isShowingCurrentSlide flag to true
+                                isShowingCurrentSlide = true;
+                                // change back to current slide
+                                showCurrentSlide();
+                                return false;
+                            });
+                });
+        </#if>
     }
 
-    var url = "${baseUrl}/avpData.do?xml=${xml}";
 
-    getData(url);
+    getData();
     $('#slide_-1').show();
 
 
+    var firstPlay = true;
     jwplayer('player1').setup({
                 flashplayer: '${JWPLAYER}',
                 bufferlength: 5,
@@ -201,7 +255,7 @@ $(function() {
                         currentSeq = -1;
                         // assume slidesData is ordered by time
                         for (var i = 0; i < slidesData.length; i++) {
-                            if (currentTime >= slidesData[i].time)
+                            if (currentTime >= slidesData[i].sTime)
                                 currentSeq = i;
                             else
                                 break;
@@ -210,6 +264,20 @@ $(function() {
                         player1LastTime = currentTime;
                     },
                     onPlay: function() {
+                        if (firstPlay) {
+                            log('avDuration = ' + avDuration);
+                            log("player duration = " + jwplayer('player1').getDuration());
+                            if (avDuration == 0) {
+                                log("set avDuration to " + jwplayer('player1').getDuration());
+                                avDuration = jwplayer('player1').getDuration();
+                            }
+                            <#if obj.mediaType == 20>
+                                // for video file, set seek delta to 1/1000 of length
+                                seekDelta = Math.round(avDuration / 1000);
+                                log("seek delta = " + seekDelta);
+                            </#if>
+                            firstPlay = false;
+                        }
                         player1IsPlaying = true;
                         <#if obj2??>
                             if (window.console) console.log("video one is playing, start playing video two");
@@ -320,10 +388,9 @@ $(function() {
                 if (Math.abs(player1LastTime - player2LastTime) > MAXIMUM_GAP) {
                     if (window.console) console.log("player1LastTime = " + player1LastTime + " player2LastTime = " + player2LastTime);
                     if (window.console) console.log("adjust video two to be in sync with video one");
-                    jwplayer('player2').play(true).seek(player1LastTime);
+                    jwplayer('player2').seek(player1LastTime).play(true);
                 }
         }
-
         var syncIntervalID = window.setInterval(checkSync, 1000);
     </#if>
     Shadowbox.init({

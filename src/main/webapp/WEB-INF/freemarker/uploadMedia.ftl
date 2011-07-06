@@ -53,7 +53,7 @@
     <div id="moreOptions">
         <div id="onTwitter">
             <strong>Have a Tweet on UniTube Twitter</strong>
-            <input type="radio" name="onTwitter" value="true" checked="checked"/> yes
+            <input type="radio" name="onTwitter" value="true" checked="checked"/> Yes
             <input type="radio" name="onTwitter" value="false"/> No
         </div>
         <div>

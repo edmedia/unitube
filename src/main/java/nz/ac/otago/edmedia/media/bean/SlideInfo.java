@@ -1,7 +1,5 @@
 package nz.ac.otago.edmedia.media.bean;
 
-import java.rmi.server.ObjID;
-
 /**
  * Slide info
  *
@@ -17,10 +15,10 @@ public class SlideInfo {
     private Long id;
 
     // start time
-    private double sTime;
+    private float sTime;
 
     // end time
-    private double eTime;
+    private float eTime;
 
     // which slide
     private int num;
@@ -40,19 +38,19 @@ public class SlideInfo {
         this.id = id;
     }
 
-    public double getsTime() {
+    public float getsTime() {
         return sTime;
     }
 
-    public void setsTime(double sTime) {
+    public void setsTime(float sTime) {
         this.sTime = sTime;
     }
 
-    public double geteTime() {
+    public float geteTime() {
         return eTime;
     }
 
-    public void seteTime(double eTime) {
+    public void seteTime(float eTime) {
         this.eTime = eTime;
     }
 
