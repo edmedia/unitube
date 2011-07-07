@@ -47,20 +47,18 @@
 
 <h2 class="clear">Synchronisation Workspace</h2>
 
-    <div id="actionButton">
-        <a href="#" class="addSlide" title="Add a slide">
-            <img src="${baseUrl}/images/plus.png" border="0"/>
-            Add a slide
-        </a>
-        |
-        <a href="${baseUrl}/avp.do?a=${avp.accessCode}" target="_blank">View this AVP (in new window or tab)</a>
-
-        <span class="right">
-        <a href="#" class="save" title="Save AVP">
-            <img src="${baseUrl}/images/save.png" border="0"/>
-        </a>
-        </span>
-    </div>
+<div id="actionButton">
+    <a href="#" class="addSlide" title="Add a slide">
+        <img src="${baseUrl}/images/plus.png" border="0"/>
+        Add a slide
+    </a>
+    |
+    <a href="${baseUrl}/avp.do?a=${avp.accessCode}" target="_blank">View this AVP (in new window or tab)</a>
+    <a href="#" class="save right" title="Save AVP">
+        <img src="${baseUrl}/images/save.png" border="0"/>
+        Save AVP
+    </a>
+</div>
 
 <div class="scroll-pane ui-corner-all clear">
     <div class="scroll-content">
@@ -68,7 +66,7 @@
 </div>
 
 <div id="slidesSelector">
-    <h2>Choose a slide to add (click to add)</h2>
+    <h2>Title here</h2>
     <ul>
         <#list 1..presentation.duration as i>
             <li>
@@ -102,9 +100,26 @@ $(function() {
     var isAddSlide = true;
     var itemToBeReplaced;
 
-    // when click "add slide"
+    // when click "Add a slide"
     $('a.addSlide').click(function() {
+        var allItems = $('.scroll-content .scroll-content-item');
+        // first, check if there's any time remained
+        if (allItems.length > 0) {
+            var last = allItems.eq(allItems.length - 1);
+            log("previous slide's end time = " + last.data('slideInfo').eTime);
+            // if previous slide's end time is the end of the video, no more slide can be added
+            if ((last.data('slideInfo').eTime + minSlideTime) >= avDuration) {
+                log("You have reached the end of the Audio/Video. No more slide can be added.");
+                alert("You have reached the end of the Audio/Video. No more slide can be added.");
+                return;
+            }
+        }
         isAddSlide = true;
+        displaySlidesSelectorDialog('Choose a slide to add (click to add)');
+        return false;
+    });
+
+    function displaySlidesSelectorDialog(txt) {
         $('#slidesSelector').show();
         var winW = $(window).width();
         var winH = $(window).height();
@@ -116,14 +131,13 @@ $(function() {
         if (dH > winH)
             dH = winH;
         log('dialog width and height (' + dW + ', ' + dH + ')');
-        $('#slidesSelector h2').text('Choose a slide to add (click to add)');
+        $('#slidesSelector h2').text(txt);
         $('#slidesSelector').dialog({
             width: dW,
             height: dH,
             modal: true
         });
-        return false;
-    });
+    }
 
     // when select a slide to add or replace
     $('#slidesSelector ul li').click(function() {
@@ -141,7 +155,9 @@ $(function() {
                 var endTime = startTime + slideDuration;
                 if (endTime > avDuration)
                     endTime = avDuration;
-                addSlide(i, startTime, endTime, '');
+                // only add slide if end time is greater than start time by minimum slide time
+                if ((endTime - startTime) >= minSlideTime)
+                    addSlide(i, startTime, endTime, '');
             } else {
                 //replace slide
                 itemToBeReplaced.data('slideInfo').num = i;
@@ -150,6 +166,7 @@ $(function() {
                 // change slide number
                 $('span.left', itemToBeReplaced).eq(0).text('Slide ' + i);
             }
+            // close dialog
             $('#slidesSelector').dialog('close');
             $('#slidesSelector').hide();
         }
@@ -157,19 +174,6 @@ $(function() {
 
     // add a slide
     function addSlide(whichSlide, sTime, eTime, title) {
-        var allItems = $('.scroll-content .scroll-content-item');
-        log("add slide " + whichSlide);
-        // first, check if there's any time remained
-        if (allItems.length > 0) {
-            var last = allItems.eq(allItems.length - 1);
-            log("previous slide's end time = " + last.data('slideInfo').eTime);
-            // if previous slide's end time is the end of the video, no more slide can be added
-            if (last.data('slideInfo').eTime >= avDuration) {
-                log("You have reached the end of the Audio/Video. No more slide can be added.");
-                alert("You have reached the end of the Audio/Video. No more slide can be added.");
-                return;
-            }
-        }
         var content = $('.scroll-content');
         var item = $('<div/>').addClass('scroll-content-item').appendTo(content);
         var div = $('<div/>').appendTo(item);
@@ -245,23 +249,7 @@ $(function() {
         replace.click(function() {
             itemToBeReplaced = $(this).parent().parent().parent();
             isAddSlide = false;
-            $('#slidesSelector').show();
-            var winW = $(window).width();
-            var winH = $(window).height();
-            log('window width and height (' + winW + ', ' + winH + ')');
-            var dW = 900;
-            var dH = 660;
-            if (dW > winW)
-                dW = winW;
-            if (dH > winH)
-                dH = winH;
-            log('dialog width and height (' + dW + ', ' + dH + ')');
-            $('#slidesSelector h2').text('Choose a slide to replace your current slide');
-            $('#slidesSelector').dialog({
-                width: dW,
-                height: dH,
-                modal: true
-            });
+            displaySlidesSelectorDialog('Choose a slide to replace your current slide');
             return false;
         });
         setupSlideScroller();
@@ -448,7 +436,8 @@ $(function() {
                     log("pause player in the first time");
                     log('avDuration = ' + avDuration);
                     log("player duration = " + jwplayer('player1').getDuration());
-                    if (avDuration == 0) {
+
+                    if (avDuration != jwplayer('player1').getDuration()) {
                         log("set avDuration to " + jwplayer('player1').getDuration());
                         avDuration = jwplayer('player1').getDuration();
                     }
