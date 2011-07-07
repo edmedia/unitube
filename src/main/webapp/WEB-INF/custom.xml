@@ -201,6 +201,12 @@
         <property name="service" ref="myBaseService"/>
     </bean>
 
+    <bean id="avpDelete" class="nz.ac.otago.edmedia.spring.controller.BaseDeleteController">
+        <property name="viewName" value="redirect:/myTube/avpList.do"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.AVP"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
     <bean id="avpSave" class="nz.ac.otago.edmedia.media.controller.AVPSaveController">
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.AVP"/>
         <property name="service" ref="myBaseService"/>
@@ -406,6 +412,7 @@
                 /myTube/profile.do=myUserEdit
                 /myTube/avpEdit.do=avpEdit
                 /myTube/avpList.do=avpList
+                /myTube/avpDelete.do=avpDelete
                 /myTube/avpSave.do=avpSave
                 /myTube/avpSync.do=avpSync
                 /myTube/view.do=view

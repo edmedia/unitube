@@ -1,36 +1,36 @@
 <div class="stage">
-    <form action="" name="listForm">
-        <#list pager.paramList as param>
-        <input type="hidden" name="${param.name?html}" value="${param.value?html}"/>
-        </#list>
+<form action="" name="listForm">
+<#list pager.paramList as param>
+    <input type="hidden" name="${param.name?html}" value="${param.value?html}"/>
+</#list>
 
-        <div class="navDiv">
-            <#if pager.elements?has_content>
-            <input type="button" value="Delete"/>
-            </#if>
-            <a href="avpEdit.do?aa=new">Create a new AVP</a>
-            |
-            <a href="list.do">My Media</a>
+    <div class="navDiv">
+    <#if pager.elements?has_content>
+        <input type="button" value="Delete"/>
+    </#if>
+        <a href="avpEdit.do?aa=new">Create a new AVP</a>
+        |
+        <a href="list.do">My Media</a>
 
-            <span class="emptySpace">&nbsp; &nbsp; </span>
-            <@displayGmailStylePager pager/>
-        </div>
+        <span class="emptySpace">&nbsp; &nbsp; </span>
+    <@displayGmailStylePager pager/>
+    </div>
 
-        <#if pager.elements?has_content>
-        <table summary="">
+<#if pager.elements?has_content>
+    <table summary="">
 
-            <tr>
-                <th>
-                    <input type="checkbox" name="all"/>
-                    #
-                </th>
-                <th>name</th>
-                <th>URL</th>
-                <th>Synchronisation Tool</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>
+                <input type="checkbox" name="all"/>
+                #
+            </th>
+            <th>name</th>
+            <th>URL</th>
+            <th>Synchronisation Tool</th>
+            <th></th>
+        </tr>
 
-            <#list pager.elements as obj>
+        <#list pager.elements as obj>
             <tr>
                 <td><input type="checkbox" name="id" value="${obj.id?c}"/></td>
                 <td>
@@ -46,20 +46,65 @@
                     <a href="#" rel="avpDelete.do?id=${obj.id?c}${pager.parameters?html}" class="delete">delete</a>
                 </td>
             </tr>
-            </#list>
+        </#list>
 
-        </table>
+    </table>
 
-        <div class="navDiv">
-            <input type="button" value="Delete"/>
-            <a href="avpEdit.do?aa=new">Create a new AVP</a>
-            |
-            <a href="list.do">My Media</a>
-            <span class="emptySpace">&nbsp; &nbsp; </span>
-            <@displayGmailStylePager pager/>
-        </div>
+    <div class="navDiv">
+        <input type="button" value="Delete"/>
+        <a href="avpEdit.do?aa=new">Create a new AVP</a>
+        |
+        <a href="list.do">My Media</a>
+        <span class="emptySpace">&nbsp; &nbsp; </span>
+    <@displayGmailStylePager pager/>
+    </div>
 
-    </form>
+</form>
 
-    </#if>
+</#if>
 </div>
+
+<script type="text/javascript">
+    <!--
+    <#assign message1><@spring.message "delete.select.first.AVP"/></#assign>
+    <#assign message2><@spring.message "delete.confirm.AVP"/></#assign>
+    var message1 = "${message1?js_string}";
+    var info;
+    function deleteRecords() {
+        if ($('input:checkbox[name=id]:checked').size() == 0) {
+            alert(message1);
+            return false;
+        }
+        if (deleteConfirm()) {
+            document.listForm.action = "${baseUrl}/myTube/avpDelete.do";
+            document.listForm.submit();
+            return true;
+        } else
+            return false;
+    }
+
+    function deleteConfirm() {
+        var message2 = "${message2?js_string}";
+        return confirm(message2);
+    }
+
+    $(function() {
+
+        // check or uncheck all checkboxes
+        $('input:checkbox[name=all]').click(function() {
+            $('input:checkbox[name=id]').attr('checked', $('input:checkbox[name=all]').is(':checked'));
+        });
+
+        $('a.delete').click(function() {
+            if (deleteConfirm()) {
+                this.href = this.rel;
+            }
+        });
+
+        $('input:button[value=Delete]').click(function() {
+            deleteRecords();
+        });
+
+    });
+    //-->
+</script>
