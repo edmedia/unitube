@@ -138,7 +138,7 @@ $(function() {
                 ${si.sTime?c},
                 ${si.eTime?c},
                 ${si.num?c},
-                        "${si.title?html}"
+                        "${si.title?js_string}"
                 );
                 // which slide (0 based)
                 var slideNum = parseInt(slidesData[${si_index?c}].num) - 1;
@@ -238,102 +238,102 @@ $(function() {
 
     var firstPlay = true;
     jwplayer('player1').setup({
-                flashplayer: '${JWPLAYER}',
-                bufferlength: 5,
-                <#if obj.mediaType == 10>
-                    controlbar: {position: 'bottom', idlehide: false},
-                    provider: 'sound',
-                    <#elseif obj.mediaType ==20>
-                        provider: 'video',
-                </#if>
-                events: {
-                    onTime: function(event) {
-                        // get current time
-                        var currentTime = event.position;
-                        // set "current-time1" text
-                        $('#current-time1').text(convertSecondsToTimecode(currentTime));
-                        currentSeq = -1;
-                        // assume slidesData is ordered by time
-                        for (var i = 0; i < slidesData.length; i++) {
-                            if (currentTime >= slidesData[i].sTime)
-                                currentSeq = i;
-                            else
-                                break;
-                        }
-                        showCurrentSlide();
-                        player1LastTime = currentTime;
-                    },
-                    onPlay: function() {
-                        if (firstPlay) {
-                            log('avDuration = ' + avDuration);
-                            log("player duration = " + jwplayer('player1').getDuration());
-                            if (avDuration == 0) {
-                                log("set avDuration to " + jwplayer('player1').getDuration());
-                                avDuration = jwplayer('player1').getDuration();
-                            }
-                            <#if obj.mediaType == 20>
-                                // for video file, set seek delta to 1/1000 of length
-                                seekDelta = Math.round(avDuration / 1000);
-                                log("seek delta = " + seekDelta);
-                            </#if>
-                            firstPlay = false;
-                        }
-                        player1IsPlaying = true;
-                        <#if obj2??>
-                            if (window.console) console.log("video one is playing, start playing video two");
-                            jwplayer('player2').play(true);
-                        </#if>
-                    },
-                    onPause: function() {
-                        player1IsPlaying = false;
-                        <#if obj2??>
-                            if (window.console) console.log("video one is pausing, pausing video two");
-                            jwplayer('player2').pause(true);
-                        </#if>
-                    },
-                    onReady: function() {
-                        if (window.console) console.log("player1 is ready");
-                        player1IsReady = true;
-                    }
+        flashplayer: '${JWPLAYER}',
+        bufferlength: 5,
+        <#if obj.mediaType == 10>
+            controlbar: {position: 'bottom', idlehide: false},
+            provider: 'sound',
+            <#elseif obj.mediaType ==20>
+                provider: 'video',
+        </#if>
+        events: {
+            onTime: function(event) {
+                // get current time
+                var currentTime = event.position;
+                // set "current-time1" text
+                $('#current-time1').text(convertSecondsToTimecode(currentTime));
+                currentSeq = -1;
+                // assume slidesData is ordered by time
+                for (var i = 0; i < slidesData.length; i++) {
+                    if (currentTime >= slidesData[i].sTime)
+                        currentSeq = i;
+                    else
+                        break;
                 }
-            });
+                showCurrentSlide();
+                player1LastTime = currentTime;
+            },
+            onPlay: function() {
+                if (firstPlay) {
+                    log('avDuration = ' + avDuration);
+                    log("player duration = " + jwplayer('player1').getDuration());
+                    if (avDuration == 0) {
+                        log("set avDuration to " + jwplayer('player1').getDuration());
+                        avDuration = jwplayer('player1').getDuration();
+                    }
+                    <#if obj.mediaType == 20>
+                        // for video file, set seek delta to 1/1000 of length
+                        seekDelta = Math.round(avDuration / 1000);
+                        log("seek delta = " + seekDelta);
+                    </#if>
+                    firstPlay = false;
+                }
+                player1IsPlaying = true;
+                <#if obj2??>
+                    if (window.console) console.log("video one is playing, start playing video two");
+                    jwplayer('player2').play(true);
+                </#if>
+            },
+            onPause: function() {
+                player1IsPlaying = false;
+                <#if obj2??>
+                    if (window.console) console.log("video one is pausing, pausing video two");
+                    jwplayer('player2').pause(true);
+                </#if>
+            },
+            onReady: function() {
+                if (window.console) console.log("player1 is ready");
+                player1IsReady = true;
+            }
+        }
+    });
     <#if obj2??>
         player2IsReady = false;
         player2IsPlaying = false;
         jwplayer('player2').setup({
-                    flashplayer: '${JWPLAYER}',
-                    bufferlength: 5,
-                    // mute player2
-                    volume: 0,
-                    <#if obj2.mediaType == 10>
-                        controlbar: {position: 'bottom', idlehide: false},
-                        provider: 'sound',
-                        <#elseif obj2.mediaType ==20>
-                            provider: 'video',
-                    </#if>
-                    //controlbar: 'none',
-                    events: {
-                        onTime: function(event) {
-                            // get current time
-                            var currentTime = event.position;
-                            // set "current-time2" text
-                            $('#current-time2').text(convertSecondsToTimecode(currentTime));
-                            player2LastTime = currentTime;
-                        },
-                        onPlay: function() {
-                            player2IsPlaying = true;
-                            jwplayer('player1').play(true);
-                        },
-                        onPause: function() {
-                            player2IsPlaying = false;
-                            jwplayer('player1').pause(true);
-                        },
-                        onReady: function() {
-                            if (window.console) console.log("player2 is ready");
-                            player2IsReady = true;
-                        }
-                    }
-                });
+            flashplayer: '${JWPLAYER}',
+            bufferlength: 5,
+            // mute player2
+            volume: 0,
+            <#if obj2.mediaType == 10>
+                controlbar: {position: 'bottom', idlehide: false},
+                provider: 'sound',
+                <#elseif obj2.mediaType ==20>
+                    provider: 'video',
+            </#if>
+            //controlbar: 'none',
+            events: {
+                onTime: function(event) {
+                    // get current time
+                    var currentTime = event.position;
+                    // set "current-time2" text
+                    $('#current-time2').text(convertSecondsToTimecode(currentTime));
+                    player2LastTime = currentTime;
+                },
+                onPlay: function() {
+                    player2IsPlaying = true;
+                    jwplayer('player1').play(true);
+                },
+                onPause: function() {
+                    player2IsPlaying = false;
+                    jwplayer('player1').pause(true);
+                },
+                onReady: function() {
+                    if (window.console) console.log("player2 is ready");
+                    player2IsReady = true;
+                }
+            }
+        });
     </#if>
 
     function showSlide(i) {
@@ -391,19 +391,20 @@ $(function() {
                     jwplayer('player2').seek(player1LastTime).play(true);
                 }
         }
+
         var syncIntervalID = window.setInterval(checkSync, 1000);
     </#if>
     Shadowbox.init({
-                skipSetup: true
-            });
+        skipSetup: true
+    });
 
     Shadowbox.setup("a.slideLink", {
-                gallery: 'Presentation',
-                counterLimit: 40,
-                overlayOpacity: 0.85,
-                player: 'img',
-                counterType: 'skip'
-            });
+        gallery: 'Presentation',
+        counterLimit: 40,
+        overlayOpacity: 0.85,
+        player: 'img',
+        counterType: 'skip'
+    });
 });
 </script>
 

@@ -111,7 +111,7 @@ $(function() {
             if ((last.data('slideInfo').eTime + minSlideTime) >= avDuration) {
                 log("You have reached the end of the Audio/Video. No more slide can be added.");
                 alert("You have reached the end of the Audio/Video. No more slide can be added.");
-                return;
+                return false;
             }
         }
         isAddSlide = true;
@@ -180,24 +180,14 @@ $(function() {
         var div2 = $('<div/>').appendTo(div);
         var span = $('<span/>').text('Slide ' + whichSlide).addClass('left').appendTo(div2);
         var del = $('<img/>').attr('src', '${baseUrl}/images/remove.png').attr('alt', 'Remove').attr('title', 'Remove this slide from AVP').addClass('right').appendTo(div2);
-        var replace = $('<img/>').attr('src', '${baseUrl}/images/replace.png').attr('alt', 'Replace').attr('title', 'Replace this slide with other slide').addClass('right').appendTo(div2);
+        var replace = $('<img/>').attr('src', '${baseUrl}/images/replace.png').attr('alt', 'Replace').attr('title', 'Replace this slide with another slide').addClass('right').appendTo(div2);
         var img = $('img[src$="-' + (whichSlide - 1) + '.png"]').eq(0).clone();
         img.appendTo(div);
         var divTime = $('<div/>').addClass('time').appendTo(div);
         $('<span/>').addClass('left').text(convertSecondsToTimecode(sTime)).appendTo(divTime);
         $('<span/>').addClass('right').text(convertSecondsToTimecode(eTime)).appendTo(divTime);
         var cap = $('<div/>').addClass('caption').addClass('clear').appendTo(div);
-        var defaultText = 'click here to add title';
-        if (title.length == 0) {
-            cap.attr('title', '');
-            cap.text(defaultText);
-        } else {
-            cap.attr("title", title);
-            if (title.length > 28)
-                cap.text(title.substring(0, 25) + ' ...');
-            else
-                cap.text(title);
-        }
+        inlineEdit(cap, title);
         item.data('slideInfo', new slideInfo(sTime, eTime, whichSlide, title));
         log('div.height = ' + div.height());
         // change item's height to have enough space to hold the slide
@@ -212,7 +202,7 @@ $(function() {
             var cap = $(this);
             var item = cap.parent().parent();
             var inputDiv = $('<div/>').addClass('input').insertAfter(cap);
-            var input = $('<input/>').attr('type', 'text').val(cap.attr('title')).css('width', '${presentationWidth?c}px').appendTo(inputDiv);
+            var input = $('<input/>').attr('type', 'text').val(cap.attr('title')).css('width', '${(presentationWidth-2)?c}px').appendTo(inputDiv);
             input.focus();
             cap.hide();
             input.blur(function() {
@@ -226,16 +216,7 @@ $(function() {
             });
 
             function afterEdit(theInput) {
-                if (theInput.val().length == 0) {
-                    cap.attr('title', '');
-                    cap.text(defaultText);
-                } else {
-                    cap.attr('title', theInput.val());
-                    if (theInput.val().length > 28)
-                        cap.text(theInput.val().substring(0, 25) + ' ...');
-                    else
-                        cap.text(theInput.val());
-                }
+                inlineEdit(cap, theInput.val());
                 item.data('slideInfo').title = theInput.val();
                 theInput.parent().remove();
                 cap.show();
@@ -255,6 +236,21 @@ $(function() {
         setupSlideScroller();
         log('item.offset() = ' + item.offset().left + ', ' + item.offset().top);
         $('.scroll-pane').scrollLeft(item.offset().left);
+    }
+
+    function inlineEdit(cap, title) {
+        var MAX_CHAR = 25;
+        var defaultText = 'click here to add title';
+        if (title.length == 0) {
+            cap.attr('title', '');
+            cap.text(defaultText);
+        } else {
+            cap.attr("title", title);
+            if (title.length > MAX_CHAR)
+                cap.text(title.substring(0, MAX_CHAR-3) + ' ...');
+            else
+                cap.text(title);
+        }
     }
 
     function slideSelected(item) {
@@ -405,7 +401,7 @@ $(function() {
     function initSlides() {
         <#if avp.slideInfos?has_content>
             <#list avp.slideInfos as slideInfo>
-                addSlide(${slideInfo.num?c}, ${slideInfo.sTime?c}, ${slideInfo.eTime?c}, '${slideInfo.title}');
+                addSlide(${slideInfo.num?c}, ${slideInfo.sTime?c}, ${slideInfo.eTime?c}, "${slideInfo.title?js_string}");
             </#list>
         </#if>
         // enable slide selector, if disabled
