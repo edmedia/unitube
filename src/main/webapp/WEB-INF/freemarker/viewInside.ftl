@@ -81,7 +81,7 @@
         </div>
     </div>
     <div class="clearMe"></div>
-    <#-- javascript here to display flash, or flowplay to play video and audio -->
+    <#-- javascript here to display flash, or jwplay to play video and audio -->
         <#if obj.realFilename?ends_with(".swf")> <#-- flash -->
             <#include "viewFlash.ftl"/>
             <#elseif obj.mediaType == 10> <#-- audio -->
