@@ -64,6 +64,9 @@
     <div class="scroll-content">
     </div>
 </div>
+<div class="hidden" id="helpInfo">
+    Click on a slide to adjust timing.
+</div>
 
 <div id="slidesSelector">
     <h2>Title here</h2>
@@ -87,6 +90,7 @@ $(function() {
 
     var seekDelta = 0;
     var howManySlides = ${presentation.duration?c};
+    var playerWidth = ${player1Width?c};
     // disable slide selector first
     $('#actionButton').hide();
 
@@ -247,7 +251,7 @@ $(function() {
         } else {
             cap.attr("title", title);
             if (title.length > MAX_CHAR)
-                cap.text(title.substring(0, MAX_CHAR-3) + ' ...');
+                cap.text(title.substring(0, MAX_CHAR - 3) + ' ...');
             else
                 cap.text(title);
         }
@@ -273,15 +277,16 @@ $(function() {
         log('minimum and maximum time for this slide: (' + minTime + ', ' + maxTime + ')');
         // remove currentSide class
         allItems.removeClass('currentSlide');
-        //allItems.css('opacity', '0.75');
-        // add currentSlide class to this slide
-        //item.css('opacity', '1');
         item.addClass('currentSlide');
-        item.focus();
         // calculate width for slider
-        var width = Math.round((maxTime - minTime) * ${player1Width}/avDuration);
+        var width = Math.round((maxTime - minTime) * playerWidth / avDuration);
         // calculate left margin
-        var marginLeft = Math.round(minTime * ${player1Width}/avDuration);
+        var marginLeft = Math.round(minTime * playerWidth / avDuration);
+        if (marginLeft < 0)
+            marginLeft = 0;
+        if (width > playerWidth)
+            width = palyerWidth;
+        log("set slider container's width to " + width + ' and margin-left to ' + marginLeft);
         $('#slider-container').css('width', width)
                 .css('margin-left', marginLeft);
         $("#slider-range").slider('destroy');
@@ -317,16 +322,16 @@ $(function() {
                 // if has previous slide, and low handler changed, change previous slide's end time to minV
                 if ((item.prev().length > 0) && (movedV == minV)) {
                     item.prev().data('slideInfo').eTime = minV;
-                    updateTimeOnslide(item.prev());
+                    updateTimeOnSlide(item.prev());
                 }
                 // if has next slide, and high handler changed, change next slide's start time to maxV
                 if ((item.next().length > 0) && (movedV == maxV)) {
                     item.next().data('slideInfo').sTime = maxV;
-                    updateTimeOnslide(item.next());
+                    updateTimeOnSlide(item.next());
                 }
                 item.data('slideInfo').sTime = minV;
                 item.data('slideInfo').eTime = maxV;
-                updateTimeOnslide(item);
+                updateTimeOnSlide(item);
 
                 // which handle
                 var handle;
@@ -357,17 +362,18 @@ $(function() {
 
     }
 
-    function updateTimeOnslide(item) {
+    function updateTimeOnSlide(item) {
         $('.time .left', item).text(convertSecondsToTimecode(item.data('slideInfo').sTime));
         $('.time .right', item).text(convertSecondsToTimecode(item.data('slideInfo').eTime));
     }
 
+    // delete a slide
     function deleteSlide(item) {
         if (confirm('Are you sure you want to remove this slide from your AVP?')) {
             // if this is not the last slide, change start time for next slide
             if (item.next().length > 0) {
                 item.next().data('slideInfo').sTime = item.data('slideInfo').sTime;
-                updateTimeOnslide(item.next());
+                updateTimeOnSlide(item.next());
             }
             // remove from interface
             item.remove();
@@ -432,7 +438,6 @@ $(function() {
                     log("pause player in the first time");
                     log('avDuration = ' + avDuration);
                     log("player duration = " + jwplayer('player1').getDuration());
-
                     if (avDuration != jwplayer('player1').getDuration()) {
                         log("set avDuration to " + jwplayer('player1').getDuration());
                         avDuration = jwplayer('player1').getDuration();
@@ -481,9 +486,21 @@ $(function() {
                 + ' scrollContentItem.inner = ' + scrollContentItem.innerWidth() + ', ' + scrollContentItem.innerHeight()
                 + ' scrollContentItem = ' + scrollContentItem.width() + ', ' + scrollContentItem.height()
         );
+        // if there's any slide, display help information, otherwise, hide it
+        if (scrollContentItem.length > 0)
+            $('#helpInfo').show();
+        else
+            $('#helpInfo').hide();
+
     }
 
+    function keepAlive() {
+        $.get('${baseUrl}/javascript/media.js?' + Math.random(), function(data) {
+            log('send request to server to keep session alive.')
+        });
+    }
 
+    var keepAliveIntervalID = window.setInterval(keepAlive, 5 * 60 * 1000);
 });
 
 

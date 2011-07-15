@@ -267,7 +267,7 @@ $(function() {
                 if (firstPlay) {
                     log('avDuration = ' + avDuration);
                     log("player duration = " + jwplayer('player1').getDuration());
-                    if (avDuration == 0) {
+                    if (avDuration != jwplayer('player1').getDuration()) {
                         log("set avDuration to " + jwplayer('player1').getDuration());
                         avDuration = jwplayer('player1').getDuration();
                     }

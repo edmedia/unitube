@@ -1090,3 +1090,9 @@ div.input input {
     display: inline;
 }
 
+div#helpInfo {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
