@@ -74,7 +74,7 @@
                     bufferlength: 5,
                     controlbar: {position: 'bottom', idlehide: false},
                     <#if obj.duration &gt; 0>
-                        duration: ${(obj.duration/1000)?c},
+                        //duration: ${(obj.duration/1000)?c},
                     </#if>
                     height: 60,
                     provider: 'sound'
@@ -85,7 +85,7 @@
                     bufferlength: 5,
                     controlbar: {position: 'bottom', idlehide: false},
                     <#if obj.duration &gt; 0>
-                        duration: ${(obj.duration/1000)?c},
+                        //duration: ${(obj.duration/1000)?c},
                     </#if>
                     provider: 'sound'
                 });
@@ -94,7 +94,7 @@
                     flashplayer: '${JWPLAYER}',
                     bufferlength: 5,
                     <#if obj.duration &gt; 0>
-                        duration: ${(obj.duration/1000)?c},
+                        //duration: ${(obj.duration/1000)?c},
                     </#if>
                     width: $(window).width(),
                     height: $(window).height(),

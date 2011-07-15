@@ -13,7 +13,7 @@
                 bufferlength: 5,
                 controlbar: {position: 'bottom', idlehide: false},
             <#if obj.duration &gt; 0>
-                duration: ${(obj.duration/1000)?c},
+                //duration: ${(obj.duration/1000)?c},
             </#if>
                 width: width,
                 height: height,
