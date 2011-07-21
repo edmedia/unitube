@@ -136,13 +136,10 @@
                        title="<@spring.message "media.access.hidden"/>"
                        <#if spring.status.value?? && spring.status.value==10>checked="checked"</#if>/>
                 <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
-            <#--
-            <input type="radio" name="${spring.status.expression}" value="20"
-            title="<@spring.message "media.access.private"/>"
-
-                   <#if spring.status.value?? && spring.status.value==20>checked="checked"</#if>/>
-            <span title="<@spring.message "media.access.private"/>">Private</span>
-            -->
+                <input type="radio" name="${spring.status.expression}" value="20"
+                       title="<@spring.message "media.access.private"/>"
+                       <#if spring.status.value?? && spring.status.value==20>checked="checked"</#if>/>
+                <span title="<@spring.message "media.access.private"/>">Private</span>
             </td>
             <td>
             <@displayError/>
@@ -161,13 +158,10 @@
                        title="<@spring.message "media.access.hidden"/>"
                        <#if spring.status.value?? && spring.status.value==10>checked="checked"</#if>/>
                 <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
-            <#--
-            <input type="radio" name="${spring.status.expression}" value="20"
-            title="<@spring.message "media.access.private"/>"
-
-                   <#if spring.status.value?? && spring.status.value==20>checked="checked"</#if>/>
-            <span title="<@spring.message "media.access.private"/>">Private</span>
-            -->
+                <input type="radio" name="${spring.status.expression}" value="20"
+                       title="<@spring.message "media.access.private"/>"
+                       <#if spring.status.value?? && spring.status.value==20>checked="checked"</#if>/>
+                <span title="<@spring.message "media.access.private"/>">Private</span>
             </td>
             <td>
             <@displayError/>

@@ -966,15 +966,15 @@ span#current-time1, span#current-time2, span#current-slide {
     padding: 5px 10px;
 }
 
-span.left {
+#share-dialog .left {
     margin-right: 100px;
 }
 
-span.splitter {
+#share-dialog .splitter {
     display: none;
 }
 
-span.right {
+#share-dialog .right {
     float: right;
 }
 
