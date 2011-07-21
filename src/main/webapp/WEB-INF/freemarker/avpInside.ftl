@@ -155,7 +155,7 @@ $(function() {
                         var seq = parseInt($(this).attr('href').substring(1));
                         // which slide to show (0 based)
                         var slideNum = parseInt(slidesData[seq].num) - 1;
-                        if (window.console) console.log("jump to slide " + (slideNum + 1));
+                        log("jump to slide " + (slideNum + 1));
                         jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
                         isShowingCurrentSlide = true;
                         currentSeq = seq;
@@ -205,7 +205,7 @@ $(function() {
                                 var seq = parseInt($(this).attr('href').substring(1));
                                 // which slide to show (0 based)
                                 var slideNum = parseInt(slidesData[seq].num) - 1;
-                                if (window.console) console.log("jump to slide " + (slideNum + 1));
+                                log("jump to slide " + (slideNum + 1));
                                 jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
                                 isShowingCurrentSlide = true;
                                 currentSeq = seq;
@@ -280,19 +280,19 @@ $(function() {
                 }
                 player1IsPlaying = true;
                 <#if obj2??>
-                    if (window.console) console.log("video one is playing, start playing video two");
+                    log("video one is playing, start playing video two");
                     jwplayer('player2').play(true);
                 </#if>
             },
             onPause: function() {
                 player1IsPlaying = false;
                 <#if obj2??>
-                    if (window.console) console.log("video one is pausing, pausing video two");
+                    log("video one is pausing, pausing video two");
                     jwplayer('player2').pause(true);
                 </#if>
             },
             onReady: function() {
-                if (window.console) console.log("player1 is ready");
+                log("player1 is ready");
                 player1IsReady = true;
             }
         }
@@ -329,7 +329,7 @@ $(function() {
                     jwplayer('player1').pause(true);
                 },
                 onReady: function() {
-                    if (window.console) console.log("player2 is ready");
+                    log("player2 is ready");
                     player2IsReady = true;
                 }
             }
@@ -348,7 +348,7 @@ $(function() {
     function showCurrentSlide() {
         currentSlide = parseInt(slidesData[currentSeq].num) - 1;
         if (lastSlide != currentSlide) {
-            if (window.console)  console.log("show slide " + (currentSlide + 1));
+            log("show slide " + (currentSlide + 1));
             lastSlide = currentSlide;
         }
         if (isShowingCurrentSlide)
@@ -361,22 +361,22 @@ $(function() {
 
     function checkReady() {
         <#if obj2??>
-            if (window.console) console.log("check if players are ready");
+            log("check if players are ready");
             <#else>
-                if (window.console) console.log("check if player1 is ready");
+                log("check if player1 is ready");
         </#if>
         if (player1IsReady && player2IsReady) {
             <#if obj2??>
-                if (window.console) console.log("all ready, clear interval and start playing player1 and player2");
+                log("all ready, clear interval and start playing player1 and player2");
                 <#else>
-                    if (window.console) console.log("all ready, clear interval and start playing player1");
+                    log("all ready, clear interval and start playing player1");
             </#if>
             window.clearInterval(readyIntervalID);
             jwplayer('player1').play();
-            if (window.console) console.log("player1 started");
+            log("player1 started");
             <#if obj2??>
                 jwplayer('player2').play();
-                if (window.console) console.log("player2 started");
+                log("player2 started");
             </#if>
         }
     }
@@ -386,8 +386,8 @@ $(function() {
         function checkSync() {
             if (player1IsPlaying && player2IsPlaying)
                 if (Math.abs(player1LastTime - player2LastTime) > MAXIMUM_GAP) {
-                    if (window.console) console.log("player1LastTime = " + player1LastTime + " player2LastTime = " + player2LastTime);
-                    if (window.console) console.log("adjust video two to be in sync with video one");
+                    log("player1LastTime = " + player1LastTime + " player2LastTime = " + player2LastTime);
+                    log("adjust video two to be in sync with video one");
                     jwplayer('player2').seek(player1LastTime).play(true);
                 }
         }

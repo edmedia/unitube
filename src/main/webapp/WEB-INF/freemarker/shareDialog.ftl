@@ -72,7 +72,7 @@
             minLength: 2,
             source: $('#userInput').attr("rel"),
             select: function(e, ui) {
-                if (window.console) console.log("select " + ui.item.value);
+                log("select " + ui.item.value);
                 $('#userInput').val(ui.item.value);
             }
         });
@@ -89,13 +89,13 @@
         $('form[name=addAccessRule]').submit(function() {
             // get media id from hidden input, must be set before show dialog
             var id = $('#ar_mediaID').val();
-            if (window.console) console.log("id = " + id);
+            log("id = " + id);
             var url = this.action + "?mediaID=" + id + "&userInput=" + $('#userInput').val();
-            if (window.console) console.log("addAccessRule url = " + url);
+            log("addAccessRule url = " + url);
             $.get(url, function(xml) {
                 if ($("action", xml).attr("success") == "true") {
                     var detail = $("action", xml).attr("detail");
-                    if (window.console) console.log("detail = " + detail);
+                    log("detail = " + detail);
                     var obj = $.parseJSON(detail);
                     var li = $('<li/>').attr("id", "ar_" + obj.id)
                             .appendTo($('#ar_list'));
@@ -131,7 +131,7 @@
             if (confirm('Are you sure you want to remove this user?')) {
                 var id = thisElement.attr('href').substring(1);
                 var url = "${baseUrl}/myTube/accessRuleDelete.do?id=" + id;
-                if (window.console) console.log("delete accessRule url " + url);
+                log("delete accessRule url " + url);
                 $.get(url, function(xml) {
                     if ($("action", xml).attr("success") == "true") {
                         $('#ar_' + id).remove();

@@ -92,7 +92,7 @@
                             minLength: 2,
                             source: userName.attr("rel"),
                             select: function(e, ui) {
-                                if (window.console) console.log("select " + ui.item.value);
+                                log("select " + ui.item.value);
                                 userName.val(ui.item.value);
                                 // $('#user-lookup-form').children().first().submit();
                             }
@@ -153,10 +153,10 @@
                 $('input:checkbox[name=id]:checked').each(function() {
                     allVals.push($(this).val());
                 });
-                if (window.console) console.log("id = " + allVals);
+                log("id = " + allVals);
 
                 var url = this.action + "?mediaIds=" + allVals + "&userName=" + userName.val();
-                if (window.console) console.log("transferOwner url = " + url);
+                log("transferOwner url = " + url);
                 $.get(url, function(xml) {
                     if ($("action", xml).attr("success") == "true")
                         info.html("<div>Transfer Ownership successfully.<\/div>").dialog('open');

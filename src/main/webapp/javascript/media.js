@@ -91,5 +91,5 @@ function goOn() {
 }
 
 function log(msg) {
-    if (inDebugMode && window.console && console.log) console.log(msg);
+    if (inDebugMode && window.console && window.console.log) window.console.log(msg);
 }
