@@ -5,23 +5,23 @@
 <div>
     <h3>UniTube Security and Privacy (<a href="#">Hide this</a>)</h3>
 
-    <p>Please be aware that at this time, anyone who has access to the web
-        address (URL) of material posted on UniTube can access that material
-        without having to login. Making files hidden on UniTube simply means
-        that the URL is not listed on UniTube itself and is not discoverable by
-        search engines. It does not however protect against access by
-        unauthorised persons who obtain the URL.</p>
+    <p>Please ensure that you use the appropriate access option when uploading materials to UniTube.</p>
 
-    <p>For this reason we strongly advise against uploading any sensitive or
-        private material to UniTube at this time.</p>
+    <p><strong>Public:</strong> This means anyone can find and access your file. No login is required.</p>
 
-    <p>Also, please do ensure that you only upload material that you have
-        created or have permission to share. See <a href="${baseUrl}/copyright.do">here</a>
-        for further information.</p>
+    <p><strong>Hidden:</strong> Means anyone who has the link can access your file. The URL for your media is not listed on UniTube
+        itself and is not discoverable by search engines. No login is required and for this reason we strongly advise
+        against uploading any sensitive or private material to UniTube using the hidden option; choose the private
+        option instead.</p>
 
-    <p>If you become aware of any material on UniTube that you feel is
-        inappropriate for any reason or is in possible breach of copyright
-        please do let us know. E-mail <a href="mailto:unitube@otago.ac.nz">unitube@otago.ac.nz</a></p>
+    <p><strong>Private:</strong> Only people explicitly granted permission can access your file. Login is required.</p>
+
+    <p>Also, please do ensure that you only upload material that you have created or have permission to share. See <a
+            href="${baseUrl}/copyright.do">here</a> for further information.</p>
+
+    <p>If you become aware of any material on UniTube that you feel is inappropriate for any reason or is in possible
+        breach of copyright please do let us know. E-mail <a href="mailto:unitube@otago.ac.nz">unitube@otago.ac.nz</a>
+    </p>
 
     <p>&nbsp; </p>
 </div>
@@ -41,12 +41,10 @@
                    title="<@spring.message "media.access.hidden"/>"
                    <#if user.uploadAccessType == 10>checked="checked"</#if>/>
             <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
-            <#--
             <input type="radio" name="accessType" value="20"
                    title="<@spring.message "media.access.private"/>"
                    <#if user.uploadAccessType == 20>checked="checked"</#if>/>
             <span title="<@spring.message "media.access.private"/>">Private</span>
-            -->
             <a id="changeOption" href="#">+ More options</a>
         </div>
     </div>
@@ -75,10 +73,11 @@
 <br/>
 <hr/>
 <br/>
-<#if user.isGuest>
-<p>You are a guest user, all your media files will be REMOVED after 24 hours.</p>
-<p>&nbsp; </p>
-</#if>
+    <#if user.isGuest>
+    <p>You are a guest user, all your media files will be REMOVED after 24 hours. Please contact us if you want to be a
+        permanent user.</p>
+    <p>&nbsp; </p>
+    </#if>
 
 
 <script type="text/javascript">
@@ -88,9 +87,9 @@
         $('#moreOptions').hide();
         changeText();
         // hide "on twitter" for non public media file
-    <#if user.uploadAccessType &gt; 0>
-        $('#onTwitter').hide();
-    </#if>
+        <#if user.uploadAccessType &gt; 0>
+            $('#onTwitter').hide();
+        </#if>
         $('#changeOption').click(function() {
             // toggle between "+ More options" and "- Less options"
             $('#moreOptions').toggle();
@@ -120,6 +119,6 @@
 
     //-->
 </script>
-<#else>
-<div>Please login first before uploading media file.</div>
-        </#if>
+    <#else>
+    <div>Please login first before uploading media file.</div>
+</#if>
