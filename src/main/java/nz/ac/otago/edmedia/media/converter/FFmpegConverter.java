@@ -66,6 +66,8 @@ public class FFmpegConverter extends AbstractConverter {
     }
 
     public MediaInfo transcode(File input, File outputPath) {
+        if (StringUtils.isNotBlank(mediaConverter.getX264Option()))
+            CODEC[H_264_CODEC] = mediaConverter.getX264Option();
         MediaInfo mediaInfo = getInfo(input);
         if ((mediaInfo != null)) {
             // if contains video
@@ -82,7 +84,7 @@ public class FFmpegConverter extends AbstractConverter {
                 generateThumbnail(new File(outputPath, thumbnail), new File(outputPath, "thumbnail.gif"));
 
                 // only convert video when it's not h264 or flash movie format
-                if(false) {
+                if (false) {
 
                 }
                 /*
