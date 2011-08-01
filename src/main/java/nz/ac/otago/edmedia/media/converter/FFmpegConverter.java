@@ -122,6 +122,18 @@ public class FFmpegConverter extends AbstractConverter {
             } else {
                 log.info("File \"{}\" is not a recognized format.", input);
             }
+            if ((mediaInfo.getVideo() != null) || (mediaInfo.getAudio() != null)) {
+                // the duration got from original file could be wrong
+                // get duration from generated file to make sure it's correct
+                if (StringUtils.isNotBlank(mediaInfo.getFilename())) {
+                    MediaInfo newInfo = getInfo(new File(outputPath, mediaInfo.getFilename()));
+                    if (!newInfo.getDuration().equals(mediaInfo.getDuration())) {
+                        newInfo.setFilename(mediaInfo.getFilename());
+                        newInfo.setThumbnail(mediaInfo.getThumbnail());
+                        mediaInfo = newInfo;
+                    }
+                }
+            }
         } else {
             log.info("File \"{}\" is not a recognized format.", input);
         }
