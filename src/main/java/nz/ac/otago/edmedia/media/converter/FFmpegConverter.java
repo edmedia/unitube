@@ -66,6 +66,8 @@ public class FFmpegConverter extends AbstractConverter {
     }
 
     public MediaInfo transcode(File input, File outputPath) {
+        if (StringUtils.isNotBlank(mediaConverter.getX264Option()))
+            CODEC[H_264_CODEC] = mediaConverter.getX264Option();
         MediaInfo mediaInfo = getInfo(input);
         if ((mediaInfo != null)) {
             // if contains video
@@ -82,7 +84,7 @@ public class FFmpegConverter extends AbstractConverter {
                 generateThumbnail(new File(outputPath, thumbnail), new File(outputPath, "thumbnail.gif"));
 
                 // only convert video when it's not h264 or flash movie format
-                if(false) {
+                if (false) {
 
                 }
                 /*
@@ -119,6 +121,18 @@ public class FFmpegConverter extends AbstractConverter {
 
             } else {
                 log.info("File \"{}\" is not a recognized format.", input);
+            }
+            if ((mediaInfo.getVideo() != null) || (mediaInfo.getAudio() != null)) {
+                // the duration got from original file could be wrong
+                // get duration from generated file to make sure it's correct
+                if (StringUtils.isNotBlank(mediaInfo.getFilename())) {
+                    MediaInfo newInfo = getInfo(new File(outputPath, mediaInfo.getFilename()));
+                    if (!newInfo.getDuration().equals(mediaInfo.getDuration())) {
+                        newInfo.setFilename(mediaInfo.getFilename());
+                        newInfo.setThumbnail(mediaInfo.getThumbnail());
+                        mediaInfo = newInfo;
+                    }
+                }
             }
         } else {
             log.info("File \"{}\" is not a recognized format.", input);

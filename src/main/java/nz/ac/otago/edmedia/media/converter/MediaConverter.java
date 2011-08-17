@@ -50,6 +50,8 @@ public class MediaConverter {
     private String pdf2swf;
     private String swfcombine;
 
+    private String x264Option;
+
     public String getFfmpeg() {
         if (StringUtils.isNotBlank(ffmpeg))
             return ffmpeg;
@@ -125,6 +127,14 @@ public class MediaConverter {
 
     public void setSwfcombine(String swfcombine) {
         this.swfcombine = swfcombine;
+    }
+
+    public String getX264Option() {
+        return x264Option;
+    }
+
+    public void setX264Option(String x264Option) {
+        this.x264Option = x264Option;
     }
 
     /**

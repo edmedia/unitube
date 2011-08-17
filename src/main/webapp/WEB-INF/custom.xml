@@ -456,6 +456,7 @@
         <property name="swfdump" value="${command.swfdump}"/>
         <property name="pdf2swf" value="${command.pdf2swf}"/>
         <property name="swfcombine" value="${command.swfcombine}"/>
+        <property name="x264Option" value="${x264.option}"/>
     </bean>
 
     <!-- scheduled task here: convert video when necessary -->
