@@ -26,6 +26,11 @@
             <column name="randomcode"/>
         </property>
 
+        <!-- access type(0: public, 10: hidden, 20: private) -->
+        <property name="accessType">
+            <column name="accesstype"/>
+        </property>
+
         <!-- Owner -->
         <many-to-one name="owner" column="ownerid"/>
 

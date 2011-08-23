@@ -688,6 +688,21 @@ public class MediaUtil {
         return result;
     }
 
+    public static int getAccessType(AVP avp) {
+        int accessType = MEDIA_ACCESS_TYPE_PUBLIC;
+        if (avp != null) {
+            Media av1 = avp.getAv1();
+            if ((av1 != null) && (av1.getAccessType() > accessType))
+                accessType = av1.getAccessType();
+            Media av2 = avp.getAv2();
+            if ((av2 != null) && (av2.getAccessType() > accessType))
+                accessType = av2.getAccessType();
+            Media presentation = avp.getPresentation();
+            if ((presentation != null) && (presentation.getAccessType() > accessType))
+                accessType = presentation.getAccessType();
+        }
+        return accessType;
+    }
 
     public static void main(String args[]) {
     }

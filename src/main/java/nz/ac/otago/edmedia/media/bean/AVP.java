@@ -1,5 +1,6 @@
 package nz.ac.otago.edmedia.media.bean;
 
+import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.WebID;
 import org.apache.commons.lang.StringUtils;
 
@@ -15,6 +16,7 @@ import java.util.Set;
  * <li><b>title </b>- AVP title</li>
  * <li><b>description </b>- AVP Description</li>
  * <li><b>randomCode </b>- Random Code</li>
+ * <li><b>accessType </b>- access type(0: public, 10: hidden, 20: private)</li>
  * <li><b>owner </b>- Owner of this AVP</li>
  * <li><b>av1 </b>- Audio/Video one</li>
  * <li><b>av2 </b>- Audio/Video two</li>
@@ -46,6 +48,11 @@ public class AVP extends WebID {
      * Random Code
      */
     private String randomCode;
+
+    /**
+     * access type(0: public, 10: hidden, 20: private)
+     */
+    private int accessType;
 
     /**
      * Owner of this album
@@ -118,6 +125,15 @@ public class AVP extends WebID {
      */
     public String getRandomCode() {
         return this.randomCode;
+    }
+
+    /**
+     * Returns access type(0: public, 10: hidden, 20: private).
+     *
+     * @return accessType
+     */
+    public int getAccessType() {
+        return MediaUtil.getAccessType(this);
     }
 
     /**
@@ -227,6 +243,15 @@ public class AVP extends WebID {
     }
 
     /**
+     * Sets access type(0: public, 10: hidden, 20: private).
+     *
+     * @param accessType access type(0: public, 10: hidden, 20: private)
+     */
+    public void setAccessType(int accessType) {
+        this.accessType = accessType;
+    }
+
+    /**
      * Sets Owner of this album.
      *
      * @param owner Owner of this album
@@ -321,6 +346,9 @@ public class AVP extends WebID {
         sb.append("\" ");
         sb.append("randomCode=\"");
         sb.append(getRandomCode());
+        sb.append("\" ");
+        sb.append("accessType=\"");
+        sb.append(getAccessType());
         sb.append("\" ");
         sb.append("]");
         return sb.toString();
