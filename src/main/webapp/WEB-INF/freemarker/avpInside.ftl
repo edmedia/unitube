@@ -409,5 +409,11 @@ $(function() {
 </script>
 
     <#else>
-    Can not find this Audio/Video Presentation.
+    <div class="info">
+        <#if accessDenied>
+    <@spring.message "avp.access.deny"/>
+    <#else>
+        <@spring.message "avp.not.found"/>
+        </#if>
+    </div>
 </#if>

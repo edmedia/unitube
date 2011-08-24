@@ -368,11 +368,18 @@
     </bean>
 
     <bean id="avp" class="nz.ac.otago.edmedia.media.controller.AVPController">
+        <property name="normalView" value="redirect:/avp.do"/>
+        <property name="loginView" value="redirect:/myTube/avp.do"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
 
     <bean id="avpData" class="nz.ac.otago.edmedia.media.controller.AVPDataController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="avps" class="nz.ac.otago.edmedia.media.controller.AVPsController">
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
@@ -443,7 +450,9 @@
                 /myTube/accessRuleDelete.do=accessRuleDeleteIt
                 /admin/tmp.do=tmp
                 /avp.do=avp
+                /myTube/avp.do=avp
                 /avpData.do=avpData
+                /avps.do=avps
             </value>
         </property>
     </bean>

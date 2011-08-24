@@ -2,6 +2,8 @@ package nz.ac.otago.edmedia.media.controller;
 
 import nz.ac.otago.edmedia.media.bean.AVP;
 import nz.ac.otago.edmedia.media.bean.Media;
+import nz.ac.otago.edmedia.media.bean.User;
+import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import org.apache.commons.lang.StringUtils;
@@ -13,13 +15,33 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * Audio/Video presentation. There could be two audio/video at the same time.
+ * Audio/Video presentation. There could be two audio/video + one presentation at the same time.
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
  *         Date: Mar 22, 2011
  *         Time: 2:13:45 PM
  */
 public class AVPController extends BaseOperationController {
+
+    private String normalView;
+
+    private String loginView;
+
+    public String getNormalView() {
+        return normalView;
+    }
+
+    public void setNormalView(String normalView) {
+        this.normalView = normalView;
+    }
+
+    public String getLoginView() {
+        return loginView;
+    }
+
+    public void setLoginView(String loginView) {
+        this.loginView = loginView;
+    }
 
     @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
@@ -28,7 +50,14 @@ public class AVPController extends BaseOperationController {
                                   BindException errors)
             throws Exception {
 
+        if (request.getRequestURI().contains("/myTube/")) {
+            // "/myTube/avp.do" is only used to make sure user has logged in
+            // once they logged in, go to normal view
+            String viewName = getNormalView() + "?" + request.getQueryString();
+            return new ModelAndView(viewName);
+        }
         Map model = errors.getModel();
+        model.put("accessDenied", Boolean.FALSE);
 
         String a = request.getParameter("a");
         if (StringUtils.isNotBlank(a)) {
@@ -39,6 +68,20 @@ public class AVPController extends BaseOperationController {
                 avp = (AVP) service.get(AVP.class, id);
             if ((avp != null) && !avp.validCode(a))
                 avp = null;
+            if (avp != null) {
+                if (avp.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PRIVATE) {
+                    User user = MediaUtil.getCurrentUser(service, request);
+                    // if not login yet
+                    if (user == null) {
+                        String viewName = getLoginView() + "?" + request.getQueryString();
+                        return new ModelAndView(viewName);
+                    }
+                    if (!MediaUtil.canView(avp, user)) {
+                        avp = null;
+                        model.put("accessDenied", Boolean.TRUE);
+                    }
+                }
+            }
             if (avp != null) {
                 model.put("avp", avp);
             }

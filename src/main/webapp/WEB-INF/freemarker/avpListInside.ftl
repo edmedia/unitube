@@ -37,7 +37,7 @@
                     <a href="avpEdit.do?id=${obj.id?c}${pager.parameters?html}">${obj.meaningfulName?html}</a>
                 </td>
                 <td>
-                    <a href="${baseUrl}/avp.do?a=${obj.accessCode}">${baseUrl}/avp?a=${obj.accessCode}</a>
+                    <a href="${baseUrl}/avp.do?a=${obj.accessCode}">${baseUrl}/avp.do?a=${obj.accessCode}</a>
                 </td>
                 <td>
                     <a href="avpSync.do?a=${obj.accessCode}">Sync</a>

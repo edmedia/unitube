@@ -688,6 +688,23 @@ public class MediaUtil {
         return result;
     }
 
+    public static boolean canView(AVP avp, User user) {
+        boolean result = false;
+        if ((avp != null) && (user != null)) {
+            if (avp.getAv1() != null)
+                if (!canView(avp.getAv1(), user))
+                    return false;
+            if (avp.getAv2() != null)
+                if (!canView(avp.getAv2(), user))
+                    return false;
+            if (avp.getPresentation() != null)
+                if (!canView(avp.getPresentation(), user))
+                    return false;
+            result = true;
+        }
+        return result;
+    }
+
     public static int getAccessType(AVP avp) {
         int accessType = MEDIA_ACCESS_TYPE_PUBLIC;
         if (avp != null) {
