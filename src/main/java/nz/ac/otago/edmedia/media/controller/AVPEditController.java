@@ -33,39 +33,68 @@ public class AVPEditController extends BaseFormController {
                                     BindException errors)
             throws Exception {
         AVP avp = (AVP) command;
-        // deal with av1
-        Long av1ID = avp.getAv1ID();
-        if (av1ID > 0) {
-            Media tmp = (Media) service.get(Media.class, av1ID);
-            avp.setAv1(tmp);
-        } else {
-            avp.setAv1(null);
-        }
-        // deal with av2
-        Long av2ID = avp.getAv2ID();
-        if (av2ID > 0) {
-            Media tmp = (Media) service.get(Media.class, av2ID);
-            avp.setAv2(tmp);
-        } else {
-            avp.setAv2(null);
-        }
-
-        // deal with presentation
-        Long presentationID = avp.getPresentationID();
-        if (presentationID >0) {
-            Media tmp = (Media) service.get(Media.class, presentationID);
-            avp.setPresentation(tmp);
-        } else {
-            avp.setPresentation(null);
-        }
-        // when create a new AVP, generate access code
         if (avp.getId() == null) {
+            // create a new AVP
+            // deal with av1
+            Long av1ID = avp.getAv1ID();
+            if (av1ID > 0) {
+                Media tmp = (Media) service.get(Media.class, av1ID);
+                avp.setAv1(tmp);
+            } else {
+                avp.setAv1(null);
+            }
+            // deal with av2
+            Long av2ID = avp.getAv2ID();
+            if (av2ID > 0) {
+                Media tmp = (Media) service.get(Media.class, av2ID);
+                avp.setAv2(tmp);
+            } else {
+                avp.setAv2(null);
+            }
+            // deal with presentation
+            Long presentationID = avp.getPresentationID();
+            if (presentationID > 0) {
+                Media tmp = (Media) service.get(Media.class, presentationID);
+                avp.setPresentation(tmp);
+            } else {
+                avp.setPresentation(null);
+            }
             User user = MediaUtil.getCurrentUser(service, request);
             avp.setOwner(user);
             String randomCode = CommonUtil.generateRandomCode();
             avp.setRandomCode(randomCode);
             service.save(avp);
         } else {
+            // deal with av1
+            Long av1ID = avp.getAv1ID();
+            if (av1ID > 0) {
+                // only load media file when the old is null, or it's a different one
+                if ((avp.getAv1() == null) || !avp.getAv1().getId().equals(av1ID)) {
+                    Media tmp = (Media) service.get(Media.class, av1ID);
+                    avp.setAv1(tmp);
+                }
+            } else
+                avp.setAv1(null);
+            // deal with av2
+            Long av2ID = avp.getAv2ID();
+            if (av2ID > 0) {
+                // only load media file when the old is null, or it's a different one
+                if ((avp.getAv2() == null) || !avp.getAv2().getId().equals(av2ID)) {
+                    Media tmp = (Media) service.get(Media.class, av2ID);
+                    avp.setAv2(tmp);
+                }
+            } else
+                avp.setAv2(null);
+            // deal with presentation
+            Long presentationID = avp.getPresentationID();
+            if (presentationID > 0) {
+                // only load media file when the old is null, or it's a different one
+                if ((avp.getPresentation() == null) || !avp.getPresentation().getId().equals(presentationID)) {
+                    Media tmp = (Media) service.get(Media.class, presentationID);
+                    avp.setPresentation(tmp);
+                }
+            } else
+                avp.setPresentation(null);
             service.update(avp);
         }
         Map model = errors.getModel();
