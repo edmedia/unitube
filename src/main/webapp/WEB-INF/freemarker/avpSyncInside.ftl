@@ -178,6 +178,8 @@ $(function() {
 
     // add a slide
     function addSlide(whichSlide, sTime, eTime, title) {
+        if ((sTime > avDuration) || (eTime > avDuration))
+            return;
         var content = $('.scroll-content');
         var item = $('<div/>').addClass('scroll-content-item').appendTo(content);
         var div = $('<div/>').appendTo(item);
@@ -271,8 +273,10 @@ $(function() {
         // if has next slide, maxTime will be next slide's end time minus minSlideTime
         if (item.next().length > 0)
             maxTime = item.next().data('slideInfo').eTime - minSlideTime;
-        if (maxTime < minTime)
+        if (maxTime > avDuration)
             maxTime = avDuration;
+        if (maxTime < minTime)
+            minTime = avDuration;
 
         log('minimum and maximum time for this slide: (' + minTime + ', ' + maxTime + ')');
         // remove currentSide class
@@ -285,7 +289,7 @@ $(function() {
         if (marginLeft < 0)
             marginLeft = 0;
         if (width > playerWidth)
-            width = palyerWidth;
+            width = playerWidth;
         log("set slider container's width to " + width + ' and margin-left to ' + marginLeft);
         $('#slider-container').css('width', width)
                 .css('margin-left', marginLeft);
