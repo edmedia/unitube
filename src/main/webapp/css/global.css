@@ -876,7 +876,7 @@ div#user-lookup-form div {
     margin: 1em;
 }
 
-div#pagination {
+div#slideList {
     background: none repeat scroll 0pt 0pt #333333;
     border: 1px solid #555555;
     height: 260px;
@@ -886,15 +886,15 @@ div#pagination {
     width: 400px;
 }
 
-#pagination ul li a.current {
+div#slideList ul li a.current {
     color: #FFFFFF;
 }
 
-#pagination ul li {
+div#slideList ul li {
     margin: 2px 0pt;
 }
 
-#pagination ul li a {
+div#slideList ul li a {
     padding: 1px 5px;
 }
 

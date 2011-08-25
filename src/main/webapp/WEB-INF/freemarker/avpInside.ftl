@@ -97,7 +97,7 @@
         </#if>
         <h2>Slides (click to jump to particular slide)</h2>
 
-        <div id="pagination">
+        <div id="slideList">
         </div>
     </div>
     <div class="clear"></div>
@@ -123,14 +123,14 @@ $(function() {
     // maximum gap between player1 and player2 is 2 seconds
     var MAXIMUM_GAP = 2;
 
-    // load data from xml and set all images, pagination, events, etc.
+    // load data from xml and set all images, slide list, events, etc.
     function getData() {
         <#if avp??>
             slidesData = new Array();
-            var pagination = $('#pagination');
-            // empty pagination first
-            pagination.empty();
-            var ul = $('<ul/>').appendTo(pagination);
+            var slideList = $('#slideList');
+            // empty slide list first
+            slideList.empty();
+            var ul = $('<ul/>').appendTo(slideList);
             var seq;
             <#list avp.slideInfos as si>
                 seq = ${si_index?c};
@@ -150,7 +150,7 @@ $(function() {
                         .attr("href", "#" + seq).appendTo(li);
                 $('#slide_' + slideNum + " a").attr("title", $(this).attr("title"));
             </#list>
-            $('#pagination ul li a').click(
+            $('#slideList ul li a').click(
                     function() {
                         var seq = parseInt($(this).attr('href').substring(1));
                         // which slide to show (0 based)
@@ -183,10 +183,10 @@ $(function() {
 
                 $.get(url, function(xml) {
                     slidesData = new Array();
-                    var pagination = $('#pagination');
-                    // empty pagination first
-                    pagination.empty();
-                    var ul = $('<ul/>').appendTo(pagination);
+                    var slideList = $('#slideList');
+                    // empty slide list first
+                    slideList.empty();
+                    var ul = $('<ul/>').appendTo(slideList);
                     $("avpData", xml).children().each(function(seq) {
                         slidesData[seq] = new slideInfo(convertTimecodeToSeconds($(this).attr("time")), 0, $(this).attr("num"), $(this).attr("title"))
                         // which slide (0 based)
@@ -200,7 +200,7 @@ $(function() {
                         $('#slide_' + slideNum + " a").attr("title", $(this).attr("title"));
                     });
 
-                    $('#pagination ul li a').click(
+                    $('#slideList ul li a').click(
                             function() {
                                 var seq = parseInt($(this).attr('href').substring(1));
                                 // which slide to show (0 based)
@@ -252,15 +252,18 @@ $(function() {
                 var currentTime = event.position;
                 // set "current-time1" text
                 $('#current-time1').text(convertSecondsToTimecode(currentTime));
-                currentSeq = -1;
+                var whichSeq = -1;
                 // assume slidesData is ordered by time
                 for (var i = 0; i < slidesData.length; i++) {
                     if (currentTime >= slidesData[i].sTime)
-                        currentSeq = i;
+                        whichSeq = i;
                     else
                         break;
                 }
-                showCurrentSlide();
+                if (whichSeq != currentSeq) {
+                    currentSeq = whichSeq;
+                    showCurrentSlide();
+                }
                 player1LastTime = currentTime;
             },
             onPlay: function() {
@@ -348,15 +351,16 @@ $(function() {
     function showCurrentSlide() {
         currentSlide = parseInt(slidesData[currentSeq].num) - 1;
         if (lastSlide != currentSlide) {
-            log("show slide " + (currentSlide + 1));
+            log("show slide " + (currentSlide + 1) + " sequence = " + currentSeq);
             lastSlide = currentSlide;
         }
         if (isShowingCurrentSlide)
             showSlide(currentSlide);
         // remove "current" class for all slide links
-        $('#pagination ul li a').removeClass("current");
+        $('#slideList ul li a').removeClass("current");
         // add "current" class to current slide link, and set focus so it will display
-        $('#pagination ul li a[href=#' + currentSeq + ']').addClass("current").focus();
+        $('#slideList ul li a[href=#' + currentSeq + ']').addClass("current");
+        //$('#slideList').scrollTop(currentSlide.height() * currentSeq);
     }
 
     function checkReady() {
