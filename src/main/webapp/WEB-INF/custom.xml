@@ -193,6 +193,7 @@
         <property name="successView" value="redirect:/myTube/avpList.do"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.AVP"/>
         <property name="commandName" value="avp"/>
+        <property name="validator" ref="avpValidator"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
