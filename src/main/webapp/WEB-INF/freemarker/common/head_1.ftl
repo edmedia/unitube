@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="${baseUrl}/images/icon.png" type="image/x-icon"/>
 <#if this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")) >
     <link rel="stylesheet" type="text/css" media="screen"
-          href="${baseUrl}/css/ui-lightness/jquery-ui-1.8.13.custom.css"/>
+          href="${baseUrl}/css/ui-lightness/jquery-ui-1.8.16.custom.css"/>
 </#if>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view'))>
     <link rel="stylesheet" type="text/css" href="${baseUrl}/shadowbox/shadowbox.css"/>
@@ -37,7 +37,7 @@
     <script type="text/javascript" src="${baseUrl}/ckeditor/ckeditor.js"></script>
 </#if>
 <#if this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")) >
-    <script type="text/javascript" src="${baseUrl}/javascript/jquery-ui-1.8.13.custom.min.js"></script>
+    <script type="text/javascript" src="${baseUrl}/javascript/jquery-ui-1.8.16.custom.min.js"></script>
 </#if>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view') || this_url?contains('embed'))>
     <script type="text/javascript" src="${baseUrl}/jwplayer/jwplayer.js"></script>
