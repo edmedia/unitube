@@ -50,7 +50,7 @@ public class AVPController extends BaseOperationController {
                                   BindException errors)
             throws Exception {
 
-        if (request.getRequestURI().contains("/myTube/")) {
+        if (request.getRequestURI().contains("/myTube/avp.do")) {
             // "/myTube/avp.do" is only used to make sure user has logged in
             // once they logged in, go to normal view
             String viewName = getNormalView() + "?" + request.getQueryString();
