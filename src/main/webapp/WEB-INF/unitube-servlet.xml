@@ -16,6 +16,7 @@
     <import resource="spring/album.xml"/>
     <import resource="spring/albumMedia.xml"/>
     <import resource="spring/annotation.xml"/>
+    <import resource="spring/avp.xml"/>
     <import resource="spring/comment.xml"/>
     <import resource="spring/iVOption.xml"/>
     <import resource="spring/media.xml"/>
