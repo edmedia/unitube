@@ -36,6 +36,7 @@ public class AVPListController extends BaseListController {
         Map model = errors.getModel();
         SearchCriteria criteria = new SearchCriteria.Builder()
                 .eq("owner", user)
+                .orderBy("id", false)
                 .build();
         Page page = service.pagination(AVP.class, pageBean.getP(), pageBean.getS(), criteria);
         model.put("pager", page);
