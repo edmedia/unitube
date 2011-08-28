@@ -34,8 +34,8 @@ CKEDITOR.lang['nb'] =
 	editorTitle : 'Rikteksteditor, %1, trykk ALT 0 for hjelp.',
 
 	// ARIA descriptions.
-	toolbar	: 'Verktøylinje',
-	editor	: 'Rikteksteditor',
+	toolbars	: 'Editor toolbars', // MISSING
+	editor		: 'Rikteksteditor',
 
 	// Toolbar buttons without dialogs.
 	source			: 'Kilde',
@@ -121,6 +121,8 @@ CKEDITOR.lang['nb'] =
 		alignBottom		: 'Bunn',
 		invalidHeight	: 'Høyde må være et tall.',
 		invalidWidth	: 'Bredde må være et tall.',
+		invalidCssLength	: 'Value specified for the "%1" field must be a positive number with or without a valid CSS measurement unit (px, %, in, cm, mm, em, ex, pt, or pc).', // MISSING
+		invalidHtmlLength	: 'Value specified for the "%1" field must be a positive number with or without a valid HTML measurement unit (px or %).', // MISSING
 
 		// Put the voice-only part of the label in the span.
 		unavailable		: '%1<span class="cke_accessibility">, utilgjenglig</span>'
@@ -201,7 +203,8 @@ CKEDITOR.lang['nb'] =
 		menu		: 'Egenskaper for anker',
 		title		: 'Egenskaper for anker',
 		name		: 'Ankernavn',
-		errorName	: 'Vennligst skriv inn ankernavnet'
+		errorName	: 'Vennligst skriv inn ankernavnet',
+		remove		: 'Remove Anchor' // MISSING
 	},
 
 	// List style dialog
@@ -413,7 +416,6 @@ CKEDITOR.lang['nb'] =
 		upload		: 'Last opp',
 		alt			: 'Alternativ tekst',
 		lockRatio	: 'Lås forhold',
-		unlockRatio	: 'Ikke lås forhold',
 		resetSize	: 'Tilbakestill størrelse',
 		border		: 'Ramme',
 		hSpace		: 'HMarg',
@@ -715,6 +717,8 @@ CKEDITOR.lang['nb'] =
 	{
 		title		: 'Om CKEditor',
 		dlgTitle	: 'Om CKEditor',
+		help	: 'Check $1 for help.', // MISSING
+		userGuide : 'CKEditor User\'s Guide', // MISSING
 		moreInfo	: 'For lisensieringsinformasjon, vennligst besøk vårt nettsted:',
 		copy		: 'Copyright &copy; $1. Alle rettigheter reservert.'
 	},
@@ -745,9 +749,64 @@ CKEDITOR.lang['nb'] =
 	toolbarCollapse	: 'Skjul verktøylinje',
 	toolbarExpand	: 'Vis verktøylinje',
 
+	toolbarGroups :
+	{
+		document : 'Document', // MISSING
+		clipboard : 'Clipboard/Undo', // MISSING
+		editing : 'Editing', // MISSING
+		forms : 'Forms', // MISSING
+		basicstyles : 'Basic Styles', // MISSING
+		paragraph : 'Paragraph', // MISSING
+		links : 'Links', // MISSING
+		insert : 'Insert', // MISSING
+		styles : 'Styles', // MISSING
+		colors : 'Colors', // MISSING
+		tools : 'Tools' // MISSING
+	},
+
 	bidi :
 	{
 		ltr : 'Tekstretning fra venstre til høyre',
 		rtl : 'Tekstretning fra høyre til venstre'
+	},
+
+	docprops :
+	{
+		label : 'Dokumentegenskaper',
+		title : 'Dokumentegenskaper',
+		design : 'Design', // MISSING
+		meta : 'Meta-data',
+		chooseColor : 'Velg',
+		other : '<annen>',
+		docTitle :	'Sidetittel',
+		charset : 	'Tegnsett',
+		charsetOther : 'Annet tegnsett',
+		charsetASCII : 'ASCII', // MISSING
+		charsetCE : 'Sentraleuropeisk',
+		charsetCT : 'Tradisonell kinesisk(Big5)',
+		charsetCR : 'Cyrillic', // MISSING
+		charsetGR : 'Gresk',
+		charsetJP : 'Japansk',
+		charsetKR : 'Koreansk',
+		charsetTR : 'Tyrkisk',
+		charsetUN : 'Unicode (UTF-8)', // MISSING
+		charsetWE : 'Vesteuropeisk',
+		docType : 'Dokumenttype header',
+		docTypeOther : 'Annet dokumenttype header',
+		xhtmlDec : 'Inkluder XHTML-deklarasjon',
+		bgColor : 'Bakgrunnsfarge',
+		bgImage : 'URL for bakgrunnsbilde',
+		bgFixed : 'Lås bakgrunnsbilde',
+		txtColor : 'Tekstfarge',
+		margin : 'Sidemargin',
+		marginTop : 'Topp',
+		marginLeft : 'Venstre',
+		marginRight : 'Høyre',
+		marginBottom : 'Bunn',
+		metaKeywords : 'Dokument nøkkelord (kommaseparert)',
+		metaDescription : 'Dokumentbeskrivelse',
+		metaAuthor : 'Forfatter',
+		metaCopyright : 'Kopirett',
+		previewHtml : '<p>This is some <strong>sample text</strong>. You are using <a href="javascript:void(0)">CKEditor</a>.</p>' // MISSING
 	}
 };
