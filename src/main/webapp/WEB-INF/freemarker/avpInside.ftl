@@ -49,8 +49,15 @@
         </#if>
         <div class="info">
             <span id="current-time1">0:00</span> <span id="current-slide"></span>
+            <a href="${baseUrl}/view?m=${obj.accessCode}" class="right">
+                <#if obj.mediaType ==10>
+                    Listen to this audio only
+                    <#else>
+                        Watch this video only
+                </#if>
+            </a>
         </div>
-        <#if obj2??>
+        <#if obj2?? || (obj.mediaType == 10) >
             <#include "avpSlides.ftl"/>
         </#if>
     </div>
@@ -66,7 +73,7 @@
         <#-- maximum width is 420 -->
             <#if player2Width &gt; 420>
                 <#assign player2Width = 420 />
-                <#assign player2Height = (player2Width*height/width)?round />
+                <#assign player2Height = (player2Width*obj2.height/obj2.width)?round />
             </#if>
             <#assign av2FileURL>${context_url}/file.do?m=${obj2.accessCode}</#assign>
             <#assign av2FileLink>${av2FileURL}</#assign>
@@ -91,8 +98,15 @@
             </#if>
             <div class="info">
                 <span id="current-time2">0:00</span>
+                <a href="${baseUrl}/view?m=${obj2.accessCode}" class="right">
+                    <#if obj2.mediaType ==10>
+                        Listen to this audio only
+                        <#else>
+                            Watch this video only
+                    </#if>
+                </a>
             </div>
-            <#else>
+            <#elseif obj.mediaType != 10>
                 <#include "avpSlides.ftl"/>
         </#if>
         <h2>Slides (click to jump to particular slide)</h2>
@@ -108,7 +122,7 @@ $(function() {
 
     var seekDelta = 0;
     var avDuration = ${(obj.duration/1000)?c};
-    // slides data, load from xml
+    // slides data, load from database (old one from xml)
     var slidesData = null;
     var lastSlide = -1;
     var currentSlide = -1;
@@ -125,110 +139,81 @@ $(function() {
 
     // load data from xml and set all images, slide list, events, etc.
     function getData() {
+        var slideList = $('#slideList');
+        // empty slide list first
+        slideList.empty();
+        var ul = $('<ul/>').appendTo(slideList);
         <#if avp??>
             slidesData = new Array();
-            var slideList = $('#slideList');
-            // empty slide list first
-            slideList.empty();
-            var ul = $('<ul/>').appendTo(slideList);
             var seq;
+            var slideNum;
+            var li;
+            var text;
             <#list avp.slideInfos as si>
                 seq = ${si_index?c};
-                slidesData[${si_index?c}] = new slideInfo(
+                slidesData[seq] = new slideInfo(
                 ${si.sTime?c},
                 ${si.eTime?c},
                 ${si.num?c},
                         "${si.title?js_string}"
                 );
                 // which slide (0 based)
-                var slideNum = parseInt(slidesData[${si_index?c}].num) - 1;
-                var li = $('<li/>').appendTo(ul);
-                var text = convertSecondsToTimecode(slidesData[${si_index?c}].sTime) + " slide " + slidesData[${si_index?c}].num;
-                if (slidesData[${si_index?c}].title)
-                    text += " - " + slidesData[${si_index?c}].title;
-                $('<a/>').text(text)
-                        .attr("href", "#" + seq).appendTo(li);
+                slideNum = parseInt(slidesData[seq].num) - 1;
+                li = $('<li/>').appendTo(ul);
+                text = convertSecondsToTimecode(slidesData[seq].sTime) + " slide " + slidesData[seq].num;
+                if (slidesData[seq].title)
+                    text += " - " + slidesData[seq].title;
+                $('<a/>').text(text).attr("href", "#" + seq).appendTo(li);
                 $('#slide_' + slideNum + " a").attr("title", $(this).attr("title"));
             </#list>
-            $('#slideList ul li a').click(
-                    function() {
-                        var seq = parseInt($(this).attr('href').substring(1));
-                        // which slide to show (0 based)
-                        var slideNum = parseInt(slidesData[seq].num) - 1;
-                        log("jump to slide " + (slideNum + 1));
-                        jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
-                        isShowingCurrentSlide = true;
-                        currentSeq = seq;
-                        showCurrentSlide();
-                        return false;
-                    }).hover(function() {
-                        // show hovered slide
-                        var seq = parseInt($(this).attr('href').substring(1));
-                        // which slide to show (0 based)
-                        var slideNum = parseInt(slidesData[seq].num) - 1;
-                        showSlide(slideNum);
-                        // set isShowingCurrentSlide flag to false
-                        isShowingCurrentSlide = false;
-                        return false;
-                    }, function() {
-                        // set isShowingCurrentSlide flag to true
-                        isShowingCurrentSlide = true;
-                        // change back to current slide
-                        showCurrentSlide();
-                        return false;
-                    });
             <#else>
-
                 var url = "${baseUrl}/${xml}";
-
                 $.get(url, function(xml) {
                     slidesData = new Array();
-                    var slideList = $('#slideList');
-                    // empty slide list first
-                    slideList.empty();
-                    var ul = $('<ul/>').appendTo(slideList);
                     $("avpData", xml).children().each(function(seq) {
-                        slidesData[seq] = new slideInfo(convertTimecodeToSeconds($(this).attr("time")), 0, $(this).attr("num"), $(this).attr("title"))
+                        slidesData[seq] = new slideInfo(
+                                convertTimecodeToSeconds($(this).attr("time")),
+                                0,
+                                $(this).attr("num"),
+                                $(this).attr("title"))
                         // which slide (0 based)
                         var slideNum = parseInt(slidesData[seq].num) - 1;
                         var li = $('<li/>').appendTo(ul);
                         var text = $(this).attr("time") + " slide " + slidesData[seq].num;
                         if (slidesData[seq].title)
                             text += " - " + slidesData[seq].title;
-                        $('<a/>').text(text)
-                                .attr("href", "#" + seq).appendTo(li);
+                        $('<a/>').text(text).attr("href", "#" + seq).appendTo(li);
                         $('#slide_' + slideNum + " a").attr("title", $(this).attr("title"));
                     });
-
-                    $('#slideList ul li a').click(
-                            function() {
-                                var seq = parseInt($(this).attr('href').substring(1));
-                                // which slide to show (0 based)
-                                var slideNum = parseInt(slidesData[seq].num) - 1;
-                                log("jump to slide " + (slideNum + 1));
-                                jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
-                                isShowingCurrentSlide = true;
-                                currentSeq = seq;
-                                showCurrentSlide();
-                                return false;
-                            }).hover(function() {
-                                // show hovered slide
-                                var seq = parseInt($(this).attr('href').substring(1));
-                                // which slide to show (0 based)
-                                var slideNum = parseInt(slidesData[seq].num) - 1;
-                                showSlide(slideNum);
-                                // set isShowingCurrentSlide flag to false
-                                isShowingCurrentSlide = false;
-                                return false;
-                            }, function() {
-                                // set isShowingCurrentSlide flag to true
-                                isShowingCurrentSlide = true;
-                                // change back to current slide
-                                showCurrentSlide();
-                                return false;
-                            });
                 });
         </#if>
+        $('ul li a', slideList).click(
+                function() {
+                    var seq = parseInt($(this).attr('href').substring(1));
+                    // which slide to show (0 based)
+                    var slideNum = parseInt(slidesData[seq].num) - 1;
+                    log("jump to slide " + (slideNum + 1));
+                    jwplayer('player1').seek(parseFloat(slidesData[seq].sTime) + seekDelta).play(true);
+                    isShowingCurrentSlide = true;
+                    currentSeq = seq;
+                    showCurrentSlide();
+                    return false;
+                }).hover(function() {
+                    // show hovered slide
+                    var seq = parseInt($(this).attr('href').substring(1));
+                    // which slide to show (0 based)
+                    var slideNum = parseInt(slidesData[seq].num) - 1;
+                    // set isShowingCurrentSlide flag to false
+                    isShowingCurrentSlide = false;
+                    showSlide(slideNum);
+                    return false;
+                }, function() {
+                    // set isShowingCurrentSlide flag to true
+                    isShowingCurrentSlide = true;
+                    // change back to current slide
+                    showCurrentSlide();
+                    return false;
+                });
     }
 
 
@@ -340,27 +325,40 @@ $(function() {
     </#if>
 
     function showSlide(i) {
-        // hide all slides first
-        $('div.slide').hide();
-        // only show required slide
-        $('#slide_' + i).show();
-        // change "current-slide" text
-        $('#current-slide').text("slide " + (i + 1));
+        if (i != lastSlide) {
+            // hide all slides first
+            $('div.slide').hide();
+            // only show required slide
+            $('#slide_' + i).show();
+            log("show slide " + (i + 1));
+            // change "current-slide" text
+            $('#current-slide').text("slide " + (i + 1));
+            lastSlide = i;
+        }
     }
 
     function showCurrentSlide() {
         currentSlide = parseInt(slidesData[currentSeq].num) - 1;
-        if (lastSlide != currentSlide) {
-            log("show slide " + (currentSlide + 1) + " sequence = " + currentSeq);
-            lastSlide = currentSlide;
-        }
         if (isShowingCurrentSlide)
             showSlide(currentSlide);
+        var slideList = $('#slideList');
         // remove "current" class for all slide links
-        $('#slideList ul li a').removeClass("current");
+        $('ul li a', slideList).removeClass("current");
+        var currentSlideLink = $('ul li a[href=#' + currentSeq + ']', slideList);
         // add "current" class to current slide link, and set focus so it will display
-        $('#slideList ul li a[href=#' + currentSeq + ']').addClass("current");
-        //$('#slideList').scrollTop(currentSlide.height() * currentSeq);
+        currentSlideLink.addClass("current");
+        // make sure current slide link is always visible
+        var currentSlideTop = currentSlideLink.offset().top;
+        var slideListTop = slideList.offset().top;
+        var slideListHeight = slideList.innerHeight();
+        var slideListScrollTop = slideList.scrollTop();
+        log("currentSlideLink.offset().top = " + currentSlideLink.offset().top + " slideList.offset().top = " + slideList.offset().top + " slideList.height() = " + slideList.height() + " slideList.innerHeight() = " + slideList.innerHeight());
+        if ((slideListScrollTop + currentSlideTop - slideListTop) > slideListHeight) {
+            slideList.scrollTop(slideListScrollTop + currentSlideTop - slideListTop - slideListHeight + currentSlideLink.innerHeight());
+            log(currentSlideTop - slideListTop - slideListHeight + currentSlideLink.innerHeight());
+        }
+        if (currentSlideTop < slideListTop)
+            slideList.scrollTop(slideListScrollTop - slideListTop + currentSlideTop);
     }
 
     function checkReady() {
