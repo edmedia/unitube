@@ -60,15 +60,17 @@
     @param: elements list of media object to be displayed
 -->
 <#macro displayMediaList elements>
-<div class="mediaDisplay2">
     <#if elements?has_content>
+    <div class="mediaDisplay2">
         <#list elements as entity>
         <@displayMediaInList entity />
         </#list>
+    </div>
         <#else>
-            <div class="info"><@spring.message "no.record"/></div>
+        <div class="stage">
+            <div class="info"><@spring.message "no.media"/></div>
+        </div>
     </#if>
-</div>
 </#macro>
 
 <#assign pagesBeforeCurrent = 10 />
@@ -192,7 +194,7 @@
 
 <#--
     name: displayMediaInList
-    desc: dispaly a media object in list, such as on media.do, search.do
+    desc: display a media object in list, such as on media.do, search.do
     @param: entity a media object to be displayed
 -->
 <#macro displayMediaInList entity>
@@ -211,6 +213,39 @@
                 From: <a
                     href="${baseUrl}/media.do?u=${entity.user.accessCode}"
                     title="${entity.user.firstName?html} ${entity.user.lastName?html}">${entity.user.firstName?html} ${entity.user.lastName?html}</a>
+            </div>
+        </div>
+    </div>
+        <#else>
+        &nbsp;
+    </#if>
+</#macro>
+
+<#--
+    name: displayAVPInList
+    desc: display an AVP object in list, such as on avps.do
+    @param: entity an AVP object to be displayed
+-->
+<#macro displayAVPInList entity>
+    <#if entity != '-'>
+    <div class="mediaBox">
+        <div class="mediaLine"></div>
+        <div class="mediacontent">
+            <div class="mediaImage">
+                <#if entity.av1?? && (entity.av1.mediaType == 20)>
+                <@viewAVPLinkWithThumbnail entity.av1 entity />
+                <#elseif entity.presentation??>
+                <@viewAVPLinkWithThumbnail entity.presentation entity />
+                </#if>
+            </div>
+            <div class="mediadetails">
+                <a href="avp.do?a=${entity.accessCode}">
+                <@getShortTitle entity.meaningfulName/>
+                </a>
+                <br/>
+                From: <a
+                    href="${baseUrl}/media.do?u=${entity.owner.accessCode}"
+                    title="${entity.owner.firstName?html} ${entity.owner.lastName?html}">${entity.owner.firstName?html} ${entity.owner.lastName?html}</a>
             </div>
         </div>
     </div>
@@ -294,6 +329,40 @@ ${link?html}</#macro>
 </a>
 </#macro>
 
+<#macro viewAVPLinkWithThumbnail media avp>
+<#-- default width and height -->
+    <#local defaultWidth = 60 />
+    <#local defaultHeight = 50 />
+    <#local realWidth = defaultWidth />
+    <#local realHeight = defaultHeight />
+<#-- calculate real width and height according media's width and height -->
+    <#if media.width != 0 && media.height != 0>
+        <#if (defaultWidth/defaultHeight) &gt; (media.width/media.height)>
+            <#local realWidth = (defaultHeight*media.width/media.height)?round />
+            <#local realHeight = defaultHeight/>
+            <#else>
+                <#local realWidth = defaultWidth/>
+                <#local realHeight = (defaultWidth*media.height/media.width)?round />
+        </#if>
+    </#if>
+    <#local linkTitle>${media.title!?html}</#local>
+<a href="${baseUrl}/avp.do?a=${avp.accessCode}" title="${linkTitle?html}">
+    <#if media.thumbnail?has_content>
+        <img src="<@thumbnailLink media/>"
+             width="${realWidth?c}" height="${realHeight?c}"
+             title="${linkTitle?html}"
+             alt="${linkTitle?html}"/>
+        <#elseif media.realFilename!?ends_with("mp3")>
+            <img src="${baseUrl}/images/mp3.jpg" width="${defaultWidth?c}" height="${defaultHeight?c}"
+                 title="${linkTitle?html}"
+                 alt="${linkTitle?html}"/>
+        <#else>
+            <img src="${baseUrl}/images/general.gif" width="${defaultHeight?c}" height="${defaultHeight?c}"
+                 title="${linkTitle?html}"
+                 alt="${linkTitle?html}"/>
+    </#if>
+</a>
+</#macro>
 
 <#macro displayComment comment>
 <li>

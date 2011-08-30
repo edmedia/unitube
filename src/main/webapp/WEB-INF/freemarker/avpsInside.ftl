@@ -1,8 +1,13 @@
-<#if pager?has_content>
-
-<#list pager.elements  as avp>
-
-<a href="avp.do?a=${avp.accessCode}">${avp.meaningfulName?html}</a>
-</#list>
-
+<#if pager.elements?has_content>
+<div class="mediaDisplay2">
+    <#list pager.elements  as avp>
+    <@displayAVPInList avp />
+    </#list>
+</div>
+    <#else>
+    <div class="stage">
+        <div class="info">
+            <@spring.message "no.avp"/>
+        </div>
+    </div>
 </#if>

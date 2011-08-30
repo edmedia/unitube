@@ -1,7 +1,6 @@
 package nz.ac.otago.edmedia.media.controller;
 
 import nz.ac.otago.edmedia.media.bean.AVP;
-import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.page.Page;
 import nz.ac.otago.edmedia.page.PageBean;
@@ -39,7 +38,7 @@ public class AVPsController extends BaseListController {
                 .build();
         Page page = service.pagination(AVP.class, pageBean.getP(), pageBean.getS(), criteria);
         model.put("pager", page);
-
+        model.put("title", "All Audio/Video Presentations");
 
         return getModelAndView(model, request);
     }

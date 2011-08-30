@@ -1,9 +1,12 @@
 <#-- if no media, album or user matched, display no result information -->
 <#if !mediaList?has_content && !albumList?has_content && !userList?has_content>
-<div class="info">
-    No record matched for "${searchWords?html}".
+<div class="stage">
+    <div class="info">
+        <#assign term=["${searchWords}"]/>
+        <@spring.messageArgs "search.no.result" term/>
+    </div>
 </div>
-<#else>
+    <#else>
 
 <#if mediaList?has_content>
 <div class="mediaDisplay2">

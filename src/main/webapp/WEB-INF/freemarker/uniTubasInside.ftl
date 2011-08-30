@@ -1,7 +1,9 @@
 <#include "uniTubasInfo.ftl" />
 
 <#if pager.elements?size = 0>
-<div class="info"><@spring.message "no.record"/></div>
+<div class="stage">
+<div class="info"><@spring.message "no.unitubas"/></div>
+    </div>
 <#else>
 <table width="440" summary="">
     <tr>

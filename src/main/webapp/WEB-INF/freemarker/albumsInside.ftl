@@ -1,6 +1,8 @@
 <#if pager.elements?size = 0>
-<div class="info"><@spring.message "no.record"/></div>
-<#else>
+<div class="stage">
+    <div class="info"><@spring.message "no.album"/></div>
+</div>
+    <#else>
 
 <table width="780" summary="">
     <tr>
