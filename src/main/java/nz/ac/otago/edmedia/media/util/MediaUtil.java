@@ -583,7 +583,7 @@ public class MediaUtil {
             } catch (NumberFormatException e) {
                 log.warn("Unexpected time format {}.", duration);
             }
-            sss = ((h * 60 + m) * 60 + s) * 1000 + ms;
+            sss = ((h * 60 + m) * 60 + s) * 1000 + ms * 10;
         }
         return sss;
     }
