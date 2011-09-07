@@ -74,7 +74,7 @@
                     bufferlength: 5,
                     controlbar: {position: 'bottom', idlehide: false},
                     <#if obj.duration &gt; 0>
-                        duration: ${(obj.duration/1000)?c},
+                        //duration: ${(obj.duration/1000)?c},
                     </#if>
                     height: 60,
                     provider: 'sound'
@@ -85,21 +85,39 @@
                     bufferlength: 5,
                     controlbar: {position: 'bottom', idlehide: false},
                     <#if obj.duration &gt; 0>
-                        duration: ${(obj.duration/1000)?c},
+                        //duration: ${(obj.duration/1000)?c},
                     </#if>
                     provider: 'sound'
                 });
                 <#elseif obj.mediaType == 20>
-                jwplayer('avPlayer').setup({
-                    flashplayer: '${JWPLAYER}',
-                    bufferlength: 5,
-                    <#if obj.duration &gt; 0>
-                        duration: ${(obj.duration/1000)?c},
-                    </#if>
-                    width: $(window).width(),
-                    height: $(window).height(),
-                    provider: 'video'
-                });
+                if (iDevice)
+                    jwplayer('avPlayer').setup({
+                        bufferlength: 5,
+                        <#if obj.duration &gt; 0>
+                            //duration: ${(obj.duration/1000)?c},
+                        </#if>
+                        width: $(window).width(),
+                        height: $(window).height(),
+                        provider: 'video',
+                        modes: [
+                            {type: 'html5'},
+                            {type: 'download'}
+                        ]
+                    });
+                else
+                    jwplayer('avPlayer').setup({
+                        bufferlength: 5,
+                        <#if obj.duration &gt; 0>
+                            //duration: ${(obj.duration/1000)?c},
+                        </#if>
+                        width: $(window).width(),
+                        height: $(window).height(),
+                        provider: 'video',
+                        modes: [
+                            {type: 'flash', src: '${JWPLAYER}'},
+                            {type: 'download'}
+                        ]
+                    });
             </#if>
         //-->
     </script>
