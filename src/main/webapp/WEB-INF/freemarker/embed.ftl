@@ -10,23 +10,8 @@
         <#elseif (obj.mediaType == 1) && obj.realFilename?ends_with(".png")>
         <#-- images -->
             <#include "viewImages.ftl"/>
-        <#elseif obj.mediaType == 10>
-        <#-- audio format -->
-        <audio width="100%" height="${height?c}"
-               src="${mediaFileLink?html}"
-               controls preload="auto" id="avPlayer">
-            Your browser does not support the audio element.
-        </audio>
-        <#elseif obj.mediaType == 20>
-        <#-- video format-->
-        <video width="100%" height="100%"
-               src="${mediaFileLink?html}"
-            <#if thumnailFileLink?has_content>
-               poster="${thumnailFileLink?html}"
-            </#if>
-               controls preload="true" id="avPlayer">
-            Your browser does not support the video element.
-        </video>
+        <#elseif (obj.mediaType == 10) || (obj.mediaType == 20)>
+        <div id="avPlayer"></div>
         <#elseif obj.realFilename?ends_with(".swf")>
         <#-- flash format-->
         <style type="text/css" media="screen">
@@ -63,64 +48,7 @@
         </div>
     </#if>
     <#if (obj.mediaType == 10) || (obj.mediaType == 20)>
-    <script type="text/javascript">
-        <!--
-        var deviceAgent = navigator.userAgent.toLowerCase();
-        var iDevice = deviceAgent.match(/(iphone|ipod|ipad)/);
-            <#if obj.mediaType ==10>
-            if (iDevice)
-                jwplayer('avPlayer').setup({
-                    flashplayer: '${JWPLAYER?html}',
-                    bufferlength: 5,
-                    controlbar: {position: 'bottom', idlehide: false},
-                    <#if obj.duration &gt; 0>
-                        //duration: ${(obj.duration/1000)?c},
-                    </#if>
-                    height: 60,
-                    provider: 'sound'
-                });
-            else
-                jwplayer('avPlayer').setup({
-                    flashplayer: '${JWPLAYER?html}',
-                    bufferlength: 5,
-                    controlbar: {position: 'bottom', idlehide: false},
-                    <#if obj.duration &gt; 0>
-                        //duration: ${(obj.duration/1000)?c},
-                    </#if>
-                    provider: 'sound'
-                });
-                <#elseif obj.mediaType == 20>
-                if (iDevice)
-                    jwplayer('avPlayer').setup({
-                        bufferlength: 5,
-                        <#if obj.duration &gt; 0>
-                            //duration: ${(obj.duration/1000)?c},
-                        </#if>
-                        width: $(window).width(),
-                        height: $(window).height(),
-                        provider: 'video',
-                        modes: [
-                            {type: 'html5'},
-                            {type: 'download'}
-                        ]
-                    });
-                else
-                    jwplayer('avPlayer').setup({
-                        bufferlength: 5,
-                        <#if obj.duration &gt; 0>
-                            //duration: ${(obj.duration/1000)?c},
-                        </#if>
-                        width: $(window).width(),
-                        height: $(window).height(),
-                        provider: 'video',
-                        modes: [
-                            {type: 'flash', src: '${JWPLAYER}'},
-                            {type: 'download'}
-                        ]
-                    });
-            </#if>
-        //-->
-    </script>
+        <#include "viewAV.ftl"/>
     </#if>
     <#else>
     <div class="info">
