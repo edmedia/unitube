@@ -145,8 +145,7 @@ public class MediaUtil {
      * @return unique media directory
      */
     private static File getMediaDirectory(UploadLocation uploadLocation, Media media, String locationCode, boolean createDir) {
-        File personalDir = uploadLocation.getUploadDir();
-        personalDir = new File(uploadLocation.getUploadDir(), media.getUser().getAccessCode());
+        File personalDir = new File(uploadLocation.getUploadDir(), media.getUser().getAccessCode());
         File mediaDir = new File(personalDir, locationCode);
         // create media directory if createDir is true, and directory does not exist
         if (createDir && !mediaDir.exists())
@@ -583,7 +582,7 @@ public class MediaUtil {
             } catch (NumberFormatException e) {
                 log.warn("Unexpected time format {}.", duration);
             }
-            sss = ((h * 60 + m) * 60 + s) * 1000 + ms;
+            sss = ((h * 60 + m) * 60 + s) * 1000 + ms * 10;
         }
         return sss;
     }
@@ -637,8 +636,9 @@ public class MediaUtil {
     /**
      * Move media file to a new location.
      *
-     * @param media          media
-     * @param uploadLocation uploadLocation
+     * @param media           media
+     * @param newLocationCode new location code
+     * @param uploadLocation  uploadLocation
      * @return true if successful
      */
     public static boolean moveMediaFile(Media media, String newLocationCode, UploadLocation uploadLocation) {

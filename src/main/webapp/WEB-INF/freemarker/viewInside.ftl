@@ -47,29 +47,8 @@
                     <#include "viewImages.ftl"/>
                 <#else>
                     <div id="${idDiv}">
-                    <#--
-                     html 5 by default.
-                     will be replaced with flash if supported and up to date.
-                    -->
-                        <#if obj.mediaType == 10>
-                            <#assign width=480/>
-                            <#assign height=24/>
-                        <#-- audio format -->
-                            <audio width="${width?c}" height="${height?c}"
-                                   src="${mediaFileLink?html}"
-                                   controls preload="auto" id="avPlayer">
-                                Your browser does not support the audio element.
-                            </audio>
-                            <#elseif obj.mediaType == 20>
-                            <#-- video format-->
-                                <video width="${width?c}" height="${height?c}"
-                                       src="${mediaFileLink?html}"
-                                    <#if thumnailFileLink?has_content>
-                                       poster="${thumnailFileLink?html}"
-                                    </#if>
-                                       controls preload="auto" id="avPlayer">
-                                    Your browser does not support the video element.
-                                </video>
+                        <#if (obj.mediaType == 10) || (obj.mediaType ==20)>
+                            <div id="avPlayer"></div>
                             <#else>
                             <#-- flash format-->
                                 You need to install Adobe Flash Player.<br/>
@@ -84,10 +63,8 @@
     <#-- javascript here to display flash, or jwplay to play video and audio -->
         <#if obj.realFilename?ends_with(".swf")> <#-- flash -->
             <#include "viewFlash.ftl"/>
-            <#elseif obj.mediaType == 10> <#-- audio -->
-                <#include "viewAudio.ftl"/>
-            <#elseif obj.mediaType == 20> <#-- video -->
-                <#include "viewVideo.ftl"/>
+            <#elseif (obj.mediaType == 10) || (obj.mediaType == 20)> <#-- audio/video -->
+                <#include "viewAV.ftl"/>
         </#if>
 
     <!--
