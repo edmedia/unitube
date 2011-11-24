@@ -42,9 +42,11 @@
         <mapping resource="Album.hbm.xml"/>
         <mapping resource="AlbumMedia.hbm.xml"/>
         <mapping resource="Annotation.hbm.xml"/>
+        <mapping resource="AVP.hbm.xml"/>
         <mapping resource="Comment.hbm.xml"/>
         <mapping resource="IVOption.hbm.xml"/>
         <mapping resource="Media.hbm.xml"/>
+        <mapping resource="SlideInfo.hbm.xml"/>
         <mapping resource="User.hbm.xml"/>
         <mapping resource="UserAlbum.hbm.xml"/>
 
