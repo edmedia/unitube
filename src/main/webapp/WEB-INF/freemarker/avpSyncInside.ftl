@@ -180,6 +180,11 @@ $(function() {
     function addSlide(whichSlide, sTime, eTime, title) {
         if ((sTime > avDuration) || (eTime > avDuration))
             return;
+        if (whichSlide < 1)
+            whichSlide = 1;
+        if (whichSlide > howManySlides)
+            whichSlide = howManySlides;
+        log("which slide = " + whichSlide);
         var content = $('.scroll-content');
         var item = $('<div/>').addClass('scroll-content-item').appendTo(content);
         var div = $('<div/>').appendTo(item);

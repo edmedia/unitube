@@ -17,12 +17,14 @@
     <#if appInfo.usingCAS>
         <h1>University of Otago Member?</h1>
 
-        <a href="${fromUrl}" class="bold">Log in using Blackboard:</a><br/>
+        <a href="${fromUrl}" class="bold">Log in here</a><br/>
+    <#--
         <a href="${fromUrl}"><img src="${baseUrl}/images/bb_logo.gif" width="152" height="29" alt=""
                                   style="margin:10px auto 30px auto;"/></a>
-
+      -->
         <hr/>
     </#if>
+        <#--
         <h2 title="Click here to login using your UniTube username and password">
             Non University of Otago Member?
             <a href="#">Click here to login.</a>
@@ -118,7 +120,7 @@
                     </tr>
                 </table>
             </form>
-        </div>
+        </div>     -->
     </div>
 
 </div>

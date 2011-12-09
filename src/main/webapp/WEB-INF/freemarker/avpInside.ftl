@@ -10,6 +10,18 @@
     </#if>
 </#if>
 
+<#if !obj?? || !presentation??>
+
+<div class="info">
+    <#if accessDenied>
+<@spring.message "avp.access.deny"/>
+<#else>
+    <@spring.message "avp.not.found"/>
+    </#if>
+</div>
+
+</#if>
+
 <#if obj?? && presentation??>
     <#include "viewHelper.ftl"/>
 <#-- maximum width is 420 -->
@@ -120,6 +132,7 @@
 <script type="text/javascript">
 $(function() {
 
+    var howManySlides = ${presentation.duration?c};
     var seekDelta = 0;
     var avDuration = ${(obj.duration/1000)?c};
     // slides data, load from database (old one from xml)
@@ -146,15 +159,21 @@ $(function() {
         <#if avp??>
             slidesData = new Array();
             var seq;
+            var num;
             var slideNum;
             var li;
             var text;
             <#list avp.slideInfos as si>
                 seq = ${si_index?c};
+                num = ${si.num?c};
+                if (num < 1)
+                    num = 1;
+                if (num > howManySlides)
+                    num = howManySlides;
                 slidesData[seq] = new slideInfo(
                 ${si.sTime?c},
                 ${si.eTime?c},
-                ${si.num?c},
+                        num,
                         "${si.title?js_string}"
                 );
                 // which slide (0 based)
@@ -410,12 +429,4 @@ $(function() {
 });
 </script>
 
-    <#else>
-    <div class="info">
-        <#if accessDenied>
-    <@spring.message "avp.access.deny"/>
-    <#else>
-        <@spring.message "avp.not.found"/>
-        </#if>
-    </div>
 </#if>

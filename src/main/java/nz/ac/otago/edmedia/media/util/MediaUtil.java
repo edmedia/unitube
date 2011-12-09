@@ -36,6 +36,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,20 +75,19 @@ public class MediaUtil {
      * @param wayf     where are you from
      * @return user for given userName and wayf
      */
-    @SuppressWarnings("unchecked")
     public static User getUser(BaseService service, String userName, String wayf) {
         User user = null;
-        List<User> list = null;
         if (userName != null) {
             SearchCriteria.Builder builder = new SearchCriteria.Builder();
             builder = builder.eq("userName", userName);
             if (wayf != null)
                 builder = builder.eq("wayf", wayf);
             SearchCriteria criteria = builder.build();
-            list = (List<User>) service.search(User.class, criteria);
+            @SuppressWarnings("unchecked")
+            List<User> list = (List<User>) service.search(User.class, criteria);
+            if (!list.isEmpty())
+                user = list.get(0);
         }
-        if ((list != null) && !list.isEmpty())
-            user = list.get(0);
         return user;
     }
 
@@ -266,7 +266,7 @@ public class MediaUtil {
         File mediaDir = MediaUtil.getMediaDirectory(uploadLocation, media);
         if (mediaDir.exists()) {
             if (removeUploadedFile) {
-                // delete media direcotry totally
+                // delete media directory totally
                 if (!FileUtils.deleteQuietly(mediaDir))
                     log.warn("Can't delete media directory \"{}\"", mediaDir);
             } else {
@@ -291,7 +291,7 @@ public class MediaUtil {
         // get annotation directory
         File annotationDir = MediaUtil.getAnnotationDirectory(uploadLocation, annotation);
         if (annotationDir.exists()) {
-            // delete annotation direcotry totally
+            // delete annotation directory totally
             if (!FileUtils.deleteQuietly(annotationDir))
                 log.warn("Can't delete annotation directory \"{}\"", annotationDir);
         }
@@ -538,10 +538,31 @@ public class MediaUtil {
 
     public static IVOption getIVOption(Media media, BaseService service) {
         IVOption ivOption = null;
-        List list = service.search(IVOption.class, "media", media);
-        if (!list.isEmpty())
-            ivOption = (IVOption) list.get(0);
+        if ((media != null) && (service != null)) {
+            List list = service.search(IVOption.class, "media", media);
+            if (!list.isEmpty())
+                ivOption = (IVOption) list.get(0);
+        }
         return ivOption;
+    }
+
+    public static List<AVP> getAVPs(Media media, BaseService service) {
+        List<AVP> avps = new ArrayList<AVP>();
+        if ((media != null) && (service != null)) {
+            @SuppressWarnings("unchecked")
+            List<AVP> list1 = (List<AVP>) service.search(AVP.class, "av1", media);
+            if (!list1.isEmpty())
+                avps.addAll(list1);
+            @SuppressWarnings("unchecked")
+            List<AVP> list2 = (List<AVP>) service.search(AVP.class, "av2", media);
+            if (!list2.isEmpty())
+                avps.addAll(list2);
+            @SuppressWarnings("unchecked")
+            List<AVP> list3 = (List<AVP>) service.search(AVP.class, "presentation", media);
+            if (!list3.isEmpty())
+                avps.addAll(list3);
+        }
+        return avps;
     }
 
     /**

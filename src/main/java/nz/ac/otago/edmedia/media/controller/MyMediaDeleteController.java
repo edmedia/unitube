@@ -1,9 +1,6 @@
 package nz.ac.otago.edmedia.media.controller;
 
-import nz.ac.otago.edmedia.media.bean.Annotation;
-import nz.ac.otago.edmedia.media.bean.IVOption;
-import nz.ac.otago.edmedia.media.bean.Media;
-import nz.ac.otago.edmedia.media.bean.User;
+import nz.ac.otago.edmedia.media.bean.*;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.IDListBean;
 import nz.ac.otago.edmedia.spring.controller.BaseDeleteController;
@@ -12,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.BatchUpdateException;
 
 /**
  * Delete a media object from database.
@@ -39,18 +37,26 @@ public class MyMediaDeleteController extends BaseDeleteController {
                     // only owner can delete their own media
                     if ((media != null) && media.getUser().getId().equals(user.getId())) {
                         // delete ivOption for image file
-                        if (media.getMediaType() == MediaUtil.MEDIA_TYPE_IMAGE) {
-                            IVOption ivOption = MediaUtil.getIVOption(media, service);
-                            // delete ivOption if exists
-                            if (ivOption != null)
-                                service.delete(ivOption);
-                        }
+                        IVOption ivOption = MediaUtil.getIVOption(media, service);
+                        // delete ivOption if exists
+                        if (ivOption != null)
+                            service.delete(ivOption);
                         for (Annotation annotation : media.getAnnotations())
                             // remove annotation files
                             MediaUtil.removeAnnotationFiles(getUploadLocation(), annotation);
-                        // delete uploaded file, converted file and thumbnail
-                        MediaUtil.removeMediaFiles(getUploadLocation(), media, true);
-                        service.delete(media);
+                        for (AVP avp : MediaUtil.getAVPs(media, service))
+                            service.delete(avp);
+                        try {
+                            service.delete(media);
+                            // delete uploaded file, converted file and thumbnail
+                            MediaUtil.removeMediaFiles(getUploadLocation(), media, true);
+                        } catch (Exception e) {
+                            logger.error(e);
+                            if (e instanceof BatchUpdateException) {
+                                BatchUpdateException bue = (BatchUpdateException) e;
+                                logger.error(bue.getNextException());
+                            }
+                        }
                     }
                 }
             }

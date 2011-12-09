@@ -63,7 +63,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 </p>
 <% } %>
 
-<p>If this problem persists please contact the <a href="mailto:helpdesk@stonebow.otago.ac.nz">Help Desk</a> with details
+<p>If this problem persists please contact the <a href="mailto:helpdesk@otago.ac.nz">Help Desk</a> with details
     of your activities when the error occurred.</p>
 
 <p>Thank you.</p>

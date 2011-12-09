@@ -62,14 +62,14 @@
                     <a href="${baseUrl}/admin/userList.do">Admin</a>
                 </#if>
                 <a href="#"
-                   onclick="logout('${baseUrl}/logout.do'<#if appInfo.usingCAS && authUser.wayf != "embeddedWayf">, '${appInfo.logoutUrl}'</#if>); return false;">Logout</a>
+                   onclick="logout('${baseUrl}/logout.do'<#if appInfo.usingCAS && authUser.wayf != "embeddedWayf" && appInfo.logoutUrl??>, '${appInfo.logoutUrl}'</#if>); return false;">Logout</a>
             </div>
         </div>
         <#else>
             <div class="headerText">Are you a <strong>UniTuba</strong>?</div>
             <div class="registration">Welcome! Please</div>
             <div class="loging">
-                <a href="${baseUrl}/login.do" onmouseout="MM_swapImgRestore()"
+                <a href="${baseUrl}/myTube/list.do" onmouseout="MM_swapImgRestore()"
                    onmouseover="MM_swapImage('login','','${baseUrl}/images/login2.png',1)"><img
                         src="${baseUrl}/images/login.png" alt="Log in" name="login" width="97" height="27"
                         border="0"/></a>
