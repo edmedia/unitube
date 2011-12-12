@@ -143,6 +143,7 @@ public class UploadController extends BaseFormController {
         logger.debug("random code for this media is " + randomCode);
         try {
             service.save(media);
+            logger.info("User [" + user.getUserName() + "] uploaded [" + originalFilename + "] [m="+ media.getAccessCode() + "] from [" + request.getRemoteAddr() + "].");
             MediaUtil.createTmpFile(getUploadLocation(), media.getAccessCode());
             String subject = msa.getMessage("upload.email.unitube.subject", new String[]{originalFilename, user.getFirstName()});
             String url = ServletUtil.getContextURL(request) + "/view?m=" + media.getAccessCode();

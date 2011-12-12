@@ -6,6 +6,7 @@ import nz.ac.otago.edmedia.media.converter.MediaConverter;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
+import org.apache.commons.lang.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -57,9 +58,14 @@ class MediaTask implements Runnable {
                 if (mediaDir != null)
                     file = new File(mediaDir, media.getUploadFileUserName());
                 try {
-                    if ((file != null) && file.exists())
+                    if ((file != null) && file.exists()) {
+                        StopWatch sw = new StopWatch();
+                        sw.start();
                         // do conversion
                         mediaInfo = mediaConverter.transcode(file, file.getParentFile());
+                        sw.stop();
+                        log.info("File [{}] [m={}] took [{}] to convert.", new Object[]{file.getAbsolutePath(), media.getAccessCode(), sw});
+                    }
                 } catch (Exception e) {
                     log.error("Exception when converting media file", e);
                 }
@@ -81,13 +87,13 @@ class MediaTask implements Runnable {
                         media.setMediaType(MediaUtil.MEDIA_TYPE_VIDEO);
                         // set video duration
                         media.setDuration(MediaUtil.howManyMilliseconds(mediaInfo.getDuration()));
-                    }else if (mediaInfo.getAudio() != null) {
+                    } else if (mediaInfo.getAudio() != null) {
                         media.setMediaType(MediaUtil.MEDIA_TYPE_AUDIO);
                         // set audio duration
                         media.setDuration(MediaUtil.howManyMilliseconds(mediaInfo.getDuration()));
-                    }else if (mediaInfo.getImage() != null)
+                    } else if (mediaInfo.getImage() != null)
                         media.setMediaType(MediaUtil.MEDIA_TYPE_IMAGE);
-                    else if (mediaInfo.getImages() !=null) {
+                    else if (mediaInfo.getImages() != null) {
                         media.setMediaType(MediaUtil.MEDIA_TYPE_OTHER_MEDIA);
                         media.setDuration(MediaUtil.howManyPages(mediaInfo.getDuration()));
                     } else

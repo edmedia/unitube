@@ -7,9 +7,9 @@ import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.util.BeanUtil;
-import org.springframework.web.context.WebApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -68,10 +68,10 @@ public class MediaServletListener extends BaseServletListener {
                     ctx.setAttribute(LOGIN_USER_MAP_KEY, map);
                 }
                 String ipAddress = getIPAddress(session.getId());
-                if(ipAddress ==null)
-                    log.info("{} login @ {} ({})", new Object[]{user.getUserName(), now, authUser});
+                if (ipAddress == null)
+                    log.info("{} logged in @ {} ({})", new Object[]{user.getUserName(), now, authUser});
                 else
-                    log.info("{} login @ {} from {} ({})", new Object[]{user.getUserName(), now, ipAddress, authUser});
+                    log.info("{} logged in @ {} from {} ({})", new Object[]{user.getUserName(), now, ipAddress, authUser});
             }
         }
     }
@@ -100,9 +100,9 @@ public class MediaServletListener extends BaseServletListener {
                     long lasts = now.getTime() - loginTime.getTime();
                     String ipAddress = getIPAddress(session.getId());
                     if (ipAddress == null)
-                        log.info("{} logout @ {} lasts for {} ({})", new Object[]{user.getUserName(), now, lasts, authUser});
+                        log.info("{} logged out @ {}, lasted for {} ms ({})", new Object[]{user.getUserName(), now, lasts, authUser});
                     else
-                        log.info("{} logout @ {} from {} lasts for {} ms ({})", new Object[]{user.getUserName(), now, ipAddress, lasts, authUser});
+                        log.info("{} logged out @ {} from {}, lasted for {} ms ({})", new Object[]{user.getUserName(), now, ipAddress, lasts, authUser});
                     // update user information to database
                     // load user from database
                     // why? because user may already change their information

@@ -42,9 +42,11 @@ public class FileController extends BaseOperationController {
             throws Exception {
 
         File file = null;
+        String accessCode = "";
         // get access code from url
         String m = request.getParameter("m");
         if (StringUtils.isNotBlank(m)) {
+            accessCode = "m=" + m;
             // deal with media
             Media media = null;
             // get id from access code
@@ -55,28 +57,36 @@ public class FileController extends BaseOperationController {
             if ((media != null) && !media.validCode(m))
                 media = null;
             if (media != null) {
+                // which file to access
+                String name = request.getParameter("name");
+                if (StringUtils.isBlank(name))
+                    // by default, get realFilename
+                    name = media.getRealFilename();
+                if (name.contains("?"))
+                    name = name.substring(0, name.indexOf("?"));
+                file = new File(MediaUtil.getMediaDirectory(getUploadLocation(), media), name);
                 if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PRIVATE) {
                     User user = MediaUtil.getCurrentUser(service, request);
                     if ((user == null) || !MediaUtil.canView(media, user)) {
+                        if (logger.isWarnEnabled()) {
+                            String username = "Unknown";
+                            String filename = "Unknown";
+                            if (user != null)
+                                username = user.getUserName();
+                            if (file != null)
+                                filename = file.getAbsolutePath();
+                            logger.warn("User [" + username + "] tried to access [" + filename + "] [" + accessCode + "] from [" + request.getRemoteAddr() + "] without login or authorisation.");
+                        }
                         // not login yet, or don't grant access
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                         return null;
                     }
                 }
-                if (media != null) {
-                    String name = request.getParameter("name");
-                    if (StringUtils.isBlank(name))
-                        // by default, get realFilename
-                        name = media.getRealFilename();
-                    if (name.contains("?"))
-                        name = name.substring(0, name.indexOf("?"));
-                    file = new File(MediaUtil.getMediaDirectory(getUploadLocation(), media), name);
-                }
-
             }
         } else {
             String a = request.getParameter("a");
             if (StringUtils.isNotBlank(a)) {
+                accessCode = "a=" + a;
                 // deal with annotation
                 Annotation annot = null;
                 // get id from access code
@@ -92,6 +102,12 @@ public class FileController extends BaseOperationController {
         }
 
         if ((file == null) || !file.exists()) {
+            if (logger.isWarnEnabled()) {
+                String filename = "Unknown";
+                if (file != null)
+                    filename = file.getAbsolutePath();
+                logger.warn("File [" + filename + "] [ " + accessCode + "] accessed from [" + request.getRemoteAddr() + "] does not exist.");
+            }
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
@@ -246,6 +262,7 @@ public class FileController extends BaseOperationController {
             // Open streams.
             input = new RandomAccessFile(file, "r");
             output = response.getOutputStream();
+            long size = 0;
 
             if (ranges.isEmpty() || ranges.get(0) == full) {
 
@@ -266,7 +283,7 @@ public class FileController extends BaseOperationController {
                     // Copy full range.
                     copy(input, output, full.start, full.length);
                 }
-
+                size = full.total;
             } else if (ranges.size() == 1) {
 
                 // Return single part of file.
@@ -280,7 +297,7 @@ public class FileController extends BaseOperationController {
                     // Copy single part range.
                     copy(input, output, r.start, r.length);
                 }
-
+                size = r.total;
             } else {
 
                 // Return multiple parts of file.
@@ -291,7 +308,7 @@ public class FileController extends BaseOperationController {
                     // Cast back to ServletOutputStream to get the easy println methods.
 
                     ServletOutputStream sos = (ServletOutputStream) output;
-
+                    size = 0;
                     // Copy multi part range.
                     for (Range r : ranges) {
                         // Add multipart boundary and header fields for every range.
@@ -302,12 +319,23 @@ public class FileController extends BaseOperationController {
 
                         // Copy single part range of multi part range.
                         copy(input, output, r.start, r.length);
+                        size += r.total;
                     }
 
                     // End with multipart boundary.
                     sos.println();
                     sos.println("--" + MULTIPART_BOUNDARY + "--");
                 }
+            }
+            if (logger.isInfoEnabled()) {
+                User user = MediaUtil.getCurrentUser(service, request);
+                String username = "Unknown";
+                String filename = "Unknown";
+                if (user != null)
+                    username = user.getUserName();
+                if (file != null)
+                    filename = file.getAbsolutePath();
+                logger.info("User [" + username + "] accessed [" + filename + "] [" + accessCode + "] [" + size + "/" + file.length() + "] from [" + request.getRemoteAddr() + "].");
             }
         } finally {
             // Gently close streams.
