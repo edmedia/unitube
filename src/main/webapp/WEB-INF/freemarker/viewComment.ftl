@@ -1,25 +1,25 @@
 <div id="comments">
     <div>
-        <img class="imageAlign" src="${baseUrl}/images/comments.png" alt=""/><strong>Comments </strong>(${obj.comments?size})
+        <img class="imageAlign" src="${baseUrl}/images/comments.png" alt=""/>
+        <strong>Comments </strong>(${obj.comments?size})
         <a href="#" class="commentLink"><#if authUser??>Post a Comment<#else>Log in to post a Comment</#if></a>
     </div>
 
-    <@displayCommentForm ""/>
-    <#if commentList?has_content>
+<@displayCommentForm ""/>
+<#if commentList?has_content>
     <ul>
         <#list commentList as comment >
         <@displayComment comment/>
         </#list>
     </ul>
     <#if hasMoreComment?? && hasMoreComment>
-    <p><a href="viewAllComment.do?m=${obj.accessCode}">View All ${obj.comments?size} Comments</a></p>
+        <p><a href="viewAllComment.do?m=${obj.accessCode}">View All ${obj.comments?size} Comments</a></p>
     </#if>
-    </#if>
+</#if>
 </div>
 
 <script type="text/javascript">
     <!--
-
     function displayComment() {
         // hide all comment forms
         $('div.commentForm').hide();
@@ -31,11 +31,10 @@
             // focus input area
             $('textarea', commentForm).focus();
             return false;
-        <#else>
-        <#-- otherwise, try to access a URL which needs login first -->
-            this.href = '${baseUrl}/myTube/postComment.do?m=${obj.accessCode}';
+            <#else>
+            <#-- otherwise, try to access a URL which needs login first -->
+                this.href = '${baseUrl}/myTube/postComment.do?m=${obj.accessCode}';
         </#if>
-
         });
         // display correct character numbers remaining in comment
         $('textarea').each(function() {
@@ -79,15 +78,11 @@
                         alert($("action", xml).attr("detail"));
                 }
             });
-
-
         });
-
         $('input[name=discard]').click(function() {
             $(this).parent().parent().hide();
         });
     }
-
     //-->
 </script>
 

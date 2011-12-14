@@ -7,10 +7,8 @@
                       checked="checked"</#if>/>Audio</label>
         <label><input type="radio" name="t" value="5"<#if (mediaType!0) == 5>
                       checked="checked"</#if>/>Image</label>
-        <#--
         <label><input type="radio" name="t" value="1"<#if (mediaType!0) == 1>
                       checked="checked"</#if>/>Other</label>
-                      -->
         <label><input type="radio" name="t" value="0"<#if (mediaType!0) == 0>
                       checked="checked"</#if>/>All</label>
     </span>

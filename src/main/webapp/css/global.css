@@ -1,6 +1,4 @@
-@charset
-"utf-8"
-;
+@charset "utf-8";
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     border: 0pt none;
@@ -347,7 +345,7 @@ div.topLine {
     float: right;
     height: 25px;
     margin-top: 40px;
-    width: 500px;
+    width: 455px;
 }
 
 .searchText {
@@ -508,7 +506,7 @@ div.sociable li {
 
 div.sociable img {
     border: none;
-    margin: 0 10px;
+    margin: 0 8px;
 }
 
 div.sociable .sociable-hovers:hover {
@@ -781,6 +779,7 @@ form .text {
 }
 
 #comments {
+    clear: both;
     margin-right: 30px;
     margin-top: 60px;
     padding-left: 30px;
@@ -1096,3 +1095,15 @@ div#helpInfo {
     font-weight: bold;
 }
 
+/** left side in view page */
+div#left {
+    width: 390px;
+    float: left;
+}
+
+div.description {
+    overflow: hidden;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px #bbb dotted;
+}
