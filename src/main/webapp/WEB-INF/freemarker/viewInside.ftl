@@ -272,38 +272,41 @@
 <script type="text/javascript">
     <!--
     $(function() {
-        var max_height = 80;
-        var d_height = $('div.description').height();
-        var d_padding_bottom = parseInt($('div.description').css('padding-bottom'));
-        var d_scrollHeight = $('div.description')[0].scrollHeight;
-        log('height = ' + d_height + " padding-bottom = " + d_padding_bottom + " scrollHeight = " + d_scrollHeight);
-        // if description is very short, just display normally
-        if (d_height < max_height) {
-            $('a.showMore').hide();
-            $('a.showLess').hide();
-        } else {
-            // otherwise, set height to max height, and display "Show more" link
-            $('div.description').css('height', max_height + 'px');
+        // if has description
+        if ($('div.description').length > 0) {
+            var max_height = 80;
             var d_height = $('div.description').height();
-            $('a.showMore').show();
-            $('a.showLess').hide();
-            $('a.showMore').click(function() {
-                $('div.description').css('height', (d_scrollHeight - d_padding_bottom) + 'px');
-                showMoreOrLess();
-                return false;
-            });
-            $('a.showLess').click(function() {
-                $('div.description').css('height', d_height + 'px');
-                showMoreOrLess();
-                return false;
-            });
-            function showMoreOrLess() {
-                if ($('div.description').height() >= (d_scrollHeight - d_padding_bottom)) {
-                    $('a.showMore').hide();
-                    $('a.showLess').show();
-                } else {
-                    $('a.showMore').show();
-                    $('a.showLess').hide();
+            var d_padding_bottom = parseInt($('div.description').css('padding-bottom'));
+            var d_scrollHeight = $('div.description')[0].scrollHeight;
+            log('height = ' + d_height + " padding-bottom = " + d_padding_bottom + " scrollHeight = " + d_scrollHeight);
+            // if description is very short, just display normally
+            if (d_height < max_height) {
+                $('a.showMore').hide();
+                $('a.showLess').hide();
+            } else {
+                // otherwise, set height to max height, and display "Show more" link
+                $('div.description').css('height', max_height + 'px');
+                var d_height = $('div.description').height();
+                $('a.showMore').show();
+                $('a.showLess').hide();
+                $('a.showMore').click(function() {
+                    $('div.description').css('height', (d_scrollHeight - d_padding_bottom) + 'px');
+                    showMoreOrLess();
+                    return false;
+                });
+                $('a.showLess').click(function() {
+                    $('div.description').css('height', d_height + 'px');
+                    showMoreOrLess();
+                    return false;
+                });
+                function showMoreOrLess() {
+                    if ($('div.description').height() >= (d_scrollHeight - d_padding_bottom)) {
+                        $('a.showMore').hide();
+                        $('a.showLess').show();
+                    } else {
+                        $('a.showMore').show();
+                        $('a.showLess').hide();
+                    }
                 }
             }
         }
