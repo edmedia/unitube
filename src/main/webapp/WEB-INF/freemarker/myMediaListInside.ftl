@@ -37,8 +37,7 @@
                     #
                 </th>
                 <th>View</th>
-                <th>Edit</th>
-                <th>Title</th>
+                <th>Title/Edit</th>
                 <th>Created</th>
                 <th>Album(s)</th>
                 <th>Delete</th>
@@ -52,12 +51,6 @@
                 <td><input type="checkbox" name="id" value="${obj.id?c}"/></td>
                 <td>
                     <@viewLinkWithThumbnail obj />
-                </td>
-                <td>
-                    <a href="edit.do?id=${obj.id?c}${pager.parameters?html}"
-                       title="Edit this media file">
-                        Edit
-                    </a>
                 </td>
                 <td>
                     <a href="edit.do?id=${obj.id?c}${pager.parameters?html}"
