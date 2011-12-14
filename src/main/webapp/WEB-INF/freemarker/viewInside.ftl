@@ -208,6 +208,7 @@
         <p><span class="title">Album(s):</span>
             <#list obj.albumMedias as albumMedia>
                 <a href="${baseUrl}/album?a=${albumMedia.album.accessCode}">${albumMedia.album.albumName?html}</a>
+                <#if albumMedia_has_next>|</#if>
             </#list>
         </p>
     </#if>
@@ -250,6 +251,7 @@
 <#-- for finished image files -->
     <#if (obj.mediaType == 5) && (obj.status == 2)>
         <p>
+            <span class="title">Image Viewer:</span>
             <a href="${baseUrl}/imageViewer.do?i=${obj.accessCode}">View Image in ImageViewer</a>
             <#if isOwner?has_content || !ivOption??  || ivOption.otherCanAnnotate>
                 |
