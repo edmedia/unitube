@@ -174,7 +174,7 @@ $(function() {
                 ${si.sTime?c},
                 ${si.eTime?c},
                         num,
-                        "${si.title?js_string}"
+                        "${si.title!?js_string}"
                 );
                 // which slide (0 based)
                 slideNum = parseInt(slidesData[seq].num) - 1;
