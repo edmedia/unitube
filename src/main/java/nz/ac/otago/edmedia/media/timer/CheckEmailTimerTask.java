@@ -53,6 +53,14 @@ public class CheckEmailTimerTask
 
     private String accessTokenSecret;
 
+    private String proxyHost;
+
+    private int proxyPort;
+
+    private String proxyUser;
+
+    private String proxyPassword;
+
     private String mailHost;
 
     private String fromEmail;
@@ -101,6 +109,22 @@ public class CheckEmailTimerTask
 
     public void setAccessTokenSecret(String accessTokenSecret) {
         this.accessTokenSecret = accessTokenSecret;
+    }
+
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public void setProxyUser(String proxyUser) {
+        this.proxyUser = proxyUser;
+    }
+
+    public void setProxyPassword(String proxyPassword) {
+        this.proxyPassword = proxyPassword;
     }
 
     public void setMailHost(String mailHost) {
@@ -472,7 +496,9 @@ public class CheckEmailTimerTask
                 subject = user.getFirstName() + " just uploaded " + filename + " to UniTube via Mobile";
             // have a tweet on UniTube Twitter if media is public
             if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC) {
-                MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, subject + " " + url);
+                MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret,
+                        proxyHost, proxyPort, proxyUser, proxyPassword,
+                        subject + " " + url);
             }
             // send an email to user
             String youSubject = "You just uploaded " + filename + " to UniTube via Email";

@@ -64,6 +64,10 @@
         <property name="consumerSecret" value="${twitter.consumer.secret}"/>
         <property name="accessToken" value="${twitter.access.token}"/>
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="proxyHost" value="${twitter.http.proxyHost}"/>
+        <property name="proxyPort" value="${twitter.http.proxyPort}"/>
+        <property name="proxyUser" value="${twitter.http.proxyUser}"/>
+        <property name="proxyPassword" value="${twitter.http.proxyPassword}"/>
     </bean>
 
     <bean id="register" class="nz.ac.otago.edmedia.media.controller.RegisterController">
@@ -83,6 +87,10 @@
         <property name="consumerSecret" value="${twitter.consumer.secret}"/>
         <property name="accessToken" value="${twitter.access.token}"/>
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="proxyHost" value="${twitter.http.proxyHost}"/>
+        <property name="proxyPort" value="${twitter.http.proxyPort}"/>
+        <property name="proxyUser" value="${twitter.http.proxyUser}"/>
+        <property name="proxyPassword" value="${twitter.http.proxyPassword}"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
         <property name="smtpUsername" value="${email.smtp.username}"/>
@@ -101,6 +109,10 @@
         <property name="consumerSecret" value="${twitter.consumer.secret}"/>
         <property name="accessToken" value="${twitter.access.token}"/>
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="proxyHost" value="${twitter.http.proxyHost}"/>
+        <property name="proxyPort" value="${twitter.http.proxyPort}"/>
+        <property name="proxyUser" value="${twitter.http.proxyUser}"/>
+        <property name="proxyPassword" value="${twitter.http.proxyPassword}"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
         <property name="smtpUsername" value="${email.smtp.username}"/>
@@ -492,6 +504,10 @@
         <property name="consumerSecret" value="${twitter.consumer.secret}"/>
         <property name="accessToken" value="${twitter.access.token}"/>
         <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
+        <property name="proxyHost" value="${twitter.http.proxyHost}"/>
+        <property name="proxyPort" value="${twitter.http.proxyPort}"/>
+        <property name="proxyUser" value="${twitter.http.proxyUser}"/>
+        <property name="proxyPassword" value="${twitter.http.proxyPassword}"/>
         <property name="mailHost" value="${email.smtp.server}"/>
         <property name="fromEmail" value="${email.from.address}"/>
         <property name="smtpUsername" value="${email.smtp.username}"/>

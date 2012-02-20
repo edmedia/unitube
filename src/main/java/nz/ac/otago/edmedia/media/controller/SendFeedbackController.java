@@ -26,6 +26,14 @@ public class SendFeedbackController extends AbstractController {
 
     private String accessTokenSecret;
 
+    private String proxyHost;
+
+    private int proxyPort;
+
+    private String proxyUser;
+
+    private String proxyPassword;
+
     public void setConsumerKey(String consumerKey) {
         this.consumerKey = consumerKey;
     }
@@ -42,11 +50,29 @@ public class SendFeedbackController extends AbstractController {
         this.accessTokenSecret = accessTokenSecret;
     }
 
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public void setProxyUser(String proxyUser) {
+        this.proxyUser = proxyUser;
+    }
+
+    public void setProxyPassword(String proxyPassword) {
+        this.proxyPassword = proxyPassword;
+    }
+
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String status = request.getParameter("status");
         String detail = null;
-        boolean success = MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, status);
+        boolean success = MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret,
+                proxyHost, proxyPort, proxyUser, proxyPassword,
+                status);
         if (!success)
             detail = "Can not send feedback.";
         OtherUtil.responseXml(response, "feedback", success, detail);

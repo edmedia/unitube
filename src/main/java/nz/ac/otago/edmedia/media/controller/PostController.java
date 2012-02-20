@@ -36,6 +36,14 @@ public class PostController extends BaseOperationController {
 
     private String accessTokenSecret;
 
+    private String proxyHost;
+
+    private int proxyPort;
+
+    private String proxyUser;
+
+    private String proxyPassword;
+
     private String mailHost;
 
     private String fromEmail;
@@ -60,6 +68,22 @@ public class PostController extends BaseOperationController {
 
     public void setAccessTokenSecret(String accessTokenSecret) {
         this.accessTokenSecret = accessTokenSecret;
+    }
+
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public void setProxyUser(String proxyUser) {
+        this.proxyUser = proxyUser;
+    }
+
+    public void setProxyPassword(String proxyPassword) {
+        this.proxyPassword = proxyPassword;
     }
 
     public void setMailHost(String mailHost) {
@@ -168,7 +192,9 @@ public class PostController extends BaseOperationController {
             if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC) {
                 boolean onTwitter = Boolean.parseBoolean(request.getParameter("onTwitter"));
                 if (onTwitter)
-                    MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, subject + " " + url);
+                    MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret,
+                            proxyHost, proxyPort, proxyUser, proxyPassword,
+                            subject + " " + url);
             }
             // send an email to user
             String youSubject = msa.getMessage("upload.email.subject", new String[]{originalFilename});

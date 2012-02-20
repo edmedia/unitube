@@ -30,7 +30,7 @@ import org.springframework.dao.DataAccessException;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -431,6 +431,10 @@ public class MediaUtil {
      * @param consumerSecret    consumer secret
      * @param accessToken       access token
      * @param accessTokenSecret access token secret
+     * @param proxyHost         proxy host
+     * @param proxyPort         proxy port
+     * @param proxyUser         proxy user
+     * @param proxyPassword     proxy password
      * @param status            status
      * @return true if successful, false otherwise
      */
@@ -438,6 +442,10 @@ public class MediaUtil {
                                         String consumerSecret,
                                         String accessToken,
                                         String accessTokenSecret,
+                                        String proxyHost,
+                                        int proxyPort,
+                                        String proxyUser,
+                                        String proxyPassword,
                                         String status) {
         boolean success = false;
         if (StringUtils.isNotBlank(consumerKey) &&
@@ -445,14 +453,25 @@ public class MediaUtil {
                 StringUtils.isNotBlank(accessToken) &&
                 StringUtils.isNotBlank(accessTokenSecret) &&
                 StringUtils.isNotBlank(status)) {
-            AccessToken token = new AccessToken(accessToken, accessTokenSecret);
-            Twitter twitter = new TwitterFactory().getInstance();
-            //Twitter twitter = new TwitterFactory().getInstance(token);
-            twitter.setOAuthConsumer(consumerKey, consumerSecret);
-            twitter.setOAuthAccessToken(token);
-            //Twitter twitter = new TwitterFactory().getOAuthAuthorizedInstance(consumerKey, consumerSecret, token);
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+                    .setOAuthConsumerKey(consumerKey)
+                    .setOAuthConsumerSecret(consumerSecret)
+                    .setOAuthAccessToken(accessToken)
+                    .setOAuthAccessTokenSecret(accessTokenSecret);
+            if (StringUtils.isNotBlank(proxyHost) && (proxyPort > 0)) {
+                cb.setHttpProxyHost(proxyHost);
+                cb.setHttpProxyPort(proxyPort);
+                if (StringUtils.isNotBlank(proxyUser) && StringUtils.isNotBlank(proxyPassword)) {
+                    cb.setHttpProxyUser(proxyUser);
+                    cb.setHttpProxyPassword(proxyPassword);
+                }
+            }
+            TwitterFactory tf = new TwitterFactory(cb.build());
+            Twitter twitter = tf.getInstance();
             try {
                 twitter.updateStatus(status);
+                log.info("update twitter status with \"{}\"", status);
                 success = true;
             } catch (TwitterException e) {
                 log.error("exception when updating twitter", e);
@@ -461,6 +480,24 @@ public class MediaUtil {
             log.warn("updateTwitter: required parameters are empty.");
         }
         return success;
+    }
+
+    /**
+     * Update twitter status.
+     *
+     * @param consumerKey       consumer key
+     * @param consumerSecret    consumer secret
+     * @param accessToken       access token
+     * @param accessTokenSecret access token secret
+     * @param status            status
+     * @return true if successful, false otherwise
+     */
+    public static boolean updateTwitter(String consumerKey,
+                                        String consumerSecret,
+                                        String accessToken,
+                                        String accessTokenSecret,
+                                        String status) {
+        return updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, null, 0, null, null, status);
     }
 
     /**
