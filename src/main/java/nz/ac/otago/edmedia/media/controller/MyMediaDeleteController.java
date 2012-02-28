@@ -47,6 +47,7 @@ public class MyMediaDeleteController extends BaseDeleteController {
                         for (AVP avp : MediaUtil.getAVPs(media, service))
                             service.delete(avp);
                         try {
+                            MediaUtil.recordDelete(service, request, media, user);
                             service.delete(media);
                             // delete uploaded file, converted file and thumbnail
                             MediaUtil.removeMediaFiles(getUploadLocation(), media, true);

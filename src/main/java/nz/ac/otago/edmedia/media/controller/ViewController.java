@@ -1,19 +1,19 @@
 package nz.ac.otago.edmedia.media.controller;
 
-import nz.ac.otago.edmedia.media.bean.Comment;
-import nz.ac.otago.edmedia.media.bean.IVOption;
-import nz.ac.otago.edmedia.media.bean.Media;
-import nz.ac.otago.edmedia.media.bean.User;
+import nz.ac.otago.edmedia.media.bean.*;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
+import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
+import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -107,6 +107,11 @@ public class ViewController extends BaseOperationController {
                     media.setAccessTimes(media.getAccessTimes() + 1);
                     service.update(media);
                 }
+                MediaUtil.recordView(service, request, media, user);
+
+                // deal with comments
+
+                // find first 10 comments
                 SearchCriteria commentCriteria = new SearchCriteria.Builder()
                         .eq("media", media)
                         .isNull("comment")
@@ -114,7 +119,7 @@ public class ViewController extends BaseOperationController {
                         .result(0, 10) // only first 10 comments
                         .build();
                 List commentList = service.search(Comment.class, commentCriteria);
-
+                // find all comments
                 SearchCriteria allCriteria = new SearchCriteria.Builder()
                         .eq("media", media)
                         .isNull("comment")
@@ -124,6 +129,7 @@ public class ViewController extends BaseOperationController {
                 if (!commentList.isEmpty())
                     model.put("commentList", commentList);
                 model.put("hasMoreComment", Boolean.FALSE);
+                // if all comments is more than first 10 comments, there are more comments
                 if (allCommentList.size() > commentList.size())
                     model.put("hasMoreComment", Boolean.TRUE);
             }

@@ -106,6 +106,9 @@ class MediaTask implements Runnable {
                         media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_FINISHED);
                         // update database
                         service.update(media);
+
+                        MediaUtil.recordUploadOrUpdateAfterConversion(service, media);
+
                         // only remove tmp file for normal user
                         // keep tmp file for guest user, so we can check if 24 hours past
                         if (!media.getUser().getIsGuest())

@@ -28,6 +28,7 @@
                 <value>Comment.hbm.xml</value>
                 <value>IVOption.hbm.xml</value>
                 <value>Media.hbm.xml</value>
+                <value>AccessRecord.hbm.xml</value>
                 <value>SlideInfo.hbm.xml</value>
                 <value>User.hbm.xml</value>
                 <value>UserAlbum.hbm.xml</value>

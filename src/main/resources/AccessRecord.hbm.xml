@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="nz.ac.otago.edmedia.media.bean">
+
+    <class name="nz.ac.otago.edmedia.media.bean.AccessRecord" table="media_accessrecord">
+
+        <id name="id">
+            <column name="id" not-null="true"/>
+            <generator class="sequence">
+                <param name="sequence">ar_seq</param>
+            </generator>
+        </id>
+        <!-- media ID -->
+        <property name="mediaID">
+            <column name="mediaid"/>
+        </property>
+
+        <!-- url -->
+        <property name="url">
+            <column name="url"/>
+        </property>
+
+        <!-- action(1: Upload, 2: Update, 3: View, 4: Delete) -->
+        <property name="action">
+            <column name="action"/>
+        </property>
+
+        <!-- filename -->
+        <property name="filename">
+            <column name="filename"/>
+        </property>
+
+        <!-- who -->
+        <property name="userID">
+            <column name="userid"/>
+        </property>
+
+        <!-- action time -->
+        <property name="actionTime">
+            <column name="actiontime"/>
+        </property>
+
+        <!-- IP address -->
+        <property name="ipAddress">
+            <column name="ipaddress"/>
+        </property>
+
+        <!-- Media Type(1: Other, 5: Image, 10: Audio, 20: Video) -->
+        <property name="mediaType">
+            <column name="mediatype"/>
+        </property>
+
+        <!-- internal or external -->
+        <property name="fromExternal">
+            <column name="fromexternal"/>
+        </property>
+
+    </class>
+
+</hibernate-mapping>

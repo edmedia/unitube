@@ -45,6 +45,8 @@ public class MyMediaEditController extends BaseFormController {
             MediaUtil.saveUploaedFile(getUploadLocation(), media);
             media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_WAITING);
             doConvert = true;
+            // record re-upload
+            MediaUtil.recordUpdate(service, request, media, media.getUser());
         }
         if (doConvert) {
             if (MediaUtil.createTmpFile(getUploadLocation(), media.getAccessCode())) {

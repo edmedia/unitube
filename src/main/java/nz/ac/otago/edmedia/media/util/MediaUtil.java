@@ -8,6 +8,7 @@ import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.spring.util.UploadUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
+import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -66,6 +67,13 @@ public class MediaUtil {
     public static final int MEDIA_ACCESS_TYPE_PUBLIC = 0;
     public static final int MEDIA_ACCESS_TYPE_HIDDEN = 10;
     public static final int MEDIA_ACCESS_TYPE_PRIVATE = 20;
+
+    // action(1: Upload, 2: Update, 3: View, 4: Delete)
+    public static final int MEDIA_ACTION_UPLOAD = 1;
+    public static final int MEDIA_ACTION_UPDATE = 2;
+    public static final int MEDIA_ACTION_VIEW = 3;
+    public static final int MEDIA_ACTION_DELETE = 4;
+
 
     /**
      * Returns user for given userName and wayf
@@ -777,6 +785,152 @@ public class MediaUtil {
                 accessType = presentation.getAccessType();
         }
         return accessType;
+    }
+
+    private static boolean fromExternal(HttpServletRequest request, String internalStart, String internalEnd) {
+        // reserved private ip address
+        // 10.0.0.0 - 10.255.255.255
+        // 172.16.0.0 - 172.31.255.255
+        // 192.168.0.0 - 192.168.255.255
+        String ipAddress = AuthUtil.getIpAddress(request);
+        if (within(ipAddress, internalStart, internalEnd))
+            return false;
+        if (within(ipAddress, "10.0.0.0", "10.255.255.255"))
+            return false;
+        if (within(ipAddress, "172.16.0.0", "172.31.255.255"))
+            return false;
+        if (within(ipAddress, "192.168.0.0", "192.168.255.255"))
+            return false;
+        return true;
+    }
+
+    private static boolean within(String ipAddress, String start, String end) {
+        boolean result = true;
+        if ((ipAddress != null) && (start != null) && (end != null)) {
+            String[] ips = ipAddress.split(".");
+            String[] ss = start.split(".");
+            String[] es = end.split(".");
+            if ((ips.length == 4) && (ss.length == 4) && (es.length == 4)) {
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        int ip = Integer.parseInt(ips[i]);
+                        int s = Integer.parseInt(ss[i]);
+                        int e = Integer.parseInt(es[i]);
+                        if ((ip < s) || (ip > e)) {
+                            return false;
+                        }
+                    } catch (NumberFormatException nfe) {
+                        // ignore
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private static void recordAction(BaseService service, HttpServletRequest request, Media media, User user, int action) {
+        if ((service != null) && (request != null) && (media != null)) {
+            // record this view
+            AccessRecord record = new AccessRecord();
+            record.setMediaID(media.getId());
+            record.setUrl(ServletUtil.getContextURL(request) + "/view?m=" + media.getAccessCode());
+            record.setAction(action);
+            if (((action == MEDIA_ACTION_UPDATE || (action == MEDIA_ACTION_UPLOAD))) && (media.getUploadFile() != null))
+                record.setFilename(media.getUploadFile().getOriginalFilename());
+            if (user != null)
+                record.setUserID(user.getId());
+            else
+                record.setUserID(0L);
+            record.setActionTime(new Date());
+            record.setIpAddress(AuthUtil.getIpAddress(request));
+            record.setMediaType(media.getMediaType());
+            record.setFromExternal(fromExternal(request, "139.80.0.0", "139.80.127.255"));
+            try {
+                service.save(record);
+            } catch (DataAccessException dae) {
+                log.error("DataAccessException when record action.", dae);
+            }
+        }
+    }
+
+    /**
+     * When someone views a media file
+     *
+     * @param service service
+     * @param request request
+     * @param media   media
+     * @param user    who
+     */
+    public static void recordView(BaseService service, HttpServletRequest request, Media media, User user) {
+        recordAction(service, request, media, user, MEDIA_ACTION_VIEW);
+    }
+
+    /**
+     * When someone uploads a media file
+     *
+     * @param service service
+     * @param request request
+     * @param media   media
+     * @param user    who
+     */
+    public static void recordUpload(BaseService service, HttpServletRequest request, Media media, User user) {
+        recordAction(service, request, media, user, MEDIA_ACTION_UPLOAD);
+    }
+
+    /**
+     * When someone updates(re-uploads) a media file
+     *
+     * @param service service
+     * @param request request
+     * @param media   media
+     * @param user    who
+     */
+    public static void recordUpdate(BaseService service, HttpServletRequest request, Media media, User user) {
+        recordAction(service, request, media, user, MEDIA_ACTION_UPDATE);
+    }
+
+    /**
+     * When someone deletes a media file
+     *
+     * @param service service
+     * @param request request
+     * @param media   media
+     * @param user    who
+     */
+    public static void recordDelete(BaseService service, HttpServletRequest request, Media media, User user) {
+        recordAction(service, request, media, user, MEDIA_ACTION_DELETE);
+    }
+
+    /**
+     * Update mediaType after done conversion, because we don't know mediaType when upload or update(re-upload).
+     *
+     * @param service service
+     * @param media   media
+     */
+    public static void recordUploadOrUpdateAfterConversion(BaseService service, Media media) {
+        if ((service != null) && (media != null)) {
+            List<Integer> uploadOrUpdate = new ArrayList<Integer>();
+            uploadOrUpdate.add(MEDIA_ACTION_UPLOAD);
+            uploadOrUpdate.add(MEDIA_ACTION_UPDATE);
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("mediaID", media.getId())
+                    .in("action", uploadOrUpdate)
+                    .orderBy("actionTime", false)
+                    .build();
+            @SuppressWarnings("unchecked")
+            List<AccessRecord> list = (List<AccessRecord>) service.search(AccessRecord.class, criteria);
+            if (!list.isEmpty()) {
+                AccessRecord record = list.get(0);
+                if (record.getMediaType() != media.getMediaType()) {
+                    record.setMediaType(media.getMediaType());
+                    try {
+                        service.update(record);
+                    } catch (DataAccessException dae) {
+                        log.error("DataAccessException when update record", dae);
+                    }
+                }
+            }
+        }
     }
 
     public static void main(String args[]) {

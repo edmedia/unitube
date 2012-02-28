@@ -185,6 +185,9 @@ public class PostController extends BaseOperationController {
         String url;
         try {
             service.save(media);
+
+            MediaUtil.recordUpload(service, request, media, user);
+
             url = ServletUtil.getContextURL(request) + "/view?m=" + media.getAccessCode();
             MediaUtil.createTmpFile(getUploadLocation(), media.getAccessCode());
             String subject = msa.getMessage("upload.email.unitube.subject", new String[]{originalFilename, user.getFirstName()});
