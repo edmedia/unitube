@@ -3,7 +3,6 @@ package nz.ac.otago.edmedia.media.controller;
 import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
-import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
@@ -26,85 +25,7 @@ import java.util.Date;
  *         Date: 17/05/2010
  *         Time: 2:19:32 PM
  */
-public class PostController extends BaseOperationController {
-
-    private String consumerKey;
-
-    private String consumerSecret;
-
-    private String accessToken;
-
-    private String accessTokenSecret;
-
-    private String proxyHost;
-
-    private int proxyPort;
-
-    private String proxyUser;
-
-    private String proxyPassword;
-
-    private String mailHost;
-
-    private String fromEmail;
-
-    private String smtpUsername;
-
-    private String smtpPassword;
-
-    private int smtpPort;
-
-    public void setConsumerKey(String consumerKey) {
-        this.consumerKey = consumerKey;
-    }
-
-    public void setConsumerSecret(String consumerSecret) {
-        this.consumerSecret = consumerSecret;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public void setAccessTokenSecret(String accessTokenSecret) {
-        this.accessTokenSecret = accessTokenSecret;
-    }
-
-    public void setProxyHost(String proxyHost) {
-        this.proxyHost = proxyHost;
-    }
-
-    public void setProxyPort(int proxyPort) {
-        this.proxyPort = proxyPort;
-    }
-
-    public void setProxyUser(String proxyUser) {
-        this.proxyUser = proxyUser;
-    }
-
-    public void setProxyPassword(String proxyPassword) {
-        this.proxyPassword = proxyPassword;
-    }
-
-    public void setMailHost(String mailHost) {
-        this.mailHost = mailHost;
-    }
-
-    public void setFromEmail(String fromEmail) {
-        this.fromEmail = fromEmail;
-    }
-
-    public void setSmtpUsername(String smtpUsername) {
-        this.smtpUsername = smtpUsername;
-    }
-
-    public void setSmtpPassword(String smtpPassword) {
-        this.smtpPassword = smtpPassword;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
+public class PostController extends EmailTwitterController {
 
     @Override
     @SuppressWarnings("unchecked")
@@ -195,20 +116,20 @@ public class PostController extends BaseOperationController {
             if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC) {
                 boolean onTwitter = Boolean.parseBoolean(request.getParameter("onTwitter"));
                 if (onTwitter)
-                    MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret,
-                            proxyHost, proxyPort, proxyUser, proxyPassword,
+                    MediaUtil.updateTwitter(getConsumerKey(), getConsumerSecret(), getAccessToken(), getAccessTokenSecret(),
+                            getProxyHost(), getProxyPort(), getProxyUser(), getProxyPassword(),
                             subject + " " + url);
             }
             // send an email to user
             String youSubject = msa.getMessage("upload.email.subject", new String[]{originalFilename});
             String youBody = msa.getMessage("upload.email.body", new String[]{url});
-            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+            OtherUtil.sendEmail(getMailHost(), getFromEmail(), getSmtpUsername(), getSmtpPassword(), getSmtpPort(),
                     user.getEmail(), youSubject, youBody);
             // send an email to unitube email address
             String body = msa.getMessage("upload.email.unitube.body", new String[]{url});
             subject = msa.getMessage("upload.email.subject", new String[]{originalFilename, user.getFirstName()});
-            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
-                    fromEmail, subject, body);
+            OtherUtil.sendEmail(getMailHost(), getFromEmail(), getSmtpUsername(), getSmtpPassword(), getSmtpPort(),
+                    getFromEmail(), subject, body);
         } catch (DataAccessException e) {
             logger.error(e);
             throw new ServletException("Exception when saving media", e);

@@ -4,7 +4,6 @@ import nz.ac.otago.edmedia.media.bean.Comment;
 import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
-import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.lang.StringUtils;
@@ -23,37 +22,7 @@ import java.util.Date;
  *         Date: 21/10/2009
  *         Time: 11:06:44
  */
-public class PostCommentController extends BaseOperationController {
-
-    private String mailHost;
-
-    private String fromEmail;
-
-    private String smtpUsername;
-
-    private String smtpPassword;
-
-    private int smtpPort;
-
-    public void setMailHost(String mailHost) {
-        this.mailHost = mailHost;
-    }
-
-    public void setFromEmail(String fromEmail) {
-        this.fromEmail = fromEmail;
-    }
-
-    public void setSmtpUsername(String smtpUsername) {
-        this.smtpUsername = smtpUsername;
-    }
-
-    public void setSmtpPassword(String smtpPassword) {
-        this.smtpPassword = smtpPassword;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
+public class PostCommentController extends EmailController {
 
     @Override
     protected ModelAndView handle(HttpServletRequest request,
@@ -90,7 +59,7 @@ public class PostCommentController extends BaseOperationController {
                 String url = ServletUtil.getContextURL(request) + "/view?m=" + media.getAccessCode() + "#comment_" + comment.getId();
                 String subject = msa.getMessage("new.comment.email.subject", new String[]{user.getFirstName()});
                 String body = msa.getMessage("new.comment.email.body", new String[]{comment.getMsg(), url});
-                OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                OtherUtil.sendEmail(getMailHost(), getFromEmail(), getSmtpUsername(), getSmtpPassword(), getSmtpPort(),
                         media.getUser().getEmail(), subject, body);
 
                 success = true;

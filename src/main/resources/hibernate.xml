@@ -38,6 +38,7 @@
         <property name="format_sql">true</property>
 
         <!-- Mapping files -->
+        <mapping resource="AccessRecord.hbm.xml"/>
         <mapping resource="AccessRule.hbm.xml"/>
         <mapping resource="Album.hbm.xml"/>
         <mapping resource="AlbumMedia.hbm.xml"/>

@@ -2,7 +2,6 @@ package nz.ac.otago.edmedia.media.controller;
 
 import nz.ac.otago.edmedia.auth.bean.AuthUser;
 import nz.ac.otago.edmedia.media.bean.User;
-import nz.ac.otago.edmedia.spring.controller.BaseFormController;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
@@ -25,44 +24,13 @@ import java.util.Random;
  *         Date: 25/11/2008
  *         Time: 16:06:32
  */
-public class RegisterController extends BaseFormController {
-
-    private String mailHost;
-
-    private String fromEmail;
-
-    private String smtpUsername;
-
-    private String smtpPassword;
-
-    private int smtpPort;
-
-    public void setMailHost(String mailHost) {
-        this.mailHost = mailHost;
-    }
-
-    public void setFromEmail(String fromEmail) {
-        this.fromEmail = fromEmail;
-    }
-
-    public void setSmtpUsername(String smtpUsername) {
-        this.smtpUsername = smtpUsername;
-    }
-
-    public void setSmtpPassword(String smtpPassword) {
-        this.smtpPassword = smtpPassword;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
+public class RegisterController extends EmailController {
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected ModelAndView onSubmit(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    Object command,
-                                    BindException errors)
+    protected ModelAndView handle(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  Object command,
+                                  BindException errors)
             throws Exception {
 
         boolean success = false;
@@ -76,6 +44,7 @@ public class RegisterController extends BaseFormController {
                 .eq("email", user.getEmail())
                 .eq("wayf", AuthUser.EMBEDDED_WAYF)
                 .build();
+        @SuppressWarnings("unchecked")
         List<User> list = (List<User>) service.search(User.class, criteria);
         // if not empty, this email is in use
         if (!list.isEmpty()) {
@@ -111,7 +80,7 @@ public class RegisterController extends BaseFormController {
                     user.getUserName(), // username
                     password // password
             });
-            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+            OtherUtil.sendEmail(getMailHost(), getFromEmail(), getSmtpUsername(), getSmtpPassword(), getSmtpPort(),
                     user.getEmail(), subject, body);
             success = true;
             detail = msa.getMessage("register.success");

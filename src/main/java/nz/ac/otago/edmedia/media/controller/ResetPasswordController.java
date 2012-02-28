@@ -2,7 +2,6 @@ package nz.ac.otago.edmedia.media.controller;
 
 import nz.ac.otago.edmedia.auth.bean.AuthUser;
 import nz.ac.otago.edmedia.media.bean.User;
-import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
@@ -24,37 +23,7 @@ import java.util.List;
  *         Date: 21/01/2009
  *         Time: 15:30:15
  */
-public class ResetPasswordController extends BaseOperationController {
-
-    private String mailHost;
-
-    private String fromEmail;
-
-    private String smtpUsername;
-
-    private String smtpPassword;
-
-    private int smtpPort;
-
-    public void setMailHost(String mailHost) {
-        this.mailHost = mailHost;
-    }
-
-    public void setFromEmail(String fromEmail) {
-        this.fromEmail = fromEmail;
-    }
-
-    public void setSmtpUsername(String smtpUsername) {
-        this.smtpUsername = smtpUsername;
-    }
-
-    public void setSmtpPassword(String smtpPassword) {
-        this.smtpPassword = smtpPassword;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
+public class ResetPasswordController extends EmailController {
 
     @Override
     @SuppressWarnings("unchecked")
@@ -103,7 +72,7 @@ public class ResetPasswordController extends BaseOperationController {
                             user.getUserName(), // username
                             password //password
                     });
-                    OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    OtherUtil.sendEmail(getMailHost(), getFromEmail(), getSmtpUsername(), getSmtpPassword(), getSmtpPort(),
                             user.getEmail(), subject, body);
                     detail = msa.getMessage("reset.password.success");
                     success = true;
