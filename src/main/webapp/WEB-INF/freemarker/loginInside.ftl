@@ -18,13 +18,11 @@
         <h1>University of Otago Member?</h1>
 
         <a href="${fromUrl}" class="bold">Log in here</a><br/>
-    <#--
         <a href="${fromUrl}"><img src="${baseUrl}/images/bb_logo.gif" width="152" height="29" alt=""
                                   style="margin:10px auto 30px auto;"/></a>
-      -->
+
         <hr/>
     </#if>
-        <#--
         <h2 title="Click here to login using your UniTube username and password">
             Non University of Otago Member?
             <a href="#">Click here to login.</a>
@@ -120,7 +118,7 @@
                     </tr>
                 </table>
             </form>
-        </div>     -->
+        </div>
     </div>
 
 </div>
@@ -174,12 +172,12 @@
             var theForm = $(this);
             if (theForm.valid())
                 theForm.ajaxSubmit({
-                            success: function(xml) {
-                                if ($("action", xml).attr("success") == "true")
-                                    $('input:submit', theForm).hide();
-                                alert($("action", xml).attr("detail"));
-                            }
-                        });
+                    success: function(xml) {
+                        if ($("action", xml).attr("success") == "true")
+                            $('input:submit', theForm).hide();
+                        alert($("action", xml).attr("detail"));
+                    }
+                });
             return false;
         });
 
@@ -187,12 +185,12 @@
             var theForm = $(this);
             if (theForm.valid())
                 theForm.ajaxSubmit({
-                            success: function(xml) {
-                                if ($("action", xml).attr("success") == "true")
-                                    $('input:submit', theForm).hide();
-                                alert($("action", xml).attr("detail"));
-                            }
-                        });
+                    success: function(xml) {
+                        if ($("action", xml).attr("success") == "true")
+                            $('input:submit', theForm).hide();
+                        alert($("action", xml).attr("detail"));
+                    }
+                });
             return false;
         });
 
