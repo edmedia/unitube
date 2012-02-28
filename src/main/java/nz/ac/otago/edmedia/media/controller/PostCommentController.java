@@ -6,7 +6,9 @@ import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
+import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,6 +24,36 @@ import java.util.Date;
  *         Time: 11:06:44
  */
 public class PostCommentController extends BaseOperationController {
+
+    private String mailHost;
+
+    private String fromEmail;
+
+    private String smtpUsername;
+
+    private String smtpPassword;
+
+    private int smtpPort;
+
+    public void setMailHost(String mailHost) {
+        this.mailHost = mailHost;
+    }
+
+    public void setFromEmail(String fromEmail) {
+        this.fromEmail = fromEmail;
+    }
+
+    public void setSmtpUsername(String smtpUsername) {
+        this.smtpUsername = smtpUsername;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
+    }
 
     @Override
     protected ModelAndView handle(HttpServletRequest request,
@@ -53,6 +85,14 @@ public class PostCommentController extends BaseOperationController {
                 comment.setMsgTime(new Date());
                 comment.setCredits(0);
                 service.save(comment);
+
+                MessageSourceAccessor msa = getMessageSourceAccessor();
+                String url = ServletUtil.getContextURL(request) + "/view?m=" + media.getAccessCode() + "#comment_" + comment.getId();
+                String subject = msa.getMessage("new.comment.email.subject", new String[]{user.getFirstName()});
+                String body = msa.getMessage("new.comment.email.body", new String[]{comment.getMsg(), url});
+                OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                        media.getUser().getEmail(), subject, body);
+
                 success = true;
                 detail = "" + comment.getId();
             }

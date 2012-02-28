@@ -369,10 +369,9 @@ ${link?html}</#macro>
     <div>
         <a href="${baseUrl}/media.do?u=${comment.author.accessCode}">${comment.author.firstName} ${comment.author.lastName}</a>
         (${comment.msgTimePast})
-        <a href="#" class="commentLink">Reply</a>
+        <a href="#" class="commentLink" name="comment_${comment.id?c}">Reply</a>
 
         <div>
-            <a name="comment_${comment.id?c}"></a>
         ${comment.msg?html}
         </div>
     </div>

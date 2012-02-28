@@ -302,6 +302,11 @@
     </bean>
 
     <bean id="postComment" class="nz.ac.otago.edmedia.media.controller.PostCommentController">
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Comment"/>
         <property name="service" ref="myBaseService"/>
     </bean>
