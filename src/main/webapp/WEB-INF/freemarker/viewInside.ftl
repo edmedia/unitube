@@ -97,7 +97,7 @@
         <img src="${baseUrl}/images/feed-icon.png" alt="Feed for ${obj.user.firstName?html} ${obj.user.lastName?html}"
              title="Feed for ${obj.user.firstName?html} ${obj.user.lastName?html}"/>
     </a> -->
-    ${obj.uploadTimePast}
+    <span title="${obj.uploadTime?string('dd/MM/yyyy hh:mm:ss')}">${obj.uploadTimePast}</span>
     </p>
     <#assign linkTitle>${obj.title!?url}</#assign>
     <#assign linkTags>${obj.tags!?url}</#assign>
