@@ -799,17 +799,19 @@ public class MediaUtil {
             return false;
         if (within(ipAddress, "172.16.0.0", "172.31.255.255"))
             return false;
-        return within(ipAddress, "192.168.0.0", "192.168.255.255");
+        if (within(ipAddress, "192.168.0.0", "192.168.255.255"))
+            return false;
+        return true;
     }
 
     private static boolean within(String ipAddress, String start, String end) {
         boolean result = true;
         if ((ipAddress != null) && (start != null) && (end != null)) {
-            String[] ips = ipAddress.split(".");
-            String[] ss = start.split(".");
-            String[] es = end.split(".");
-            if ((ips.length == 4) && (ss.length == 4) && (es.length == 4)) {
-                for (int i = 0; i < 4; i++) {
+            String[] ips = ipAddress.split("\\.");
+            String[] ss = start.split("\\.");
+            String[] es = end.split("\\.");
+            if ((ips.length == 4) && (ss.length == 4) && (es.length == 4))
+                for (int i = 0; i < 4; i++)
                     try {
                         int ip = Integer.parseInt(ips[i]);
                         int s = Integer.parseInt(ss[i]);
@@ -818,10 +820,10 @@ public class MediaUtil {
                             return false;
                         }
                     } catch (NumberFormatException nfe) {
-                        // ignore
+                        log.warn("Wrong ip address: {} {} {}", new String[]{ipAddress, start, end});
                     }
-                }
-            }
+            else
+                log.warn("Wrong ip address: {} {} {}", new String[]{ipAddress, start, end});
         }
         return result;
     }
@@ -941,6 +943,7 @@ public class MediaUtil {
     }
 
     public static void main(String args[]) {
+        log.error(" " + fromExternal("139.80.33.44", "139.80.0.0", "139.80.127.255"));
     }
 
 }
