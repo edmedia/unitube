@@ -55,6 +55,10 @@ public class UploadController extends BaseFormController {
 
     private int smtpPort;
 
+    private String internalIpStart;
+
+    private String internalIpEnd;
+
     public void setConsumerKey(String consumerKey) {
         this.consumerKey = consumerKey;
     }
@@ -105,6 +109,14 @@ public class UploadController extends BaseFormController {
 
     public void setSmtpPort(int smtpPort) {
         this.smtpPort = smtpPort;
+    }
+
+    public void setInternalIpStart(String internalIpStart) {
+        this.internalIpStart = internalIpStart;
+    }
+
+    public void setInternalIpEnd(String internalIpEnd) {
+        this.internalIpEnd = internalIpEnd;
     }
 
     @Override
@@ -168,7 +180,7 @@ public class UploadController extends BaseFormController {
         try {
             service.save(media);
 
-            MediaUtil.recordUpload(service, request, media, user);
+            MediaUtil.recordUpload(service, request, media, user, internalIpStart, internalIpEnd);
 
             logger.info("User [" + user.getUserName() + "] uploaded [" + originalFilename + "] [m=" + media.getAccessCode() + "] from [" + request.getRemoteAddr() + "].");
             MediaUtil.createTmpFile(getUploadLocation(), media.getAccessCode());

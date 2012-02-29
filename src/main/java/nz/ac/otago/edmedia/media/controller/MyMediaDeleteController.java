@@ -20,6 +20,19 @@ import java.sql.BatchUpdateException;
  */
 public class MyMediaDeleteController extends BaseDeleteController {
 
+    private String internalIpStart;
+
+    private String internalIpEnd;
+
+    public void setInternalIpStart(String internalIpStart) {
+        this.internalIpStart = internalIpStart;
+    }
+
+    public void setInternalIpEnd(String internalIpEnd) {
+        this.internalIpEnd = internalIpEnd;
+    }
+
+    @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -47,7 +60,7 @@ public class MyMediaDeleteController extends BaseDeleteController {
                         for (AVP avp : MediaUtil.getAVPs(media, service))
                             service.delete(avp);
                         try {
-                            MediaUtil.recordDelete(service, request, media, user);
+                            MediaUtil.recordDelete(service, request, media, user, internalIpStart, internalIpEnd);
                             service.delete(media);
                             // delete uploaded file, converted file and thumbnail
                             MediaUtil.removeMediaFiles(getUploadLocation(), media, true);

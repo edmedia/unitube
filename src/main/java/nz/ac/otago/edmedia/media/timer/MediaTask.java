@@ -6,9 +6,12 @@ import nz.ac.otago.edmedia.media.converter.MediaConverter;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
+import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import org.apache.commons.lang.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.dao.DataAccessException;
 
 import java.io.File;
@@ -33,11 +36,33 @@ class MediaTask implements Runnable {
 
     private Media media;
 
-    public MediaTask(BaseService service, UploadLocation uploadLocation, MediaConverter mediaConverter, Media media) {
+    private String mailHost;
+
+    private String fromEmail;
+
+    private String smtpUsername;
+
+    private String smtpPassword;
+
+    private int smtpPort;
+
+    private String appURL;
+
+    private ApplicationContext ctx;
+
+    public MediaTask(BaseService service, UploadLocation uploadLocation, MediaConverter mediaConverter, Media media,
+                     String mailHost, String fromEmail, String smtpUsername, String smtpPassword, int smtpPort, String appURL, ApplicationContext ctx) {
         this.service = service;
         this.uploadLocation = uploadLocation;
         this.mediaConverter = mediaConverter;
         this.media = media;
+        this.mailHost = mailHost;
+        this.fromEmail = fromEmail;
+        this.smtpUsername = smtpUsername;
+        this.smtpPassword = smtpPassword;
+        this.smtpPort = smtpPort;
+        this.appURL = appURL;
+        this.ctx = ctx;
     }
 
     public void run() {
@@ -106,6 +131,18 @@ class MediaTask implements Runnable {
                         media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_FINISHED);
                         // update database
                         service.update(media);
+
+                        // send an email to owner after conversion is finished
+                        MessageSourceAccessor msa = new MessageSourceAccessor(ctx);
+                        StringBuilder url = new StringBuilder(appURL);
+                        if (!url.toString().endsWith("/"))
+                            url.append("/");
+                        url.append("view?m=");
+                        url.append(media.getAccessCode());
+                        String subject = msa.getMessage("conversion.finished.email.subject");
+                        String body = msa.getMessage("conversion.finished.email.body", new String[]{url.toString()});
+                        OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                                media.getUser().getEmail(), subject, body);
 
                         MediaUtil.recordUploadOrUpdateAfterConversion(service, media);
 

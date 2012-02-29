@@ -787,21 +787,19 @@ public class MediaUtil {
         return accessType;
     }
 
-    private static boolean fromExternal(HttpServletRequest request, String internalStart, String internalEnd) {
+    private static boolean fromExternal(String ipAddress, String internalIpStart, String internalIpEnd) {
         // reserved private ip address
         // 10.0.0.0 - 10.255.255.255
         // 172.16.0.0 - 172.31.255.255
         // 192.168.0.0 - 192.168.255.255
-        String ipAddress = AuthUtil.getIpAddress(request);
-        if (within(ipAddress, internalStart, internalEnd))
-            return false;
+        if (StringUtils.isNotBlank(internalIpStart) && StringUtils.isNotBlank(internalIpEnd))
+            if (within(ipAddress, internalIpStart, internalIpEnd))
+                return false;
         if (within(ipAddress, "10.0.0.0", "10.255.255.255"))
             return false;
         if (within(ipAddress, "172.16.0.0", "172.31.255.255"))
             return false;
-        if (within(ipAddress, "192.168.0.0", "192.168.255.255"))
-            return false;
-        return true;
+        return within(ipAddress, "192.168.0.0", "192.168.255.255");
     }
 
     private static boolean within(String ipAddress, String start, String end) {
@@ -828,7 +826,7 @@ public class MediaUtil {
         return result;
     }
 
-    private static void recordAction(BaseService service, HttpServletRequest request, Media media, User user, int action) {
+    private static void recordAction(BaseService service, HttpServletRequest request, Media media, User user, int action, String internalIpStart, String internalIpEnd) {
         if ((service != null) && (request != null) && (media != null)) {
             // record this view
             AccessRecord record = new AccessRecord();
@@ -844,7 +842,8 @@ public class MediaUtil {
             record.setActionTime(new Date());
             record.setIpAddress(AuthUtil.getIpAddress(request));
             record.setMediaType(media.getMediaType());
-            record.setFromExternal(fromExternal(request, "139.80.0.0", "139.80.127.255"));
+            String ipAddress = AuthUtil.getIpAddress(request);
+            record.setFromExternal(fromExternal(ipAddress, internalIpStart, internalIpEnd));
             try {
                 service.save(record);
             } catch (DataAccessException dae) {
@@ -856,49 +855,57 @@ public class MediaUtil {
     /**
      * When someone views a media file
      *
-     * @param service service
-     * @param request request
-     * @param media   media
-     * @param user    who
+     * @param service         service
+     * @param request         request
+     * @param media           media
+     * @param user            who
+     * @param internalIpStart internal IP start
+     * @param internalIpEnd   internal IP end
      */
-    public static void recordView(BaseService service, HttpServletRequest request, Media media, User user) {
-        recordAction(service, request, media, user, MEDIA_ACTION_VIEW);
+    public static void recordView(BaseService service, HttpServletRequest request, Media media, User user, String internalIpStart, String internalIpEnd) {
+        recordAction(service, request, media, user, MEDIA_ACTION_VIEW, internalIpStart, internalIpEnd);
     }
 
     /**
      * When someone uploads a media file
      *
-     * @param service service
-     * @param request request
-     * @param media   media
-     * @param user    who
+     * @param service         service
+     * @param request         request
+     * @param media           media
+     * @param user            who
+     * @param internalIpStart internal IP start
+     * @param internalIpEnd   internal IP end
      */
-    public static void recordUpload(BaseService service, HttpServletRequest request, Media media, User user) {
-        recordAction(service, request, media, user, MEDIA_ACTION_UPLOAD);
+    public static void recordUpload(BaseService service, HttpServletRequest request, Media media, User user, String internalIpStart, String internalIpEnd) {
+        recordAction(service, request, media, user, MEDIA_ACTION_UPLOAD, internalIpStart, internalIpEnd);
     }
 
     /**
      * When someone updates(re-uploads) a media file
      *
-     * @param service service
-     * @param request request
-     * @param media   media
-     * @param user    who
+     * @param service         service
+     * @param request         request
+     * @param media           media
+     * @param user            who
+     * @param internalIpStart internal IP start
+     * @param internalIpEnd   internal IP end
      */
-    public static void recordUpdate(BaseService service, HttpServletRequest request, Media media, User user) {
-        recordAction(service, request, media, user, MEDIA_ACTION_UPDATE);
+    public static void recordUpdate(BaseService service, HttpServletRequest request, Media media, User user, String internalIpStart, String internalIpEnd) {
+        recordAction(service, request, media, user, MEDIA_ACTION_UPDATE, internalIpStart, internalIpEnd);
     }
 
     /**
      * When someone deletes a media file
      *
-     * @param service service
-     * @param request request
-     * @param media   media
-     * @param user    who
+     * @param service         service
+     * @param request         request
+     * @param media           media
+     * @param user            who
+     * @param internalIpStart internal IP start
+     * @param internalIpEnd   internal IP end
      */
-    public static void recordDelete(BaseService service, HttpServletRequest request, Media media, User user) {
-        recordAction(service, request, media, user, MEDIA_ACTION_DELETE);
+    public static void recordDelete(BaseService service, HttpServletRequest request, Media media, User user, String internalIpStart, String internalIpEnd) {
+        recordAction(service, request, media, user, MEDIA_ACTION_DELETE, internalIpStart, internalIpEnd);
     }
 
     /**

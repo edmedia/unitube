@@ -27,6 +27,18 @@ import java.util.Date;
  */
 public class PostController extends EmailTwitterController {
 
+    private String internalIpStart;
+
+    private String internalIpEnd;
+
+    public void setInternalIpStart(String internalIpStart) {
+        this.internalIpStart = internalIpStart;
+    }
+
+    public void setInternalIpEnd(String internalIpEnd) {
+        this.internalIpEnd = internalIpEnd;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
@@ -107,7 +119,7 @@ public class PostController extends EmailTwitterController {
         try {
             service.save(media);
 
-            MediaUtil.recordUpload(service, request, media, user);
+            MediaUtil.recordUpload(service, request, media, user, internalIpStart, internalIpEnd);
 
             url = ServletUtil.getContextURL(request) + "/view?m=" + media.getAccessCode();
             MediaUtil.createTmpFile(getUploadLocation(), media.getAccessCode());

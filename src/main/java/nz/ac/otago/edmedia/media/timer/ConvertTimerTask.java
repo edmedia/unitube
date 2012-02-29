@@ -11,6 +11,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.dao.DataAccessException;
 
 import java.io.File;
@@ -26,7 +29,7 @@ import java.util.concurrent.Executors;
  *         Date: 29/02/2008
  *         Time: 11:38:37
  */
-public class ConvertTimerTask extends TimerTask {
+public class ConvertTimerTask extends TimerTask implements ApplicationContextAware {
 
     private final static Logger log = LoggerFactory.getLogger(ConvertTimerTask.class);
 
@@ -45,6 +48,20 @@ public class ConvertTimerTask extends TimerTask {
     private int maxThreadNumber;
 
     private int maxProcessTimes;
+
+    private String mailHost;
+
+    private String fromEmail;
+
+    private String smtpUsername;
+
+    private String smtpPassword;
+
+    private int smtpPort;
+
+    private String appURL;
+
+    private ApplicationContext ctx;
 
     public void setService(BaseService service) {
         this.service = service;
@@ -70,6 +87,35 @@ public class ConvertTimerTask extends TimerTask {
             this.maxProcessTimes = maxProcessTimes;
         else
             this.maxProcessTimes = DEFATUL_MAXIMUM_PROCESS_TIMES;
+    }
+
+    public void setMailHost(String mailHost) {
+        this.mailHost = mailHost;
+    }
+
+    public void setFromEmail(String fromEmail) {
+        this.fromEmail = fromEmail;
+    }
+
+    public void setSmtpUsername(String smtpUsername) {
+        this.smtpUsername = smtpUsername;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
+    }
+
+    public void setAppURL(String appURL) {
+        this.appURL = appURL;
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException {
+        ctx = applicationContext;
     }
 
     private ExecutorService executor;
@@ -166,7 +212,7 @@ public class ConvertTimerTask extends TimerTask {
                     service.update(media);
                     // put it into running queue
                     log.info("Put media {} into running queue", media.getId());
-                    executor.execute(new MediaTask(service, uploadLocation, mediaConverter, media));
+                    executor.execute(new MediaTask(service, uploadLocation, mediaConverter, media, mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort, appURL, ctx));
                 } catch (DataAccessException e) {
                     log.error("Can not set status to " + media.getStatus(), e);
                 }

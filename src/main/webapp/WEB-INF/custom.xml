@@ -97,6 +97,8 @@
         <property name="smtpPassword" value="${email.smtp.password}"/>
         <property name="smtpPort" value="${email.smtp.port}"/>
         <property name="formView" value="main"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
         <property name="successView" value="uploadSuccess"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="commandName" value="media"/>
@@ -118,6 +120,8 @@
         <property name="smtpUsername" value="${email.smtp.username}"/>
         <property name="smtpPassword" value="${email.smtp.password}"/>
         <property name="smtpPort" value="${email.smtp.port}"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="commandName" value="media"/>
         <property name="service" ref="myBaseService"/>
@@ -127,6 +131,8 @@
     <bean id="myMediaEdit" class="nz.ac.otago.edmedia.media.controller.MyMediaEditController">
         <property name="formView" value="myMediaEdit"/>
         <property name="successView" value="redirect:/myTube/list.do"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="commandName" value="media"/>
         <property name="validator" ref="mediaValidator"/>
@@ -143,6 +149,8 @@
 
     <bean id="myMediaDelete" class="nz.ac.otago.edmedia.media.controller.MyMediaDeleteController">
         <property name="viewName" value="redirect:/myTube/list.do"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
         <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
@@ -234,6 +242,8 @@
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="normalView" value="redirect:/view"/>
         <property name="loginView" value="redirect:/myTube/view.do"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
@@ -488,6 +498,12 @@
 
     <!-- scheduled task here: convert video when necessary -->
     <bean id="convertTimerTask" class="nz.ac.otago.edmedia.media.timer.ConvertTimerTask">
+        <property name="mailHost" value="${email.smtp.server}"/>
+        <property name="fromEmail" value="${email.from.address}"/>
+        <property name="smtpUsername" value="${email.smtp.username}"/>
+        <property name="smtpPassword" value="${email.smtp.password}"/>
+        <property name="smtpPort" value="${email.smtp.port}"/>
+        <property name="appURL" value="${app.url}"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
         <property name="mediaConverter" ref="mediaConverter"/>

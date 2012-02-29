@@ -30,6 +30,10 @@ public class ViewController extends BaseOperationController {
 
     private String loginView;
 
+    private String internalIpStart;
+
+    private String internalIpEnd;
+
     public String getNormalView() {
         return normalView;
     }
@@ -44,6 +48,14 @@ public class ViewController extends BaseOperationController {
 
     public void setLoginView(String loginView) {
         this.loginView = loginView;
+    }
+
+    public void setInternalIpStart(String internalIpStart) {
+        this.internalIpStart = internalIpStart;
+    }
+
+    public void setInternalIpEnd(String internalIpEnd) {
+        this.internalIpEnd = internalIpEnd;
     }
 
     @SuppressWarnings("unchecked")
@@ -107,7 +119,7 @@ public class ViewController extends BaseOperationController {
                     media.setAccessTimes(media.getAccessTimes() + 1);
                     service.update(media);
                 }
-                MediaUtil.recordView(service, request, media, user);
+                MediaUtil.recordView(service, request, media, user, internalIpStart, internalIpEnd);
 
                 // deal with comments
 

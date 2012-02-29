@@ -26,6 +26,18 @@ import java.util.Map;
  */
 public class MyMediaEditController extends BaseFormController {
 
+    private String internalIpStart;
+
+    private String internalIpEnd;
+
+    public void setInternalIpStart(String internalIpStart) {
+        this.internalIpStart = internalIpStart;
+    }
+
+    public void setInternalIpEnd(String internalIpEnd) {
+        this.internalIpEnd = internalIpEnd;
+    }
+
     @Override
     protected ModelAndView onSubmit(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -46,7 +58,7 @@ public class MyMediaEditController extends BaseFormController {
             media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_WAITING);
             doConvert = true;
             // record re-upload
-            MediaUtil.recordUpdate(service, request, media, media.getUser());
+            MediaUtil.recordUpdate(service, request, media, media.getUser(), internalIpStart, internalIpEnd);
         }
         if (doConvert) {
             if (MediaUtil.createTmpFile(getUploadLocation(), media.getAccessCode())) {

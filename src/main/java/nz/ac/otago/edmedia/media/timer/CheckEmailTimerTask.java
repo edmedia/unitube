@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.dao.DataAccessException;
 
 import javax.mail.*;
@@ -82,10 +83,6 @@ public class CheckEmailTimerTask
     private String appURL;
 
     private ApplicationContext ctx;
-
-    public BaseService getService() {
-        return service;
-    }
 
     public void setService(BaseService service) {
         this.service = service;
@@ -490,10 +487,10 @@ public class CheckEmailTimerTask
                 url.append("/");
             url.append("view?m=");
             url.append(media.getAccessCode());
-            //MessageSourceAccessor msa = new MessageSourceAccessor(ctx);
-            String subject = user.getFirstName() + " just uploaded " + filename + " to UniTube via Email";
+            MessageSourceAccessor msa = new MessageSourceAccessor(ctx);
+            String subject = msa.getMessage("upload.email.unitube.subject.via.email", new String[]{filename, user.getFirstName()});
             if (viaMMS)
-                subject = user.getFirstName() + " just uploaded " + filename + " to UniTube via Mobile";
+                subject = msa.getMessage("upload.email.unitube.subject.via.mms", new String[]{filename, user.getFirstName()});
             // have a tweet on UniTube Twitter if media is public
             if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC) {
                 MediaUtil.updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret,
@@ -501,16 +498,15 @@ public class CheckEmailTimerTask
                         subject + " " + url);
             }
             // send an email to user
-            String youSubject = "You just uploaded " + filename + " to UniTube via Email";
+            String youSubject = msa.getMessage("upload.email.subject.via.email", new String[]{filename});
             if (viaMMS)
-                youSubject = "You just uploaded " + filename + " to UniTube via Mobile";
+                youSubject = msa.getMessage("upload.email.subject.via.email", new String[]{filename});
 
-            String youBody = "Here is the link to your media file: " + url;
+            String youBody = msa.getMessage("upload.email.body", new String[]{url.toString()});
             OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
                     user.getEmail(), youSubject, youBody);
             // send an email to unitube email address
-            String body = "Here is the link to the media file: " + url;
-            subject = user.getFirstName() + " just uploaded " + filename + " to UniTube";
+            String body = msa.getMessage("upload.email.unitube.body", new String[]{url.toString()});
             OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
                     fromEmail, subject, body);
             // delete this email
