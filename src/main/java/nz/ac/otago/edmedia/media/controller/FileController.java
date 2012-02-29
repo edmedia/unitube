@@ -1,5 +1,6 @@
 package nz.ac.otago.edmedia.media.controller;
 
+import nz.ac.otago.edmedia.auth.util.AuthUtil;
 import nz.ac.otago.edmedia.media.bean.Annotation;
 import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.bean.User;
@@ -75,7 +76,8 @@ public class FileController extends BaseOperationController {
                                 username = user.getUserName();
                             if (file != null)
                                 filename = file.getAbsolutePath();
-                            logger.warn("User [" + username + "] tried to access [" + filename + "] [" + accessCode + "] from [" + request.getRemoteAddr() + "] without login or authorisation.");
+                            String ipAddress = AuthUtil.getIpAddress(request);
+                            logger.warn("User [" + username + "] tried to access [" + filename + "] [" + accessCode + "] from [" + ipAddress + "] without login or authorisation.");
                         }
                         // not login yet, or don't grant access
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -106,7 +108,8 @@ public class FileController extends BaseOperationController {
                 String filename = "Unknown";
                 if (file != null)
                     filename = file.getAbsolutePath();
-                logger.warn("File [" + filename + "] [ " + accessCode + "] accessed from [" + request.getRemoteAddr() + "] does not exist.");
+                String ipAddress = AuthUtil.getIpAddress(request);
+                logger.warn("File [" + filename + "] [ " + accessCode + "] accessed from [" + ipAddress + "] does not exist.");
             }
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
@@ -335,7 +338,8 @@ public class FileController extends BaseOperationController {
                     username = user.getUserName();
                 if (file != null)
                     filename = file.getAbsolutePath();
-                logger.info("User [" + username + "] accessed [" + filename + "] [" + accessCode + "] [" + size + "/" + file.length() + "] from [" + request.getRemoteAddr() + "].");
+                String ipAddress = AuthUtil.getIpAddress(request);
+                logger.info("User [" + username + "] accessed [" + filename + "] [" + accessCode + "] [" + size + "/" + file.length() + "] from [" + ipAddress + "].");
             }
         } finally {
             // Gently close streams.
