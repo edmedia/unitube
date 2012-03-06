@@ -50,3 +50,12 @@
     <script type="text/javascript" src="${baseUrl}/javascript/jquery.galleryview-3.0.min.js"></script>
     <link type="text/css" rel="stylesheet" href="${baseUrl}/galleryview/jquery.galleryview-3.0.css"/>
 </#if>
+<#if this_url?? && this_url?contains('stats')>
+    <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="${baseUrl}/jqplot/excanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="${baseUrl}/jqplot/jquery.jqplot.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="${baseUrl}/jqplot/jquery.jqplot.min.css"/>
+    <script type="text/javascript" src="${baseUrl}/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="${baseUrl}/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="${baseUrl}/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+    <script type="text/javascript" src="${baseUrl}/jqplot/plugins/jqplot.pointLabels.min.js"></script>
+</#if>

@@ -943,7 +943,7 @@ public class MediaUtil {
     }
 
     public static void main(String args[]) {
-        log.error(" " + fromExternal("139.80.33.44", "139.80.0.0", "139.80.127.255"));
+        log.error(" " + fromExternal("139.80.59.251", "139.80.0.0", "139.80.127.255"));
     }
 
 }

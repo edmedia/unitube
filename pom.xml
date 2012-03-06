@@ -16,6 +16,16 @@
     </description>
     <url>http://hedc.otago.ac.nz</url>
 
+    <properties>
+        <spring.version>2.5.6.SEC03</spring.version>
+        <hibernate.version>3.2.7.ga</hibernate.version>
+        <jetty.version>6.1.26</jetty.version>
+        <slf4j.version>1.6.4</slf4j.version>
+        <openoffice.version>3.2.1</openoffice.version>
+        <edmedia-spring.version>0.9</edmedia-spring.version>
+    </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -129,7 +139,7 @@
         <dependency>
             <groupId>edmedia</groupId>
             <artifactId>edmedia-spring</artifactId>
-            <version>0.8</version>
+            <version>${edmedia-spring.version}</version>
         </dependency>
 
         <dependency>
@@ -288,14 +298,6 @@
         </plugins>
         <finalName>unitube</finalName>
     </build>
-
-    <properties>
-        <spring.version>2.5.6.SEC03</spring.version>
-        <hibernate.version>3.2.7.ga</hibernate.version>
-        <jetty.version>6.1.26</jetty.version>
-        <slf4j.version>1.6.4</slf4j.version>
-        <openoffice.version>3.2.1</openoffice.version>
-    </properties>
 
     <repositories>
         <repository>

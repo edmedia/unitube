@@ -23,7 +23,7 @@ import java.io.File;
  *         Date: 16/07/2008
  *         Time: 09:52:48
  */
-class MediaTask implements Runnable {
+class  MediaTask implements Runnable {
 
     private final static Logger log = LoggerFactory.getLogger(MediaTask.class);
 

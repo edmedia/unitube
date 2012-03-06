@@ -1108,3 +1108,29 @@ div.description {
     margin-bottom: 10px;
     border-bottom: 1px #bbb dotted;
 }
+
+
+/** styles on stats page */
+div#pie {
+    margin-left: 10px;
+    height: 50%;
+    width: 50%;
+    float: left;
+}
+
+div#pie_num {
+    float: right;
+    width: 30%;
+}
+td.num {
+    text-align: right;
+}
+
+td.percent {
+    text-align: right;
+}
+
+div#bar {
+    clear:both;
+    margin-left: 10px;
+}
