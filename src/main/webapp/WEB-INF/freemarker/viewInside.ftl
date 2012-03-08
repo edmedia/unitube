@@ -181,7 +181,9 @@
         <span class="title">Download:</span>
     <#-- proviod original file link for upload only, swf, unrecognized, images-->
         <#if obj.uploadOnly || obj.realFilename!?ends_with(".swf") || (obj.status == 9) || (obj.mediaType == 5) || obj.realFilename!?ends_with(".png")>
+        <#if originalFileLink?has_content>
             <a href="${originalFileLink?html}">original file</a>
+        </#if>
             <#elseif mediaFileLink?has_content>
                 <a href="${mediaFileLink?html}">media file</a>
         </#if>

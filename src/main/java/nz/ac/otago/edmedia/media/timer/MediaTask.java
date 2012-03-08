@@ -23,7 +23,7 @@ import java.io.File;
  *         Date: 16/07/2008
  *         Time: 09:52:48
  */
-class  MediaTask implements Runnable {
+class MediaTask implements Runnable {
 
     private final static Logger log = LoggerFactory.getLogger(MediaTask.class);
 
@@ -127,6 +127,13 @@ class  MediaTask implements Runnable {
                         media.setThumbnail(mediaInfo.getThumbnail());
                     media.setWidth(mediaInfo.getWidth());
                     media.setHeight(mediaInfo.getHeight());
+                    // for audio and video file, delete original file after conversion
+                    if ((media.getMediaType() == MediaUtil.MEDIA_TYPE_AUDIO) || (media.getMediaType() == MediaUtil.MEDIA_TYPE_VIDEO)) {
+                        // if delete successfully, set uploadFileUserName to null
+                        if (MediaUtil.removeUploadedMediaFiles(uploadLocation, media)) {
+                            media.setUploadFileUserName(null);
+                        }
+                    }
                     try {
                         media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_FINISHED);
                         // update database

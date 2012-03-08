@@ -290,6 +290,32 @@ public class MediaUtil {
     }
 
     /**
+     * Removes uploaded file for given media object. For audio and video files, we don't need to keep original file.
+     *
+     * @param uploadLocation uploadLocation
+     * @param media          media
+     */
+    public static boolean removeUploadedMediaFiles(UploadLocation uploadLocation, Media media) {
+        boolean result = false;
+        // get media directory
+        File mediaDir = MediaUtil.getMediaDirectory(uploadLocation, media);
+        if (mediaDir.exists()) {
+            // make sure uploadFileUserName and realFilename are not empty
+            if (StringUtils.isNotBlank(media.getUploadFileUserName()) && StringUtils.isNotBlank(media.getRealFilename())) {
+                // only delete original file if realFilename is not the same as uploadFileUserName
+                if (!media.getRealFilename().equals(media.getUploadFileUserName())) {
+                    File file = new File(mediaDir, media.getUploadFileUserName());
+                    log.info("Delete original file \"{}\" for media (accessCode = {}, id = {})", new Object[]{file, media.getAccessCode(), media.getId()});
+                    result = FileUtils.deleteQuietly(file);
+                    if (!result)
+                        log.warn("Can't delete file \"{}\"", file);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Removes files for given annotation object.
      *
      * @param uploadLocation uploadLocation

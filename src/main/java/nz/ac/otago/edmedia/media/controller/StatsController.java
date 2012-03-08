@@ -3,9 +3,11 @@ package nz.ac.otago.edmedia.media.controller;
 import nz.ac.otago.edmedia.media.bean.AccessRecord;
 import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
+import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.ServletUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +25,12 @@ import java.util.*;
  */
 public class StatsController extends BaseOperationController {
 
+    private UploadLocation uploadLocation;
+
+    public void setUploadLocation(UploadLocation uploadLocation) {
+        this.uploadLocation = uploadLocation;
+    }
+
     @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
@@ -31,55 +39,74 @@ public class StatsController extends BaseOperationController {
             throws Exception {
         @SuppressWarnings("unchecked")
         Map<String, Object> model = (Map<String, Object>) errors.getModel();
-
-        //**
-        int[] mediaTypes = {
-                MediaUtil.MEDIA_TYPE_VIDEO,
-                MediaUtil.MEDIA_TYPE_AUDIO,
-                MediaUtil.MEDIA_TYPE_IMAGE,
-                MediaUtil.MEDIA_TYPE_OTHER_MEDIA,
-                MediaUtil.MEDIA_TYPE_UNKNOWN
-        };
-
-        String[] mediaTypeNames = {
-                "Video",
-                "Audio",
-                "Image",
-                "Other",
-                "Unknown"
-        };
-
-        List<Map> list = new ArrayList<Map>();
-        int total = 0;
-        for (int i = 0; i < mediaTypes.length; i++) {
+        String cleanUp = request.getParameter("cleanUp");
+        if (StringUtils.isNotBlank(cleanUp)) {
+            // clean up database
+            // remove all original video and audio files
+            List<Integer> mediaTypes = new ArrayList<Integer>();
+            mediaTypes.add(MediaUtil.MEDIA_TYPE_VIDEO);
+            mediaTypes.add(MediaUtil.MEDIA_TYPE_AUDIO);
             SearchCriteria criteria = new SearchCriteria.Builder()
-                    .eq("mediaType", mediaTypes[i])
+                    .in("mediaType", mediaTypes)
+                    .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
                     .build();
+            List<Media> deleted = new ArrayList<Media>();
             @SuppressWarnings("unchecked")
-            List<Media> ll = (List<Media>) service.search(Media.class, criteria);
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("name", mediaTypeNames[i]);
-            map.put("num", ll.size());
-            total += ll.size();
-            list.add(map);
-        }
-        model.put("list", list);
-        model.put("total", total);
-        //*/
-        // this feature is only available since 2012
-        int startYear = 2012;
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int y = ServletUtil.getParameter(request, "y", 0);
-        List<int[]> stats = null;
-        if ((y >= startYear) && (y <= currentYear)) {
-            // process this year
-            stats = processYear(y);
+            List<Media> media = (List<Media>) service.search(Media.class, criteria);
+            for (Media m : media)
+                // if delete successfully, set uploadFileUserName to null
+                if (MediaUtil.removeUploadedMediaFiles(uploadLocation, m)) {
+                    deleted.add(m);
+                    m.setUploadFileUserName(null);
+                    service.update(m);
+                }
+            model.put("deleted", deleted);
         } else {
-            // process current year
-            stats = processYear(currentYear);
+            int[] mediaTypes = {
+                    MediaUtil.MEDIA_TYPE_VIDEO,
+                    MediaUtil.MEDIA_TYPE_AUDIO,
+                    MediaUtil.MEDIA_TYPE_IMAGE,
+                    MediaUtil.MEDIA_TYPE_OTHER_MEDIA,
+                    MediaUtil.MEDIA_TYPE_UNKNOWN
+            };
+            String[] mediaTypeNames = {
+                    "Video",
+                    "Audio",
+                    "Image",
+                    "Other",
+                    "Unknown"
+            };
+            List<Map> list = new ArrayList<Map>();
+            int total = 0;
+            for (int i = 0; i < mediaTypes.length; i++) {
+                SearchCriteria criteria = new SearchCriteria.Builder()
+                        .eq("mediaType", mediaTypes[i])
+                        .build();
+                @SuppressWarnings("unchecked")
+                List<Media> ll = (List<Media>) service.search(Media.class, criteria);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("name", mediaTypeNames[i]);
+                map.put("num", ll.size());
+                total += ll.size();
+                list.add(map);
+            }
+            model.put("list", list);
+            model.put("total", total);
+            // this feature is only available since 2012
+            int startYear = 2012;
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            int y = ServletUtil.getParameter(request, "y", 0);
+            List<int[]> stats = null;
+            if ((y >= startYear) && (y <= currentYear)) {
+                // process this year
+                stats = processYear(y);
+            } else {
+                // process current year
+                stats = processYear(currentYear);
+            }
+            if (stats != null)
+                model.put("stats", stats);
         }
-        if (stats != null)
-            model.put("stats", stats);
         return getModelAndView(model, request);
     }
 

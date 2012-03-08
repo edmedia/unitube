@@ -1,5 +1,14 @@
 <h2>Statistics Page</h2>
 
+<#if deleted?has_content>
+<h3>Deleted original files</h3>
+<ul>
+    <#list deleted as d>
+        <li><a href="${baseUrl}/view?m=${d.accessCode?html}"> ${d.title?html} </a></li>
+    </#list>
+</ul>
+</#if>
+
 <div id="pie">
 
 </div>
@@ -27,7 +36,7 @@
         <tr>
             <th>Total</th>
             <td class="num">${total}</td>
-            <td></td>
+            <td>&nbsp; </td>
         </tr>
         </tbody>
     </table>
@@ -38,14 +47,40 @@
 
 </div>
 
+<#if stats?has_content>
+<table>
+    <thead>
+    <tr>
+        <th>Month</th>
+        <th>Upload</th>
+        <th>Update</th>
+        <th>View</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+        <#list stats as s>
+        <tr>
+            <td>${s_index+1}</td>
+            <#list s as ss>
+                <td>${ss}</td>
+            </#list>
+        </tr>
+        </#list>
+    </tbody>
+</table>
+</#if>
+
 <script type="text/javascript">
     <!--
     $(function() {
+
+    <#if list?has_content>
         // prepare pie data
         var pie_data = [
-        <#list list as l><#if l.num &gt; 0>
-            ['${l.name?html}', ${l.num}]<#if l_has_next>,</#if>
-        </#if></#list>
+            <#list list as l><#if l.num &gt; 0>
+                ['${l.name?html}', ${l.num}]<#if l_has_next>,</#if>
+            </#if></#list>
         ];
         // display pie
         var plot1 = $.jqplot('pie', [pie_data], {
@@ -58,7 +93,9 @@
             },
             legend: { show: true, location: 'ne' }
         });
+    </#if>
 
+    <#if stats?has_content>
         // prepare bar data
         var allMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var ticks = new Array();
@@ -71,14 +108,12 @@
         var sss = new Array(series.length);
         for (var i = 0; i < series.length; i++)
             sss[i] = new Array(${stats?size});
-    <#list stats as s>
-        <#list s as ss>
-            sss[${ss_index}][${s_index}] = ${ss};
-            ticks[${s_index}] = allMonth[${s_index}];
+        <#list stats as s>
+            <#list s as ss>
+                sss[${ss_index}][${s_index}] = ${ss};
+                ticks[${s_index}] = allMonth[${s_index}];
+            </#list>
         </#list>
-    </#list>
-
-        log("sss = " + sss);
         // display bar
         var bar = $.jqplot('bar', sss, {
             // The "seriesDefaults" option is an options object that will
@@ -114,31 +149,8 @@
                 }
             }
         });
+    </#if>
 
     });
     //-->
 </script>
-
-<#if stats?has_content>
-<table>
-    <thead>
-    <tr>
-        <th>Month</th>
-        <th>Upload</th>
-        <th>Update</th>
-        <th>View</th>
-        <th>Delete</th>
-    </tr>
-    </thead>
-    <tbody>
-        <#list stats as s>
-        <tr>
-            <td>${s_index+1}</td>
-            <#list s as ss>
-                <td>${ss}</td>
-            </#list>
-        </tr>
-        </#list>
-    </tbody>
-</table>
-</#if>

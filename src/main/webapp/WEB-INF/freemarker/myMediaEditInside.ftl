@@ -124,7 +124,7 @@
 
         <!-- uploadFile: Upload File -->
         <tr>
-            <th>Upload File</th>
+            <th>Replace File</th>
             <td>
                 <@spring.bind "media.uploadFile" />
                 <input type="file" name="${spring.status.expression}"/>
@@ -132,7 +132,7 @@
             <td>
                 <@displayError/>
                 <@spring.bind "media.uploadFileUserName" />
-                <#if spring.status.value??>
+                <#if spring.status.value?has_content>
                 <#assign uploadFileUrl = mediaFileBaseUrl + "&name=" + spring.status.value />
                 <a href="${uploadFileUrl?html}"><@getTitle spring.status.value! /></a>
                 </#if>
@@ -157,6 +157,9 @@
         </#if>
         </#if>
 
+        <#-- convert again is only possible if original file is still there -->
+                <@spring.bind "media.uploadFileUserName" />
+                <#if spring.status.value?has_content>
         <tr>
             <th>Convert again?</th>
             <td>
@@ -168,6 +171,7 @@
                 If the conversion goes wrong for some reason, you can do it again. ONLY USE IT WHEN NECESSARY.
             </td>
         </tr>
+                </#if>
 
         <@spring.bind "media.mediaType" />
         <#-- only display this when it's an image file -->
