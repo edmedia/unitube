@@ -31,6 +31,29 @@ public class StatsController extends BaseOperationController {
         this.uploadLocation = uploadLocation;
     }
 
+    private int[] mediaTypes = {
+            MediaUtil.MEDIA_TYPE_VIDEO,
+            MediaUtil.MEDIA_TYPE_AUDIO,
+            MediaUtil.MEDIA_TYPE_IMAGE,
+            MediaUtil.MEDIA_TYPE_OTHER_MEDIA,
+            MediaUtil.MEDIA_TYPE_UNKNOWN
+    };
+
+    private String[] mediaTypeNames = {
+            "Video",
+            "Audio",
+            "Image",
+            "Other",
+            "Unknown"
+    };
+
+    private int[] actions = {
+            MediaUtil.MEDIA_ACTION_UPLOAD,
+            MediaUtil.MEDIA_ACTION_UPDATE,
+            MediaUtil.MEDIA_ACTION_DELETE,
+            MediaUtil.MEDIA_ACTION_VIEW
+    };
+
     @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
@@ -39,6 +62,7 @@ public class StatsController extends BaseOperationController {
             throws Exception {
         @SuppressWarnings("unchecked")
         Map<String, Object> model = (Map<String, Object>) errors.getModel();
+        model.put("title", "Statistics");
         String cleanUp = request.getParameter("cleanUp");
         if (StringUtils.isNotBlank(cleanUp)) {
             // clean up database
@@ -50,32 +74,18 @@ public class StatsController extends BaseOperationController {
                     .in("mediaType", mediaTypes)
                     .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
                     .build();
-            List<Media> deleted = new ArrayList<Media>();
+            List<Media> deleteList = new ArrayList<Media>();
             @SuppressWarnings("unchecked")
             List<Media> media = (List<Media>) service.search(Media.class, criteria);
             for (Media m : media)
                 // if delete successfully, set uploadFileUserName to null
                 if (MediaUtil.removeUploadedMediaFiles(uploadLocation, m)) {
-                    deleted.add(m);
+                    deleteList.add(m);
                     m.setUploadFileUserName(null);
                     service.update(m);
                 }
-            model.put("deleted", deleted);
+            model.put("deleteList", deleteList);
         } else {
-            int[] mediaTypes = {
-                    MediaUtil.MEDIA_TYPE_VIDEO,
-                    MediaUtil.MEDIA_TYPE_AUDIO,
-                    MediaUtil.MEDIA_TYPE_IMAGE,
-                    MediaUtil.MEDIA_TYPE_OTHER_MEDIA,
-                    MediaUtil.MEDIA_TYPE_UNKNOWN
-            };
-            String[] mediaTypeNames = {
-                    "Video",
-                    "Audio",
-                    "Image",
-                    "Other",
-                    "Unknown"
-            };
             List<Map> list = new ArrayList<Map>();
             int total = 0;
             for (int i = 0; i < mediaTypes.length; i++) {
@@ -96,32 +106,36 @@ public class StatsController extends BaseOperationController {
             int startYear = 2012;
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             int y = ServletUtil.getParameter(request, "y", 0);
+            int m = ServletUtil.getParameter(request, "m", 0);
             List<int[]> stats = null;
-            if ((y >= startYear) && (y <= currentYear)) {
-                // process this year
-                stats = processYear(y);
-            } else {
-                // process current year
-                stats = processYear(currentYear);
-            }
+            if ((y < startYear) || (y > currentYear))
+                y = currentYear;
+            model.put("y", y);
+            if (m > 0) {
+                model.put("m", m);
+                // process year and month
+                stats = process(y, m);
+            } else
+                // process year only
+                stats = process(y);
             if (stats != null)
                 model.put("stats", stats);
         }
         return getModelAndView(model, request);
     }
 
-
-    private List<int[]> processYear(int year) {
+    /**
+     * Process with given year
+     *
+     * @param year year
+     * @return stats for given year
+     */
+    private List<int[]> process(int year) {
         List<int[]> stats = new ArrayList<int[]>();
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
-        int[] actions = {
-                MediaUtil.MEDIA_ACTION_UPLOAD,
-                MediaUtil.MEDIA_ACTION_UPDATE,
-                MediaUtil.MEDIA_ACTION_VIEW,
-                MediaUtil.MEDIA_ACTION_DELETE
-        };
         int[] total = new int[actions.length];
+        // month is 0 based
         for (int i = 0; i < 12; i++) {
             calendar.set(year, i, 1, 0, 0, 0);
             Date firstDayOfThisMonth = calendar.getTime();
@@ -141,7 +155,7 @@ public class StatsController extends BaseOperationController {
                 List<AccessRecord> list = (List<AccessRecord>) service.search(AccessRecord.class, criteria);
                 results[a] = list.size();
                 total[a] += results[a];
-                logger.info("month: " + (i + 1) + " actions: " + results[a]);
+                logger.debug("month: " + (i + 1) + " action: " + actions[a] + " num: " + results[a]);
             }
             stats.add(results);
         }
@@ -149,4 +163,44 @@ public class StatsController extends BaseOperationController {
         return stats;
     }
 
+    /**
+     * process with given year and month, month is 0 based
+     *
+     * @param year  year
+     * @param month month
+     * @return stats for given year and month
+     */
+    private List<int[]> process(int year, int month) {
+        List<int[]> stats = new ArrayList<int[]>();
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        int[] total = new int[actions.length];
+        // day is 1 based
+        for (int i = 1; i <= 31; i++) {
+            calendar.set(year, month, i, 0, 0, 0);
+            Date startOfTheDay = calendar.getTime();
+            Date startOfNextDay = DateUtils.addDays(startOfTheDay, 1);
+            startOfNextDay = DateUtils.addMilliseconds(startOfNextDay, -1);
+            logger.debug("start of the day: " + startOfTheDay + " start of next day: " + startOfNextDay);
+            // if start of the day is after now, exit from the loop
+            if (startOfTheDay.after(now) || calendar.get(Calendar.MONTH) > month)
+                break;
+            int[] results = new int[actions.length];
+            for (int a = 0; a < actions.length; a++) {
+                // how many actions each month
+                SearchCriteria criteria = new SearchCriteria.Builder()
+                        .eq("action", actions[a])
+                        .between("actionTime", startOfTheDay, startOfNextDay)
+                        .build();
+                @SuppressWarnings("unchecked")
+                List<AccessRecord> list = (List<AccessRecord>) service.search(AccessRecord.class, criteria);
+                results[a] = list.size();
+                total[a] += results[a];
+                logger.debug("day: " + (i + 1) + " action: " + actions[a] + " num: " + results[a]);
+            }
+            stats.add(results);
+        }
+        //stats.add(total);
+        return stats;
+    }
 }
