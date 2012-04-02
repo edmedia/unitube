@@ -10,30 +10,39 @@
             <img src="${baseUrl}/images/lock.png" alt="private"/>
             Private - Only the people listed below can access
         </li>
-        <#if owner?has_content>
+    <#if owner?has_content>
         <li>
             <span title="${owner.email!}" class="left">${owner.firstName} ${owner.lastName} (you)</span>
             <span class="splitter"> -  </span>
             <span class="right">Is owner</span>
         </li>
-        </#if>
-        <#if accessRules?has_content>
+    </#if>
+    <#if accessRules?has_content>
         <#list accessRules as accessRule>
-        <#if accessRule.user?has_content>
-        <li id="ar_${accessRule.id?c}">
+            <#if accessRule.user?has_content>
+                <li id="ar_${accessRule.id?c}">
             <span title="${accessRule.user.email}"
                   class="left">${accessRule.user.firstName} ${accessRule.user.lastName}</span>
-            <span class="splitter"> -  </span>
-            <span class="right"><a href="#${accessRule.id?c}" class="delete" title="Remove this user">X</a></span>
-        </li>
-        </#if>
+                    <span class="splitter"> -  </span>
+                    <span class="right"><a href="#${accessRule.id?c}" class="delete"
+                                           title="Remove this user">X</a></span>
+                </li>
+            <#else>
+                <li id="ar_${accessRule.id?c}">
+            <span class="left">${accessRule.userInput?html}</span>
+                    <span class="splitter"> -  </span>
+                    <span class="right"><a href="#${accessRule.id?c}" class="delete"
+                                           title="Remove this user">X</a></span>
+                </li>
+            </#if>
         </#list>
-        </#if>
+    </#if>
     </ul>
 
     <div>
         <form action="${baseUrl}/myTube/accessRuleAdd.do" name="addAccessRule">
             <input id="ar_mediaID" type="hidden" value=""/>
+
             <p>Add people:</p>
             Username:
             <input id="userInput" type="text" size="35"
@@ -67,7 +76,7 @@
             deleteAccessRule($(this));
         });
 
-        // autocomplete username
+        // auto-complete username
         $('#userInput').autocomplete({
             minLength: 2,
             source: $('#userInput').attr("rel"),
@@ -96,27 +105,32 @@
                 if ($("action", xml).attr("success") == "true") {
                     var detail = $("action", xml).attr("detail");
                     log("detail = " + detail);
-                    var obj = $.parseJSON(detail);
-                    var li = $('<li/>').attr("id", "ar_" + obj.id)
-                            .appendTo($('#ar_list'));
-                    var left = $('<span/>')
-                            .attr('title', obj.email)
-                            .addClass('left')
-                            .text(obj.firstName + " " + obj.lastName)
-                            .appendTo(li);
-                    var splitter = $('<span/>')
-                            .addClass('splitter')
-                            .text(' - ')
-                            .appendTo(li);
-                    var right = $('<span/>')
-                            .addClass('right')
-                            .appendTo(li);
-                    var aa = $('<a/>')
-                            .attr('href', '#' + obj.id)
-                            .attr('title', 'Remove this user')
-                            .addClass('delete')
-                            .text('X')
-                            .appendTo(right);
+                    if (detail.subsring(0, 1) == "{") {
+                        var obj = $.parseJSON(detail);
+                        var li = $('<li/>').attr("id", "ar_" + obj.id)
+                                .appendTo($('#ar_list'));
+                        var left = $('<span/>')
+                                .attr('title', obj.email)
+                                .addClass('left')
+                                .text(obj.firstName + " " + obj.lastName)
+                                .appendTo(li);
+                        var splitter = $('<span/>')
+                                .addClass('splitter')
+                                .text(' - ')
+                                .appendTo(li);
+                        var right = $('<span/>')
+                                .addClass('right')
+                                .appendTo(li);
+                        var aa = $('<a/>')
+                                .attr('href', '#' + obj.id)
+                                .attr('title', 'Remove this user')
+                                .addClass('delete')
+                                .text('X')
+                                .appendTo(right);
+                    } else {
+                        info.text(detail);
+                        info.dialog("open");
+                    }
                     $('a.delete').click(function() {
                         deleteAccessRule($(this));
                     });
