@@ -417,10 +417,15 @@
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
 
+     <bean id="authInterceptor" class="nz.ac.otago.edmedia.media.interceptor.AuthInterceptor">
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
     <bean id="handlerMappingCustom" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="interceptors">
             <list>
                 <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="authInterceptor"/>
             </list>
         </property>
         <property name="mappings">

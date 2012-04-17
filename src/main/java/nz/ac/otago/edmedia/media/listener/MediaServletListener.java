@@ -1,7 +1,6 @@
 package nz.ac.otago.edmedia.media.listener;
 
 import nz.ac.otago.edmedia.auth.bean.AuthUser;
-import nz.ac.otago.edmedia.auth.util.AuthUtil;
 import nz.ac.otago.edmedia.listener.BaseServletListener;
 import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
@@ -40,7 +39,7 @@ public class MediaServletListener extends BaseServletListener {
     @SuppressWarnings("unchecked")
     @Override
     protected void userLogin(HttpSession session) {
-        AuthUser authUser = AuthUtil.getAuthUser(session);
+        AuthUser authUser = MediaUtil.getAuthUser(session);
         if (authUser != null) {
             // for login user, timeout is 30 minutes
             session.setMaxInactiveInterval(1800);
@@ -55,6 +54,7 @@ public class MediaServletListener extends BaseServletListener {
                 if (user.getFirstLoginTime() == null)
                     user.setFirstLoginTime(now);
                 user.setLoginTimes(user.getLoginTimes() + 1);
+                user = MediaUtil.updateUserFromAuthUser(authUser, user);
                 service.update(user);
                 // set loginTime to session
                 session.setAttribute(LOGIN_TIME_KEY, now);
@@ -83,7 +83,7 @@ public class MediaServletListener extends BaseServletListener {
      */
     @Override
     protected void userLogout(HttpSession session) {
-        AuthUser authUser = AuthUtil.getAuthUser(session);
+        AuthUser authUser = MediaUtil.getAuthUser(session);
         if (authUser != null) {
             ServletContext ctx = session.getServletContext();
             WebApplicationContext webCtx = BeanUtil.getWebApplicationContext(ctx);
@@ -128,5 +128,6 @@ public class MediaServletListener extends BaseServletListener {
             }
         }
     }
+
 
 }

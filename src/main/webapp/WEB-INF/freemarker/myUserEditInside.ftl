@@ -1,3 +1,5 @@
+<#include "myOptions.ftl"/>
+
 <@spring.bind "user.userName" />
 <h2>Profile (${spring.status.value})</h2>
 

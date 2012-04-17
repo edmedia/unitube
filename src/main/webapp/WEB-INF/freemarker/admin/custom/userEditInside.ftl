@@ -1,3 +1,5 @@
+<#include "/myOptions.ftl"/>
+
 <@spring.bind "user.id" />
 
 <h2><#if spring.status.value??>Edit<#else>Create a new</#if> User</h2>

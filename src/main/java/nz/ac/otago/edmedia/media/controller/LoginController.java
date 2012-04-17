@@ -48,7 +48,7 @@ public class LoginController extends BaseFormController {
                     logger.warn("Invalid token: username = " + user.getUserName() + " from " + request.getRemoteHost());
                     Map model = new HashMap();
                     model.put("error", "Invalid token value. Please try again.");
-                    // generate a new toake
+                    // generate a new token
                     String code = CommonUtil.generateRandomCode();
                     model.put(AuthUser.ONE_TIME_TOKEN_KEY, code);
                     session.setAttribute(AuthUser.ONE_TIME_TOKEN_KEY, code);

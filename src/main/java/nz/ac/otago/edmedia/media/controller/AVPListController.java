@@ -41,6 +41,7 @@ public class AVPListController extends BaseListController {
         Page page = service.pagination(AVP.class, pageBean.getP(), pageBean.getS(), criteria);
         model.put("pager", page);
         model.put("user", user);
+        model.put("title", "My AVPs");
         return getModelAndView(model, request);
     }
 }

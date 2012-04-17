@@ -1,4 +1,6 @@
-@charset "utf-8";
+@charset
+"utf-8"
+;
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     border: 0pt none;
@@ -17,10 +19,18 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 body {
-    background: none repeat scroll 0% 0% white;
+    background: url(../images/bodybg.jpg) repeat-x #fff;
     color: #000000;
     line-height: 1.2em;
 }
+
+#uniLogo {
+    margin-left: 35px;
+    position: absolute;
+    top: 50px;
+}
+
+
 
 ul {
     list-style: none outside none;
@@ -48,30 +58,28 @@ blockquote, q {
     quotes: "" "";
 }
 
-.alignC {
+/*.alignC {
     text-align: center;
 }
+*/
 
 body {
-    background-color: #9FC4D9;
+    background-color: #fff;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: small;
     text-align: center;
 }
 
 #container {
-    background-color: #FFFFFF;
-    background-image: url("../images/sideLine.png");
     background-repeat: repeat-y;
-    border: 1px solid #999999;
-    margin: 20px auto;
-    position: relative;
+    margin: 0px auto;
+    /*position: relative;*/
     text-align: left;
-    width: 955px;
+    width: 960px;
 }
 
 * html #container {
-    height: 1%;
+    height: 100%;
 }
 
 .clear {
@@ -79,12 +87,13 @@ body {
 }
 
 #header {
-    background-image: url("../images/UniTube_01.png");
-    height: 153px;
-    width: 955px;
+   /*  background-image: url("../images/UniTube_01.png");
+	background-repeat: no-repeat; */
+    height: 183px;
+    width: 960px;
 }
 
-.uniLogo {
+/*.uniLogo {
     background-image: url("../images/university_web_logo.gif");
     height: 128px;
     left: 16px;
@@ -92,8 +101,9 @@ body {
     top: 14px;
     width: 87px;
 }
+*/
 
-.tubeLogo {
+/*.tubeLogo {
     background-image: url("../images/unitube_logo.png");
     height: 44px;
     left: 113px;
@@ -101,6 +111,8 @@ body {
     top: 27px;
     width: 154px;
 }
+
+*/
 
 .home {
     height: 36px;
@@ -143,18 +155,24 @@ body {
 }
 
 .topNavLinks {
+    color: #FFFFFF;
     font-size: 10px;
     height: 23px;
-    left: 683px;
     position: absolute;
+    right: 20px;
     text-align: right;
-    top: 124px;
+    top: 30px;
     width: 241px;
     word-spacing: 10px;
 }
 
 .topNavLinks a {
     font-size: 10px;
+	color: #fff;
+}
+
+.topNavLinks a:hover{
+	color:#0CF;
 }
 
 .headerText {
@@ -164,21 +182,29 @@ body {
     margin-top: 20px;
 }
 
-.loging {
+/*.loging {
     left: 784px;
     position: absolute;
     top: 63px;
     width: 83px;
 }
 
+*/
+
 .registration {
-    font-size: medium;
-    height: 42px;
-    left: 768px;
+    color: white;
+    font-size: 12px;
     position: absolute;
-    text-align: center;
-    top: 20px;
-    width: 127px;
+    right: 20px;
+    text-align: right;
+    top: 10px;
+    width: 230px;
+}
+
+
+.registration a{
+	color:#0CF;
+	font-size: 12px;
 }
 
 .mytube {
@@ -197,18 +223,19 @@ body {
 }
 
 .topLine {
-    background-image: url("../images/UniTube_10.png");
+    /*background-image: url("../images/UniTube_10.png");
     background-position: center bottom;
-    background-repeat: repeat-x;
+    background-repeat: repeat-x; */
     height: 1%;
     line-height: 20px;
     overflow: hidden;
-    padding-left: 50px;
-    width: 905px;
+    padding-left: 35px;
+    width: 910px;
+	padding-bottom: 10px;
 }
 
 div.topLine {
-    height: 77px;
+    height: 63px;
 }
 
 .sideBar {
@@ -219,7 +246,7 @@ div.topLine {
 }
 
 .mainStage {
-    float: left;
+    /*float: left;*/
     margin-bottom: 30px;
     margin-left: 35px;
     width: 900px;
@@ -319,6 +346,7 @@ div.topLine {
 
 .infoBox {
     float: right;
+	margin-right: 14px;
     margin-top: 30px;
     overflow: hidden;
     width: 236px;
@@ -329,7 +357,7 @@ div.topLine {
 }
 
 .infoHeader {
-    background-image: url("../images/UniTube_04.png");
+    /* background-image: url("../images/UniTube_04.png"); */
     height: 15px;
     width: 236px;
 }
@@ -344,8 +372,9 @@ div.topLine {
 .search {
     float: right;
     height: 25px;
-    margin-top: 40px;
-    width: 455px;
+    margin-top: 20px;
+	padding-bottom:10px;
+    padding-right: 35px;
 }
 
 .searchText {
@@ -359,7 +388,6 @@ div.topLine {
     margin-bottom: 15px;
     margin-right: 10px;
     text-align: right;
-    width: 250px;
 }
 
 .upload {
@@ -380,10 +408,16 @@ div.topLine {
 }
 
 .infoContent {
-    background-image: url("../images/UniTube_07.png");
+    /* background-image: url("../images/UniTube_07.png"); */
     padding: 0px 20px 20px;
     text-align: left;
     width: 196px;
+}
+
+.infoBox h2{
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
 }
 
 .info {
@@ -391,7 +425,7 @@ div.topLine {
 }
 
 .infoFooter {
-    background-image: url("../images/info_footer.png");
+  /*  background-image: url("../images/info_footer.png"); */
     clear: both;
     height: 15px;
     width: 236px;
@@ -461,7 +495,7 @@ div.pageNumber ul li.current {
 }
 
 a {
-    color: #006699;
+    color: #003399;
     font-size: small;
     text-decoration: none;
 }
@@ -477,7 +511,7 @@ a:hover {
 }
 
 .stage {
-    padding-left: 30px;
+    padding-left: 0px;
     position: relative;
     top: 30px;
     width: 850px;
@@ -506,7 +540,7 @@ div.sociable li {
 
 div.sociable img {
     border: none;
-    margin: 0 8px;
+    margin: 0 10px;
 }
 
 div.sociable .sociable-hovers:hover {
@@ -520,7 +554,6 @@ div.sociable .sociable-hovers {
 table {
     border-spacing: 2px;
     margin-bottom: 20px;
-    margin-left: 20px;
     margin-top: 20px;
 }
 
@@ -561,7 +594,7 @@ table {
 
 th {
     background-color: #F6AF3F;
-    color: #FFFFFF;
+    color: #fff;
     line-height: 25px;
     padding: 3px;
     text-align: center;
@@ -616,7 +649,10 @@ th {
 }
 
 th, td {
-    vertical-align: middle;
+    border-top: 1px dashed #CCCCCC;
+    padding: 10px;
+    vertical-align: top;
+	text-align:left;
 }
 
 .hidden {
@@ -642,7 +678,9 @@ th, td {
 h1 {
     font-size: 17px;
     font-weight: normal;
-    margin-top: 40px;
+    margin-top: 20px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	text-transform:uppercase;
 }
 
 h1 a img {
@@ -653,6 +691,8 @@ h2 {
     font-size: 14px;
     font-weight: bold;
     padding: 1em 0pt;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	text-transform:uppercase;
 }
 
 p {
@@ -721,16 +761,18 @@ form .text {
     width: 202px;
 }
 
-.mediaLine {
+/* .mediaLine {
     border-bottom: 1px solid #CCCCCC;
     float: left;
     height: 40px;
     width: 15px;
 }
+*/
 
 .mediacontent {
-    background: none repeat scroll 0% 0% #F7F7F7;
-    border: 1px solid #CCCCCC;
+	background:#fff url(../images/boxesBg.png) repeat-x;
+    border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
     float: left;
     height: 80px;
     width: 185px;
@@ -757,7 +799,7 @@ form .text {
 
 .mediaTitle {
     background: none repeat scroll 0% 0% #FFFFFF;
-    border-bottom: 1px solid #CCCCCC;
+   /* border-bottom: 1px solid #CCCCCC; */
     color: #321277;
     font-weight: bold;
     height: 40px;
@@ -767,8 +809,8 @@ form .text {
 
 .titleText {
     background: none repeat scroll 0% 0% #FFFFFF;
-    border-left: 1px solid #CCCCCC;
-    border-right: 1px solid #CCCCCC;
+    /* border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC; */
     height: 20px;
     left: 30px;
     margin: 0pt;
@@ -776,6 +818,8 @@ form .text {
     position: relative;
     top: 25px;
     width: 140px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	text-transform:uppercase;
 }
 
 #comments {
@@ -1133,4 +1177,11 @@ td.percent {
 div#bar {
     clear:both;
     margin-left: 10px;
+}
+
+/** disable link for current page */
+div.myOptions a.currentPage {
+    pointer-events: none;
+    cursor: default;
+    font-weight: bold;
 }

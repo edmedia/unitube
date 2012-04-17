@@ -22,7 +22,11 @@ from ${user.firstName} ${user.lastName}
 <#assign title>
 <a href="${baseUrl}/feed.do?topic=media<#if user??>&amp;u=${user.accessCode}</#if>" title="RSS Feed"><img
         src="${baseUrl}/images/feed-icon.png" alt=""/></a>
+<#if mediaType?has_content>
+    <a href="?">All Media</a>
+<#else>
 All Media
+</#if>
 <#if user?has_content>from ${user.firstName} ${user.lastName}
 <#else>
 (

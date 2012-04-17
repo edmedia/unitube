@@ -7,6 +7,7 @@ import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,20 +77,37 @@ class MediaTask implements Runnable {
             File mediaDir = null;
             MediaInfo mediaInfo = null;
             if (media != null) {
-                // remove old files
-                MediaUtil.removeMediaFiles(uploadLocation, media, false);
                 File file = null;
                 mediaDir = MediaUtil.getMediaDirectory(uploadLocation, media);
-                if (mediaDir != null)
+                if ((mediaDir != null) && StringUtils.isNotBlank(media.getUploadFileUserName()))
                     file = new File(mediaDir, media.getUploadFileUserName());
                 try {
                     if ((file != null) && file.exists()) {
+                        // only remove old files if we have uploaded file
+                        MediaUtil.removeMediaFiles(uploadLocation, media, false);
                         StopWatch sw = new StopWatch();
                         sw.start();
                         // do conversion
                         mediaInfo = mediaConverter.transcode(file, file.getParentFile());
                         sw.stop();
                         log.info("File [{}] [m={}] took [{}] to convert.", new Object[]{file.getAbsolutePath(), media.getAccessCode(), sw});
+                    } else {
+                        // if upload file does not exist
+                        // there is no conversion we can do
+                        // if it's already converted, keep old files, set status to finished
+                        // otherwise, stop and set status to unrecognized
+                        file = null;
+                        if (StringUtils.isNotBlank(media.getRealFilename()))
+                            file = new File(mediaDir, media.getRealFilename());
+                        if ((file != null) && file.exists())
+                            media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_FINISHED);
+                        else
+                            media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_UNRECOGNIZED);
+                        try {
+                            service.update(media);
+                        } catch (DataAccessException e) {
+                            log.error("Can not update database for media " + media.getId(), e);
+                        }
                     }
                 } catch (Exception e) {
                     log.error("Exception when converting media file", e);
@@ -128,11 +146,11 @@ class MediaTask implements Runnable {
                     media.setWidth(mediaInfo.getWidth());
                     media.setHeight(mediaInfo.getHeight());
                     // for audio and video file, delete original file after conversion
-                    if ((media.getMediaType() == MediaUtil.MEDIA_TYPE_AUDIO) || (media.getMediaType() == MediaUtil.MEDIA_TYPE_VIDEO)) {
+                    if (((media.getMediaType() == MediaUtil.MEDIA_TYPE_AUDIO) || (media.getMediaType() == MediaUtil.MEDIA_TYPE_VIDEO))
+                            && StringUtils.isBlank(media.getConvertTo())) {
                         // if delete successfully, set uploadFileUserName to null
-                        if (MediaUtil.removeUploadedMediaFiles(uploadLocation, media)) {
+                        if (MediaUtil.removeUploadedMediaFiles(uploadLocation, media))
                             media.setUploadFileUserName(null);
-                        }
                     }
                     try {
                         media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_FINISHED);
@@ -170,6 +188,7 @@ class MediaTask implements Runnable {
             if (media != null) {
                 // if conversion failed, set status back to waiting
                 media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_WAITING);
+                media.setProcessTimes(media.getProcessTimes() + 1);
                 try {
                     // update database
                     service.update(media);

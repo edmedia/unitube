@@ -168,7 +168,7 @@ public class SyndFeedController extends BaseOperationController {
             // get media directory
             File mediaDir = MediaUtil.getMediaDirectory(getUploadLocation(), media);
             String filename;
-            if (media.getUploadFileUserName().endsWith(".pdf")) {
+            if (StringUtils.isNotBlank(media.getUploadFileUserName()) && media.getUploadFileUserName().endsWith(".pdf")) {
                 filename = media.getUploadFileUserName();
                 url += "&name=" + media.getUploadFileUserName();
             } else

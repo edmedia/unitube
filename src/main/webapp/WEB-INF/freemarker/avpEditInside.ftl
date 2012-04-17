@@ -1,3 +1,5 @@
+<#include "myOptions.ftl"/>
+
 <div class="stage">
     <@spring.bind "avp.id" />
 

@@ -1,6 +1,8 @@
 package nz.ac.otago.edmedia.media.util;
 
+import nz.ac.otago.edmedia.auth.bean.AppInfo;
 import nz.ac.otago.edmedia.auth.bean.AuthUser;
+import nz.ac.otago.edmedia.auth.bean.Course;
 import nz.ac.otago.edmedia.auth.util.AuthUtil;
 import nz.ac.otago.edmedia.media.bean.*;
 import nz.ac.otago.edmedia.spring.bean.UploadLocation;
@@ -9,6 +11,7 @@ import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.spring.util.UploadUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -33,13 +36,17 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+import javax.naming.Context;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * Utitlity class for media.
@@ -138,8 +145,17 @@ public class MediaUtil {
      */
     public static User getCurrentUser(BaseService service, HttpServletRequest request)
             throws ServletException {
-        AuthUser authUser = AuthUtil.getAuthUser(request);
-        return getCurrentUser(service, authUser);
+        User user = null;
+        String username = AuthUtil.getUserName(request);
+        if (StringUtils.isNotBlank(username)) {
+            user = getUser(service, username, null);
+            if (user == null) {
+                log.info("Can not find user, get authUser and get user from authUser.");
+                AuthUser authUser = AuthUtil.getAuthUser(request);
+                user = getCurrentUser(service, authUser);
+            }
+        }
+        return user;
     }
 
     /**
@@ -294,6 +310,7 @@ public class MediaUtil {
      *
      * @param uploadLocation uploadLocation
      * @param media          media
+     * @return returns true only if successful
      */
     public static boolean removeUploadedMediaFiles(UploadLocation uploadLocation, Media media) {
         boolean result = false;
@@ -966,6 +983,231 @@ public class MediaUtil {
                 }
             }
         }
+    }
+
+    /**
+     * Returns AuthUser object.
+     *
+     * @param session session object
+     * @return AuthUser object
+     */
+    public static AuthUser getAuthUser(HttpSession session) {
+        AuthUser authUser = null;
+        if (session != null) {
+            // get user info from session
+            authUser = (AuthUser) session.getAttribute(AuthUser.AUTHENTICATED_USER_KEY);
+        }
+        return authUser;
+    }
+
+
+    /**
+     * Get user information from LDAP
+     *
+     * @param username username
+     * @param url      ldap url
+     * @param baseDN   base DN
+     * @return authUser for given user
+     */
+    public static AuthUser getUserInfoFromLDAP(String username, String url, String baseDN) {
+        return toAuthUser(getUserAttributesFromLDAP(username, url, baseDN));
+    }
+
+    /**
+     * Get user attributes from LDAP
+     *
+     * @param username username
+     * @param url      ldap url
+     * @param baseDN   base DN
+     * @return attributes for given user
+     */
+    public static Attributes getUserAttributesFromLDAP(String username, String url, String baseDN) {
+        Attributes attributes = null;
+        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(url) && StringUtils.isNotBlank(baseDN)) {
+            log.info("Get user information from LDAP for \"{}\"", username);
+            // Set up the environment for creating the initial context
+            Hashtable<String, String> env = new Hashtable<String, String>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            log.debug("ldap url = {}", url);
+            env.put(Context.PROVIDER_URL, url);
+            // set to none for anonymous bind
+            env.put(Context.SECURITY_AUTHENTICATION, "none");
+            try {
+                DirContext ctx = new InitialDirContext(env);
+                // search controls to limit scope
+                SearchControls sc = new SearchControls();
+                sc.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+                // search filter
+                String filter = "(cn=" + username + ")";
+                log.debug("filter = {}", filter);
+                // search LDAP server
+                NamingEnumeration<SearchResult> answer = ctx.search(baseDN, filter, sc);
+                if ((answer != null) && answer.hasMore()) {
+                    SearchResult result = answer.next();
+                    attributes = result.getAttributes();
+                    if (answer.hasMore())
+                        log.warn("Found more than one result for {} in LDAP.", username);
+                }
+            } catch (NamingException e) {
+                log.error("NamingException when getting user information from LDAP", e);
+            }
+        }
+        return attributes;
+    }
+
+    private static final Map<String, String> map = new HashMap<String, String>() {
+        {
+            put("cn", "userName");
+            put("sn", "lastName");
+            put("givenname", "firstName");
+            put("mail", "email");
+            put("employeenumber", "studentID");
+        }
+    };
+
+    private static AuthUser toAuthUser(Attributes attributes) {
+        String employeeType = "employeetype";
+        AuthUser authUser = null;
+        if (attributes != null) {
+            authUser = new AuthUser();
+            Attribute a;
+            try {
+                for (String key : map.keySet()) {
+                    a = attributes.get(key);
+                    if (a != null) {
+                        try {
+                            PropertyUtils.setProperty(authUser, map.get(key), a.get());
+                        } catch (IllegalAccessException e) {
+                            log.error("IllegalAccessException when setting property.", e);
+                        } catch (InvocationTargetException e) {
+                            log.error("InvocationTargetException when setting property.", e);
+                        } catch (NoSuchMethodException e) {
+                            log.error("NoSuchMethodException when setting property.", e);
+                        }
+                    }
+                }
+                a = attributes.get(employeeType);
+                if (a != null) {
+                    String value = (String) a.get();
+                    if (StringUtils.isNotBlank(value)) {
+                        if (value.equalsIgnoreCase("staff"))
+                            authUser.setIsStaff(true);
+                        if (value.equalsIgnoreCase("student"))
+                            authUser.setIsStudent(true);
+                    }
+                }
+                // always from blackboard.otago.ac.nz
+                authUser.setWayf("blackboard.otago.ac.nz");
+            } catch (NamingException e) {
+                log.error("NamingException when getting attribute.", e);
+            }
+        }
+        return authUser;
+    }
+
+    /**
+     * Updates user object from given authUser object.
+     *
+     * @param authUser authUser object
+     * @param user     user object
+     * @return returns updated user object
+     */
+    public static User updateUserFromAuthUser(AuthUser authUser, User user) {
+        if ((authUser != null) && (user != null)) {
+            // only update first name if current first name is empty, or the same but all upper case
+            if (StringUtils.isNotBlank(authUser.getFirstName()))
+                if (StringUtils.isBlank(user.getFirstName()) ||
+                        (user.getFirstName().equalsIgnoreCase(authUser.getFirstName()) && StringUtils.isAllUpperCase(user.getFirstName())))
+                    user.setFirstName(authUser.getFirstName());
+            // only update last name if current last name is empty, or the same but all upper case
+            if (StringUtils.isNotBlank(authUser.getLastName()))
+                if (StringUtils.isBlank(user.getLastName()) ||
+                        (user.getLastName().equalsIgnoreCase(authUser.getLastName()) && StringUtils.isAllUpperCase(user.getLastName())))
+                    user.setLastName(authUser.getLastName());
+            // only update email if current email is empty, or contains stonebow inside
+            if (StringUtils.isNotBlank(authUser.getEmail()))
+                if (StringUtils.isBlank(user.getEmail()) || user.getEmail().contains("stonebow"))
+                    user.setEmail(authUser.getEmail());
+        }
+        return user;
+    }
+
+
+    public static AuthUser alterAuthUser(AuthUser authUser, AppInfo appInfo) {
+        if ((authUser != null) && (appInfo != null)) {
+            boolean isInstructor = isInstructor(authUser, appInfo.getInstructors(), appInfo.getCourses());
+            if (isInstructor) {
+                authUser.setIsInstructor(true);
+                authUser.setIsEnrolled(true);
+            } else {
+                boolean isEnrolled = isEnrolled(authUser, appInfo.getInstructors(), appInfo.getStudents(), appInfo.getCourses());
+                if (isEnrolled)
+                    authUser.setIsEnrolled(true);
+            }
+        }
+        return authUser;
+    }
+
+    /**
+     * Returns if an authUser is an instructor, according given comma separated instructors line, and courses line.
+     *
+     * @param authUser    AuthUser object
+     * @param instructors all instructors, separated by comma
+     * @param courses     all courses, separated by comma
+     * @return true if given authUser is an instructor, otherwise false.
+     */
+    private static boolean isInstructor(AuthUser authUser, String instructors, String courses) {
+        if (authUser == null)
+            return false;
+        if (StringUtils.isNotBlank(instructors))
+            for (String instructor : instructors.split(","))
+                // if username in instructor list, return true
+                if (authUser.getUserName().equals(instructor.trim()))
+                    return true;
+        if (StringUtils.isNotBlank(courses)) {
+            for (String course : courses.split(",")) {
+                for (String key : authUser.getCourses().keySet()) {
+                    String courseName = key.toLowerCase();
+                    Course c = authUser.getCourses().get(key);
+                    // if course name starts with this course, and is an instructor, returns true
+                    if (courseName.startsWith(course.trim().toLowerCase()) && c.getIsInstructor())
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns if an authUser is an instructor, a student, according given comma separated instructors and students line.
+     *
+     * @param authUser    AuthUser object
+     * @param instructors all instructors, separated by comma
+     * @param students    all students, separated by comma
+     * @param courses     all courses, separated by comma
+     * @return true if given authUser is an student, otherwise false.
+     */
+    private static boolean isEnrolled(AuthUser authUser, String instructors, String students, String courses) {
+        if (authUser == null)
+            return false;
+        if (StringUtils.isNotBlank(instructors))
+            for (String instructor : instructors.split(","))
+                if (authUser.getUserName().equals(instructor.trim()))
+                    return true;
+        if (StringUtils.isNotBlank(students))
+            for (String student : students.split(","))
+                if (authUser.getUserName().equals(student.trim()))
+                    return true;
+        if (StringUtils.isNotBlank(courses)) {
+            for (String course : courses.split(",")) {
+                for (String key : authUser.getCourses().keySet()) {
+                    String courseName = key.toLowerCase();
+                    if (courseName.startsWith(course.trim().toLowerCase()))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void main(String args[]) {

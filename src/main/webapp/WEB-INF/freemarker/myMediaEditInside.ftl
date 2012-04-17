@@ -1,3 +1,5 @@
+<#include "myOptions.ftl"/>
+
 <form action="${this_url}" name="mediaForm" method="post" enctype="multipart/form-data">
     <#if pageNumber??>
     <input type="hidden" name="p" value="${pageNumber?c}"/>

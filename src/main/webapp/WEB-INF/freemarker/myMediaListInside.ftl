@@ -1,3 +1,5 @@
+<#include "myOptions.ftl"/>
+
 <div class="stage">
 
     <#include "uploadMedia.ftl" />

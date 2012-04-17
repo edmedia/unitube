@@ -122,6 +122,7 @@ public class AVPEditController extends BaseFormController {
                 .build();
         List pList = service.search(Media.class, pCriteria);
         model.put("pList", pList);
+        model.put("title", "Edit AVP");
         return model;
     }
 
