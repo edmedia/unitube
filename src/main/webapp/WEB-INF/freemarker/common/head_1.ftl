@@ -10,10 +10,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="Author" content="Educational Media, HEDC, University of Otago"/>
     <meta name="keywords" content="UniTube, Educational Media, HEDC, University of Otago"/>
-    <link rel="shortcut icon" href="${baseUrl}/images/icon.png" type="image/x-icon"/>
-<#if this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")) >
+    <link rel="shortcut icon" href="http://www.otago.ac.nz/favicon.ico" type="image/x-icon"/>
+<#assign needJQueryUI=(this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")))/>
+<#if needJQueryUI >
     <link rel="stylesheet" type="text/css" media="screen"
-          href="${baseUrl}/css/ui-lightness/jquery-ui-1.8.16.custom.css"/>
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-lightness/jquery-ui.css"/>
 </#if>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view'))>
     <link rel="stylesheet" type="text/css" href="${baseUrl}/shadowbox/shadowbox.css"/>
@@ -35,8 +36,8 @@
 <#if this_url?? && (this_url?contains("myTube/") || this_url?contains("admin/"))>
     <script type="text/javascript" src="${baseUrl}/ckeditor/ckeditor.js"></script>
 </#if>
-<#if this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")) >
-    <script type="text/javascript" src="${baseUrl}/javascript/jquery-ui-1.8.16.custom.min.js"></script>
+<#if needJQueryUI >
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 </#if>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view') || this_url?contains('embed'))>
     <script type="text/javascript" src="${baseUrl}/jwplayer/jwplayer.js"></script>

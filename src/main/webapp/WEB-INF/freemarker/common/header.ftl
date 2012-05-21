@@ -36,7 +36,7 @@
                onclick="logout('${baseUrl}/logout.do'<#if appInfo.usingCAS && authUser.wayf != "embeddedWayf" && appInfo.logoutUrl??>, '${appInfo.logoutUrl}'</#if>); return false;">Logout</a>
         </div>
         <#else>
-            <div class="registration"> Welcome! Please <a href="${baseUrl}/login.do"> login</a></div>
+            <div class="registration"> Welcome! Please <a href="${baseUrl}/myTube/list.do"> login</a></div>
     </#if>
     </div>
     <!--end of header-->
