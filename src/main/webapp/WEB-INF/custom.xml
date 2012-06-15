@@ -49,7 +49,7 @@
     <bean id="copyright" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
     </bean>
 
-    <bean id="credits" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
+    <bean id="about" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
     </bean>
 
     <bean id="help" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
@@ -438,7 +438,7 @@
                 /resetPassword.do=resetPassword
                 /copyright.do=copyright
                 /help.do=help
-                /credits.do=credits
+                /about.do=about
                 /feedback.do=feedback
                 /sendFeedback.do=sendFeedback
                 /register.do=register
