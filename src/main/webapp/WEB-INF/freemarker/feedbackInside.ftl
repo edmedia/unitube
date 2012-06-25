@@ -2,7 +2,7 @@
     <div class="infoHeader"></div>
     <div class="infoContent">
         <div class="info">
-            <h2>Latest Uploads/Feedback</h2>
+            <h2>Latest Tweets</h2>
 
             <div id="twitter">
                 <ul id="twitter_update_list">
@@ -18,21 +18,16 @@
 
 <div class="mediaArea">
 
-    <h2>Have your Toot on UniTube</h2>
-
 
     <form id="feedback" method="post" action="">
-        <p>Give us your comments and they will be posted straight away to the UniTube Latest Toots. Comments are also
-            displayed on the <a href="http://twitter.com/${twitterUsername}">UniTube Twitter Site</a> so that you
-            can easily keep up with what is new on UniTube using either the Web or your mobile phone.</p>
+        <p>Be a part of UniTube's Twitter community by posting a comment in our feed, or by checking the 'Tweet' option each time you upload a new file. If you have your own Twitter account, make sure you <a href="http://twitter.com/${twitterUsername}">follow us</a> to keep up with what's new!</p>
 
         <!-- <p>Latest uploads are also notified on UniTube <i>Latest Toots</i>. </p> -->
 
-        <p>Tell us what you think of UniTube now!</p>
 
         <textarea id="status" name="status" rows="10" cols="60"></textarea>
         <br/>
-        <input id="feedbackButton" type="button" value="Toot!" align="right"/>
+        <input id="feedbackButton" type="button" value="Tweet!" align="right"/>
     </form>
 
 </div>

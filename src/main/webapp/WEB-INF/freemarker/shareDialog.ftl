@@ -27,13 +27,13 @@
                     <span class="right"><a href="#${accessRule.id?c}" class="delete"
                                            title="Remove this user">X</a></span>
                 </li>
-            <#else>
-                <li id="ar_${accessRule.id?c}">
-            <span class="left">${accessRule.userInput?html}</span>
-                    <span class="splitter"> -  </span>
+                <#else>
+                    <li id="ar_${accessRule.id?c}">
+                        <span class="left">${accessRule.userInput?html}</span>
+                        <span class="splitter"> -  </span>
                     <span class="right"><a href="#${accessRule.id?c}" class="delete"
                                            title="Remove this user">X</a></span>
-                </li>
+                    </li>
             </#if>
         </#list>
     </#if>
@@ -105,15 +105,19 @@
                 if ($("action", xml).attr("success") == "true") {
                     var detail = $("action", xml).attr("detail");
                     log("detail = " + detail);
-                    if (detail.subsring(0, 1) == "{") {
+                    if (detail.substring(0, 1) == "{") {
                         var obj = $.parseJSON(detail);
                         var li = $('<li/>').attr("id", "ar_" + obj.id)
                                 .appendTo($('#ar_list'));
                         var left = $('<span/>')
-                                .attr('title', obj.email)
                                 .addClass('left')
-                                .text(obj.firstName + " " + obj.lastName)
                                 .appendTo(li);
+                        if (obj.email)
+                            left.attr('title', obj.email);
+                        if (obj.firstName && obj.lastName)
+                            left.text(obj.firstName + " " + obj.lastName);
+                        else
+                            left.text(obj.userName);
                         var splitter = $('<span/>')
                                 .addClass('splitter')
                                 .text(' - ')

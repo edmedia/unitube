@@ -119,7 +119,7 @@
             <p class="validateTips"></p>
 
             <div>
-                Please input the username of new owner:
+                Type the name of the user you would like to transfer ownership to:
                 <input type="text" name="userName" id="userName" rel="${baseUrl}/myTube/userNameSearch.do"/>
             </div>
         </form>

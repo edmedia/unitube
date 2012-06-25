@@ -4,7 +4,7 @@
         <div class="info">
             <h2>Copyright and IP resources</h2>
 
-            <p><a href="http://www.otago.ac.nz/copyright">Copyright at Otago</a></p>
+            <p><a href="http://www.otago.ac.nz/copyright" target="_blank">Copyright at Otago</a></p>
 
             <#--
             <p><a href="http://www.otago.ac.nz/administration/copyright/copyrightatotago.pdf">Can I copy this? -
@@ -19,19 +19,19 @@
             </p>
             -->
             <p>
-                <a href="http://www.otago.ac.nz/administration/policies/otago003310.html">
-                    The Recording of Lectures and other Teaching by the University Policy
+                <a href="http://www.otago.ac.nz/administration/policies/otago017804.html" target="_blank">
+                    Recording of Lectures and other Teaching - Guidelines for Lecturers
                 </a>
             </p>
 
             <p>
-                <a href="http://www.otago.ac.nz/administration/policies/otago003031.html">
-                    Advice on Copyright - Copying for educational purposes
+                <a href="http://www.otago.ac.nz/administration/copyright/otago016310.html" target="_blank">
+                    'Educational purposes' and copyright
                 </a>
             </p>
 
             <p>
-                <a href="http://www.otago.ac.nz/administration/policies/otago003229.html">
+                <a href="http://www.otago.ac.nz/administration/policies/otago003229.html" target="_blank">
                     Intellectual Property Rights Policy
                 </a>
             </p>
@@ -46,15 +46,9 @@
 
     <div class="mediaBorder">
 
-        <object width="520" height="414">
-            <param name="movie" value="http://media.otago.ac.nz/FlowPlayer/flowplayer-3.1.swf" />
-            <param name="flashvars"
-                   value="config={ 'playlist': [ {'url':'http://media.otago.ac.nz/wndxjUWUR/Srcymeo7/1237753945483.jpg'}, {'url': 'http://media.otago.ac.nz/wndxjUWUR/Srcymeo7/Copyright.mov', 'autoPlay': false, 'scaling': 'orig', 'autoBuffering': true, 'accelerated': true } ], 'plugins': { 'controls': { 'bottom': 0, 'height': 24 } } }" />
-            <param name="allowFullScreen" value="true" />
-            <embed src="http://media.otago.ac.nz/FlowPlayer/flowplayer-3.1.swf" type="application/x-shockwave-flash"
-                   allowfullscreen="true" width="520" height="414"
-                   flashvars="config={ 'playlist': [ {'url':'http://media.otago.ac.nz/wndxjUWUR/Srcymeo7/1237753945483.jpg'}, {'url': 'http://media.otago.ac.nz/wndxjUWUR/Srcymeo7/Copyright.mov', 'autoPlay': false, 'scaling': 'orig', 'autoBuffering': true, 'accelerated': true } ], 'plugins': { 'controls': { 'bottom': 0, 'height': 24 } } }"></embed>
-        </object>
+ <p><strong>Richard White, University Copyright Officer, explains how to make sure your uploads are copyright-friendly.</strong></p>
+
+      <div id="__unitube_53" style="width:600px"><iframe width="600" height="450" src="http://unitube.otago.ac.nz/embed.do?m=SrcyRmeo7" frameborder="0" allowfullscreen></iframe></div>
 
     </div>
 
@@ -68,11 +62,13 @@
         important that you are confident that you are the owner of that material or that you have the right to make it
         available to others before you upload it.</p>
 
-    <p>If you are unsure about whether you can or should upload material, there are a number of Otago guides and
+	<h2>Need help?</h2>
+
+	<p>If you are unsure about whether you can or should upload material, there are a number of Otago guides and
         resources that can help you (listed on the right).</p>
 
     <p>If you would like assistance to record video or audio material please contact <a
-            href="mailto:robert.vandervyver@stonebow.otago.ac.nz">Robert van der Vyver</a>,
-        our Head AV Producer, at the Audio Visual Support and Development Unit.</p>
+            href="mailto:ray.bretherton@otago.ac.nz">Ray Bretherton</a>,
+        AV Producer, at the Audio Visual Support and Development Unit.</p>
 
 </div>

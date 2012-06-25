@@ -21,12 +21,6 @@
                 <li>Other Microsoft office files (.doc, .xls)</li>
                 <li>Open Office files (.odt, .ods, .odp)</li>
             </ul>
-            <p>The UniTube website has been tested on the following browsers:</p>
-            <ul>
-                <li>IE 6</li>
-                <li>IE 7</li>
-                <li>Firefox 3</li>
-            </ul>
         </div>
     </div>
     <!--end of infoContent-->
@@ -35,42 +29,42 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Getting started with UniTube</h2>
+    <h2>Upload</h2>
 
-    <p>UniTube is a service provided by Educational Media (HEDC) for University of Otago staff and students. This
-        service is provided on an 'as is' basis and we are actively seeking your feedback to ensure that UniTube
-        develops in a way that best supports the work of staff and students at the University of Otago.</p>
+    <p>Go to <a href="${baseUrl}/myTube/list.do">My Media</a> to get uploading. UniTube accepts a wide range of files, from audio and video to documents. See the full list on the right.</p>
 
-    <p>Start using UniTube by following the steps below:</p>
-    <ol>
-        <li> Click on Login. If you are from the University of Otago, simply log in using Blackboard. If not, either
-            register as a new user or log in using your existing UniTube account. If you experience any difficulties
-            logging in, please <a href="mailto:unitube@otago.ac.nz">contact us</a>.
-        </li>
-        <li>Once you have successfully logged in, you will be taken to My Media. On this page, you can upload a file and
-            organise your files:
-            <ul>
-                <li>To upload a file, click on Browse and locate the file you want to upload. Click on Upload. The time
-                    taken to process the file will depend on the file size. A message will appear indicating a
-                    successful upload and you can now click on the link provided to view your file. Also, you can click
-                    on My Media for a list of all your files.
-                </li>
-                <li>To organize your files, you have a few options:
-                    <ul>
-                        <li>You can organise your files into albums (e.g. "Students' Presentations", "My Lectures") by
-                            selecting multiple files and then adding them to albums (create a new album if you have not
-                            already done so). To specify users who are allowed to add media to your albums, you can set
-                            permissions by clicking My Albums, selecting an album, and adding/removing users.
-                        </li>
-                        <li>You can also facilitate the retrieving of your files by tagging them: Simply click on Edit
-                            and add Tags (e.g. "PERF301", "SimPharm").
-                        </li>
-                        <li>To give users more details of your file, add a description by clicking on Edit and writing a
-                            short description.
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ol>
+	<p>You can also upload your media files by emailing them from your Otago email address on any computer or internet-enabled mobile device. Attach your files to an email and send it to <a href="mailto:post2unitube@otago.ac.nz">post2unitube@otago.ac.nz</a>. The title of your upload can be typed in the subject line and the description in the email body. If you attach several files they will all be uploaded separately, however they will all be given the same title and description.</p>
+
+	<p>If you’re uploading it's a good idea to check out our <a href="${baseUrl}/copyright.do">copyright and IP page</a> first. Please be aware that although UniTube is intended for use by Otago staff and students, uploaded files are available to view on the world wide web unless you select the 'Private' option when uploading.</p>
+
+    <h2>Organise</h2>
+
+    <p>You can organise your uploaded files into albums, making it easy for users to locate them. For example, you might
+        want to create an album for each of the classes you teach so that students can search by paper code. You can
+        even set permissions for each album, allowing specified users to contribute and collaborate.</p>
+
+
+    <h2>Share</h2>
+
+    <p>You can copy and paste the link to your file to share it with whoever you like. You can also share your files using
+        social media such as <a href="http://www.facebook.com">Facebook</a>.</p>
+
+    <p>To make files easy to locate when browsing or searching, make sure that they have meaningful names and
+        descriptions. You can also tag files with relevant keywords when you edit the file. </p>
+
+    <h2>Tweet</h2>
+
+    <p>If you want to post your activity on UniTube's Twitter feed, you can select this option when you upload your
+        file. You can view recent uploads and comments other UniTubas have posted on the <a href="${baseUrl}/feedback.do">Twitter feed page</a>.</p>
+
+    <h2>Embed</h2>
+
+    <p>You can embed any file on a web page or in Blackboard. View the media file and copy the code in the ‘Embed’ box.
+        If you paste this into the code of your site, your file will appear on the page. </p>
+
+
+    <h2><a name="rss">Subscribe</a></h2>
+
+    <p>You can subscribe to a UniTuba or any one of their albums using RSS. You will need an RSS feed reader installed
+        on your computer to do this. Click on the orange icon next to the name of a UniTuba or their album and set a notification to alert you by email each time something new is uploaded. </p>
 </div>

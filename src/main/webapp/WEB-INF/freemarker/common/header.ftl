@@ -24,9 +24,9 @@
         </div>
 
         <div class="topNavLinks">
-            <a href="${baseUrl}/copyright.do">Copyright</a> |
-            <a href="${baseUrl}/feedback.do">Feedback</a> |
-            <a href="${baseUrl}/credits.do">Credits</a>
+            <a href="${baseUrl}/copyright.do">Copyright &amp; IP</a><br/>
+            <a href="${baseUrl}/feedback.do"><img src="${baseUrl}/images/twitter.ico"/> Tweet about UniTube</a><br/>
+            <a href="${baseUrl}/about.do">About</a>
         </div>
 
     <#if authUser??>

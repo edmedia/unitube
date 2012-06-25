@@ -6,6 +6,11 @@
         <input type="hidden" name="${param.name?html}" value="${param.value?html}"/>
     </#list>
 
+        <p>AVP stands for Audio/Video Presentation. This feature allows you to upload different types of media and
+            combine them within a single file. This would be handy if you wanted to present an audio or video recording
+            of your lecture together with your Powerpoint slides. You can specify the timing of the PowerPoint slideshow
+            to synchronise it with the audio/video file.</p>
+
         <div class="navDiv">
         <#if pager.elements?has_content>
             <input type="button" value="Delete"/>

@@ -160,6 +160,7 @@
         </#if>
 
         <#-- convert again is only possible if original file is still there -->
+        <#--
                 <@spring.bind "media.uploadFileUserName" />
                 <#if spring.status.value?has_content>
         <tr>
@@ -173,7 +174,7 @@
                 If the conversion goes wrong for some reason, you can do it again. ONLY USE IT WHEN NECESSARY.
             </td>
         </tr>
-                </#if>
+                </#if> -->
 
         <@spring.bind "media.mediaType" />
         <#-- only display this when it's an image file -->

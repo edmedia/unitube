@@ -3,29 +3,27 @@
 <h2>Upload your media file</h2>
 
 <div>
-    <h3>UniTube Security and Privacy</h3>
-
-    <p>Please ensure that you use the appropriate access option when uploading materials to UniTube.
+    <p>Please ensure that you use the appropriate access option when uploading to UniTube.
         <a href="#" class="showMore">+ Show more</a>
         <a href="#" class="showLess">- Show less</a>
     </p>
 
     <div id="accessTypeDetail">
-        <p><strong>Public:</strong> This means anyone can find and access your file. No login is required.</p>
+        <p><strong>Public:</strong> Anyone can find and access your file. No login is required.</p>
 
-        <p><strong>Hidden:</strong> Means anyone who has the link can access your file. The URL for your media is not
-            listed on UniTube itself and is not discoverable by search engines. No login is required and for this reason
+        <p><strong>Hidden:</strong> Anyone who has the link can access your file. The file URL is not
+            listed on UniTube and is not discoverable by search engines. No login is required, and for this reason
             we strongly advise against uploading any sensitive or private material to UniTube using the hidden option;
             choose the private option instead.</p>
 
         <p><strong>Private:</strong> Only people explicitly granted permission can access your file. Login is required.
         </p>
 
-        <p>Also, please do ensure that you only upload material that you have created or have permission to share. See
-            <a href="${baseUrl}/copyright.do">here</a> for further information.</p>
+        <p>Please also ensure that you only upload material that you have created or have permission to share. See our
+            <a href="${baseUrl}/copyright.do">copyright and IP page</a> for more information.</p>
 
-        <p>If you become aware of any material on UniTube that you feel is inappropriate for any reason or is in
-            possible breach of copyright please do let us know. E-mail <a href="mailto:unitube@otago.ac.nz">unitube@otago.ac.nz</a>
+        <p>If you become aware of any material on UniTube that you feel is inappropriate for any reason or may
+            breach copyright, please let us know. E-mail <a href="mailto:unitube@otago.ac.nz">unitube@otago.ac.nz</a>
         </p>
 
         <p>&nbsp; </p>
@@ -56,26 +54,28 @@
     </div>
     <div id="moreOptions">
         <div id="onTwitter">
-            <strong>Have a Tweet on UniTube Twitter</strong>
+            <span title="Post my activity in UniTube Twitter feed.">Tweet?</span>
             <input type="radio" name="onTwitter" value="true" checked="checked"/> Yes
             <input type="radio" name="onTwitter" value="false"/> No
         </div>
         <div>
-            <strong>Conversion: convert file to MPEG?</strong>
+            <span title="Converting a video file to MPEG will allow you to embed it into PowerPoint.">Convert to MPEG?</span>
             <input type="radio" name="convertTo" value="mpg"/> Yes
             <input type="radio" name="convertTo" value="" checked="checked"/> No
         </div>
         <div>
-            <strong>Only for download (i.e. make your file available for download only, not for viewing online)
-                ?</strong>
+            <span title="This will make your file available for download only, not for viewing online">Only for download?</span>
             <input type="radio" name="uploadOnly" value="true"/> Yes
             <input type="radio" name="uploadOnly" value="false" checked="checked"/> No
         </div>
     </div>
     <div>
         <input name="upload" type="submit" value="Upload"/>
+		<br />
     </div>
 </form>
+<br />
+<p>Did you know you can also upload files by emailing them to UniTube? <a href="${baseUrl}/help.do">Find out more</a></p>
 <br/>
 <hr/>
 <br/>
@@ -103,9 +103,9 @@
         });
 
         // hide more options by default
-        $('#moreOptions').hide();
-        $('a.moreOption').show();
-        $('a.lessOption').hide();
+        $('#moreOptions').show();
+        $('a.moreOption').hide();
+        $('a.lessOption').show();
         $('a.moreOption').click(function() {
             $('#moreOptions').show();
             showMoreOrLessOption();

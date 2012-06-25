@@ -157,13 +157,13 @@ body {
 .topNavLinks {
     color: #FFFFFF;
     font-size: 10px;
-    height: 23px;
+    height: 50px;
     position: absolute;
     right: 20px;
     text-align: right;
-    top: 30px;
+    top: 40px;
     width: 241px;
-    word-spacing: 10px;
+    word-spacing: 3px;
 }
 
 .topNavLinks a {
@@ -410,7 +410,7 @@ div.topLine {
 .infoContent {
     /* background-image: url("../images/UniTube_07.png"); */
     padding: 0px 20px 20px;
-    text-align: left;
+    text-align: justify;
     width: 196px;
 }
 
@@ -512,7 +512,6 @@ a:hover {
 
 .stage {
     padding-left: 0px;
-    position: relative;
     top: 30px;
     width: 850px;
 }
@@ -1007,18 +1006,6 @@ span#current-time1, span#current-time2, span#current-slide {
     list-style: none;
     border: 1px solid #f6af3f;
     padding: 5px 10px;
-}
-
-#share-dialog .left {
-    margin-right: 100px;
-}
-
-#share-dialog .splitter {
-    display: none;
-}
-
-#share-dialog .right {
-    float: right;
 }
 
 /** jQuery validation error */

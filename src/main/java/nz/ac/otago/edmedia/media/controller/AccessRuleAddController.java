@@ -33,19 +33,23 @@ public class AccessRuleAddController extends BaseOperationController {
 
 
         boolean success = false;
-        String detail = "Can not find given media or user";
+        String detail = "Can not find given media or user.";
 
         // get media ids, and userName
         // check if current user is instructor, or the owner of media
         // then transfer owner to given user
         Media media = null;
         long mediaId = ServletUtil.getParameter(request, "mediaID", 0L);
+        User currentUser = MediaUtil.getCurrentUser(service, request);
         if (mediaId > 0)
             media = (Media) service.get(Media.class, mediaId);
-        User currentUser = MediaUtil.getCurrentUser(service, request);
-        // make sure current user is the owner of the media file
-        if (!media.getUser().getId().equals(currentUser.getId()))
-            media = null;
+        if (media != null) {
+            // make sure current user is the owner of the media file
+            if (!media.getUser().getId().equals(currentUser.getId())) {
+                media = null;
+                detail = "You are not the owner of this media file.";
+            }
+        }
         String userInput = ServletUtil.getParameter(request, "userInput");
         if ((media != null) && StringUtils.isNotBlank(userInput)) {
             // only get userName part, without "(FirstName LastName)"
@@ -58,16 +62,26 @@ public class AccessRuleAddController extends BaseOperationController {
             AccessRule accessRule = new AccessRule();
             accessRule.setMedia(media);
             accessRule.setUserInput(userInput);
+            // check if this access rule exists already
             if (user != null) {
-                accessRule.setUser(user);
-                SearchCriteria criteria = new SearchCriteria.Builder()
-                        .eq("media", media)
-                        .eq("user", user)
-                        .build();
-                @SuppressWarnings("unchecked")
-                List<AccessRule> list = (List<AccessRule>) service.search(AccessRule.class, criteria);
-                if (!list.isEmpty())
+                // trying to add owner
+                if (user.getId().equals(currentUser.getId())) {
                     accessRule = null;
+                    detail = "Owner already has full access to this media file.";
+                } else {
+                    accessRule.setUser(user);
+                    SearchCriteria criteria = new SearchCriteria.Builder()
+                            .eq("media", media)
+                            .eq("user", user)
+                            .build();
+                    @SuppressWarnings("unchecked")
+                    List<AccessRule> list = (List<AccessRule>) service.search(AccessRule.class, criteria);
+                    // if exists already, don't create another one
+                    if (!list.isEmpty()) {
+                        accessRule = null;
+                        detail = "You already granted access to this user.";
+                    }
+                }
             } else {
                 SearchCriteria criteria = new SearchCriteria.Builder()
                         .eq("media", media)
@@ -75,8 +89,10 @@ public class AccessRuleAddController extends BaseOperationController {
                         .build();
                 @SuppressWarnings("unchecked")
                 List<AccessRule> list = (List<AccessRule>) service.search(AccessRule.class, criteria);
-                if (!list.isEmpty())
+                if (!list.isEmpty()) {
                     accessRule = null;
+                    detail = "You already granted access to this user.";
+                }
             }
             try {
                 if (accessRule != null) {
@@ -84,14 +100,32 @@ public class AccessRuleAddController extends BaseOperationController {
                     success = true;
                     if (user != null) {
                         String[] keys = {"id", "userName", "firstName", "lastName", "email"};
-                        String[] values = { Long.toString(accessRule.getId()), user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail()};
+                        String[] values = {Long.toString(accessRule.getId()), user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail()};
                         StringBuilder sb = new StringBuilder();
                         sb.append("{");
-                        for(int i=0;i<keys.length; i++) {
+                        for (int i = 0; i < keys.length; i++) {
                             String key = keys[i];
                             String value = values[i];
-                            if(i!=0)
-                            sb.append(", ");
+                            if (i != 0)
+                                sb.append(", ");
+                            sb.append("\"");
+                            sb.append(key);
+                            sb.append("\":\"");
+                            sb.append(value);
+                            sb.append("\"");
+                        }
+                        sb.append("}");
+                        detail = sb.toString();
+                    } else {
+                        String[] keys = {"id", "userName"};
+                        String[] values = {Long.toString(accessRule.getId()), userName};
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("{");
+                        for (int i = 0; i < keys.length; i++) {
+                            String key = keys[i];
+                            String value = values[i];
+                            if (i != 0)
+                                sb.append(", ");
                             sb.append("\"");
                             sb.append(key);
                             sb.append("\":\"");
@@ -101,8 +135,6 @@ public class AccessRuleAddController extends BaseOperationController {
                         sb.append("}");
                         detail = sb.toString();
                     }
-                } else {
-                    detail = "You already granted access to this user";
                 }
             } catch (Exception e) {
                 logger.error("Can not save access rule", e);

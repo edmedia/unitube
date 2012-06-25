@@ -1,6 +1,5 @@
 package nz.ac.otago.edmedia.media.controller;
 
-import nz.ac.otago.edmedia.spring.util.ModelUtil;
 import nz.ac.otago.edmedia.spring.controller.StaticContentController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,19 +19,15 @@ public class FeedbackController extends StaticContentController {
 
     private String username;
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @SuppressWarnings("unchecked")
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) {
 
-        Map model = new HashMap();
+        Map<String, Object> model = new HashMap<String, Object>();
         model.put("twitterUsername", username);
+        model.put("title", "Tweet about UniTube");
         return getModelAndView(model, request);
     }
 

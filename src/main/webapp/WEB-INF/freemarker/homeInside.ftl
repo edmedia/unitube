@@ -1,5 +1,7 @@
 <#include "common/info.ftl" />
 
+<p>Upload and share video, audio, images, documents and more!</p>
+
 <div class="mediaDisplay">
 
     <div class="mediaBox">
