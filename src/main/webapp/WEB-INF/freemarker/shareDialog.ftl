@@ -46,7 +46,7 @@
             <p>Add people:</p>
             Username:
             <input id="userInput" type="text" size="35"
-                   rel="${baseUrl}/myTube/userNameSearch.do"/>
+                   rel="${baseUrl}/myTube/userSearch.do"/>
             <input type="button" value="Share" name="share"/>
         </form>
     </div>

@@ -375,6 +375,11 @@
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
 
+    <bean id="userSearch" class="nz.ac.otago.edmedia.media.controller.UserSearchController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
     <bean id="transferOwner" class="nz.ac.otago.edmedia.media.controller.TransferOwnerController">
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
@@ -483,6 +488,7 @@
                 /iva.do=iva
                 /myTube/ivOption.do=ivOption
                 /myTube/userNameSearch.do=userNameSearch
+                /myTube/userSearch.do=userSearch
                 /myTube/transferOwner.do=transferOwner
                 /myTube/accessRuleAdd.do=accessRuleAdd
                 /myTube/accessRuleDelete.do=accessRuleDeleteIt

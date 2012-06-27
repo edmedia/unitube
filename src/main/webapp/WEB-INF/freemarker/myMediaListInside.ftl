@@ -120,7 +120,7 @@
 
             <div>
                 Type the name of the user you would like to transfer ownership to:
-                <input type="text" name="userName" id="userName" rel="${baseUrl}/myTube/userNameSearch.do"/>
+                <input type="text" name="userName" id="userName" rel="${baseUrl}/myTube/userSearch.do"/>
             </div>
         </form>
     </div>

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Username search controller.
+ * UserName search controller, returns matched username list in json.
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
  *         Date: Mar 29, 2011
