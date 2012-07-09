@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="${baseUrl}/shadowbox/shadowbox.css"/>
 </#if>
     <link rel="stylesheet" type="text/css" media="screen" href="${baseUrl}/css/global.css"/>
-    <script type="text/javascript" src="${baseUrl}/javascript/jquery-1.5.2.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <#if this_url?? && (this_url?contains("login") || this_url?contains("myTube/profile")|| this_url?contains("admin/userEdit")) >
 <#-- md5.js is only needed when changing password -->
     <script type="text/javascript" src="${baseUrl}/javascript/md5.js"></script>

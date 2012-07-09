@@ -93,6 +93,27 @@ body {
     width: 960px;
 }
 
+#headerWrapper {
+	position:relative;
+}
+
+#headerWrapper a {
+	position:absolute;
+	text-transform:uppercase;
+	color:#fff;
+}
+
+#headerWrapper a:hover {
+	color:#0CF;
+}
+
+/* CSS for skip navigation link - positioned top left */
+#skipNavigation {
+	position:absolute;
+	top:0;
+	left:0;
+}
+
 /*.uniLogo {
     background-image: url("../images/university_web_logo.gif");
     height: 128px;
@@ -162,7 +183,6 @@ body {
     right: 20px;
     text-align: right;
     top: 40px;
-    width: 241px;
     word-spacing: 3px;
 }
 
@@ -346,7 +366,6 @@ div.topLine {
 
 .infoBox {
     float: right;
-	margin-right: 14px;
     margin-top: 30px;
     overflow: hidden;
     width: 236px;
@@ -410,7 +429,6 @@ div.topLine {
 .infoContent {
     /* background-image: url("../images/UniTube_07.png"); */
     padding: 0px 20px 20px;
-    text-align: justify;
     width: 196px;
 }
 

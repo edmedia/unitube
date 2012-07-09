@@ -1,6 +1,11 @@
 <#include "common/info.ftl" />
 
-<p>Upload and share video, audio, images, documents and more!</p>
+<div style='margin-top:15px'>
+    <span style='font-size:16px;font-weight:bold;color:#031f69'>UPLOAD</span>
+    <i>&amp;</i>
+    <span style='font-size:16px;font-weight:bold;color:#031f69'>SHARE</span>
+    <span style="font-style:italic">video, audio, images, documents and more!</span>
+</div>
 
 <div class="mediaDisplay">
 
@@ -10,11 +15,11 @@
         </div>
     </div>
 
-    <#if mostVisited?has_content>
+<#if mostVisited?has_content>
     <#list mostVisited as media>
     <@displayMediaInList media />
     </#list>
-    </#if>
+</#if>
 
 </div>
 
@@ -26,11 +31,11 @@
         </div>
     </div>
 
-    <#if mostRecent?has_content>
+<#if mostRecent?has_content>
     <#list mostRecent as media>
     <@displayMediaInList media />
     </#list>
-    </#if>
+</#if>
 
 </div>
 

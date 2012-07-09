@@ -1,19 +1,29 @@
 <div id="container">
     <div id="header">
+        <!-- added skip navigation link - jumps to mainstage -->
+        <a id="skipNavigation" href="#mainStage">Skip Navigation</a>
 
-        <img src="${baseUrl}/images/UniTube_01.png" width="960" height="183" alt="unitube" usemap="#headerImage"/>
+        <div id="headerWrapper">
+            <img src="${baseUrl}/images/UniTube_nomap.png" width="960" height="183" alt="unitube"
+                 usemap="#headerImage"/>
 
-        <map id="headerImage" name="headerImage">
-            <area shape="rect" alt="UniTube home" title="" coords="320,56,462,105" href="${baseUrl}/home.do"/>
-            <area shape="rect" alt="UniTube home" title="" coords="499,70,551,101" href="${baseUrl}/home.do"/>
-            <area shape="rect" alt="University of Otago" title="" coords="45,40,207,121"
-                  href="http://www.otago.ac.nz" target="_blank"/>
-            <area shape="rect" alt="Unitubas" title="" coords="523,118,600,145" href="${baseUrl}/uniTubas.do"/>
-            <area shape="rect" alt="Media" title="" coords="610,70,666,101" href="${baseUrl}/media.do"/>
-            <area shape="rect" alt="Albums" title="" coords="642,121,707,145" href="${baseUrl}/albums.do"/>
-            <area shape="rect" alt="My Media" title="" coords="711,71,820,103" href="${baseUrl}/myTube/list.do"/>
-            <area shape="rect" alt="Help" title="" coords="741,121,794,146" href="${baseUrl}/help.do"/>
-        </map>
+            <a href="${baseUrl}/home.do"
+               style="top:75px;left:330px;text-transform:none;font-size:35px;font-family:Arial" accesskey="0">
+                <b>Uni</b>Tube
+            </a>
+
+            <!-- Top row -->
+            <a href="${baseUrl}/home.do" style="top:77px;left:507px;" accesskey="0">Home</a>
+            <a href="${baseUrl}/media.do" style="top:77px;left:620px;" accesskey="1">Media</a>
+            <a href="${baseUrl}/myTube/list.do" style="top:77px;left:720px;" accesskey="2">My Media</a>
+
+            <!-- Bottom row -->
+            <a href="${baseUrl}/uniTubas.do" style="top:124px;left:533px;" accesskey="3">UniTubas</a>
+            <a href="${baseUrl}/albums.do" style="top:124px;left:652px;" accesskey="4">Albums</a>
+            <a href="${baseUrl}/help.do" style="top:124px;left:753px;" accesskey="5">Help</a>
+
+        </div>
+
 
         <div id="uniLogo">
             <a href="http://www.otago.ac.nz" target="_blank">
@@ -24,9 +34,11 @@
         </div>
 
         <div class="topNavLinks">
-            <a href="${baseUrl}/copyright.do">Copyright &amp; IP</a><br/>
-            <a href="${baseUrl}/feedback.do"><img src="${baseUrl}/images/twitter.ico"/> Tweet about UniTube</a><br/>
-            <a href="${baseUrl}/about.do">About</a>
+            <a href="${baseUrl}/copyright.do" accesskey="6">Copyright &amp; IP</a><br/>
+            <a href="${baseUrl}/feedback.do" accesskey="7">
+                <img src="${baseUrl}/images/twitter.ico" style="float:left;margin-right:5px" alt="Twitter Icon"/>
+                Tweet about UniTube</a><br/>
+            <a href="${baseUrl}/about.do" accesskey="8">About</a>
         </div>
 
     <#if authUser??>
@@ -44,4 +56,6 @@
     <#include "search.ftl" />
         <h1>${title}</h1>
     </div>
+
     <div class="mainStage">
+        <a name="mainStage" id="mainStage"></a>
