@@ -47,6 +47,11 @@ public class MyMediaEditController extends BaseFormController {
 
         Media media = (Media) command;
         boolean doConvert = false;
+        // remove script tag in description
+        if (StringUtils.isNotBlank(media.getDescription())){
+            String desc = MediaUtil.removeScriptTag(media.getDescription());
+            media.setDescription(desc);
+        }
         // if user asked to convert again, set status to "waiting"
         if (request.getParameter("convertAgain") != null) {
             media.setStatus(MediaUtil.MEDIA_PROCESS_STATUS_WAITING);
@@ -85,7 +90,6 @@ public class MyMediaEditController extends BaseFormController {
                 }
             }
         }
-
         Map model = errors.getModel();
         return getModelAndView(model, request);
     }

@@ -1149,6 +1149,74 @@ public class MediaUtil {
     }
 
     /**
+     * replace any given html tag (include anything inside) with given text.
+     *
+     * @param content content
+     * @param tag     html tag, such as script, body, etc., without '<' and '>'
+     * @param txt     replace html tag with this text
+     * @return replaced content
+     */
+    public static String replaceHtmlTag(String content, String tag, String txt) {
+        if (StringUtils.isNotBlank(content) && StringUtils.isNotBlank(tag)) {
+            // always use lower case to compare
+            tag = tag.toLowerCase();
+            // start tag
+            String sTag = "<" + tag;
+            // end tag
+            String eTag = "</" + tag + ">";
+            boolean repeat = true;
+            while (repeat) {
+                // lower case of content
+                String lowerCase = content.toLowerCase();
+                int sNum = lowerCase.indexOf(sTag);
+                int eNum = lowerCase.indexOf(eTag);
+                // if has both start tag and end tag, and end tag is after start tag
+                if ((sNum != -1) && (eNum != -1) && (eNum > sNum)) {
+                    if (StringUtils.isNotBlank(txt))
+                        content = content.substring(0, sNum) + txt + content.substring(eNum + eTag.length());
+                    else
+                        content = content.substring(0, sNum) + content.substring(eNum + eTag.length());
+                } else if ((sNum != -1) || (eNum != -1)) {
+                    // if has start tag, find the end '>', and get rid of it
+                    if (sNum != -1) {
+                        int i = lowerCase.indexOf(">", sNum);
+                        if (i != -1) {
+                            content = content.substring(0, sNum) + content.substring(i + 1);
+                        }
+                    }
+                    // if has end tag
+                    if (eNum != -1) {
+                        content = content.substring(0, eNum) + content.substring(eNum + eTag.length());
+                    }
+                } else
+                    repeat = false;
+            }
+        }
+        return content;
+    }
+
+    /**
+     * remove any given html tag (include anything inside)
+     *
+     * @param content content
+     * @param tag     html tag, such as script, body, etc., without '<' and '>'
+     * @return replaced content
+     */
+    public static String replaceHtmlTag(String content, String tag) {
+        return replaceHtmlTag(content, tag, null);
+    }
+
+    /**
+     * remove any javascript tag (include anything inside)
+     *
+     * @param content content
+     * @return replaced content
+     */
+    public static String removeScriptTag(String content) {
+        return replaceHtmlTag(content, "script");
+    }
+
+    /**
      * Returns if an authUser is an instructor, according given comma separated instructors line, and courses line.
      *
      * @param authUser    AuthUser object

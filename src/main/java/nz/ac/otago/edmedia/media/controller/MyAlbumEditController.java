@@ -6,6 +6,7 @@ import nz.ac.otago.edmedia.media.bean.UserAlbum;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseFormController;
 import nz.ac.otago.edmedia.util.CommonUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,6 +38,11 @@ public class MyAlbumEditController extends BaseFormController {
             album.setOwner(user);
             String randomCode = CommonUtil.generateRandomCode();
             album.setRandomCode(randomCode);
+            // remove script tag in description
+            if (StringUtils.isNotBlank(album.getDescription())) {
+                String desc = MediaUtil.removeScriptTag(album.getDescription());
+                album.setDescription(desc);
+            }
             service.save(album);
 
             UserAlbum userAlbum = new UserAlbum();
@@ -48,6 +54,11 @@ public class MyAlbumEditController extends BaseFormController {
             // update Album
             Album oldAlbum = (Album) service.get(Album.class, album.getId());
             oldAlbum.setAlbumName(album.getAlbumName());
+            // remove script tag in description
+            if (StringUtils.isNotBlank(album.getDescription())) {
+                String desc = MediaUtil.removeScriptTag(album.getDescription());
+                album.setDescription(desc);
+            }
             oldAlbum.setDescription(album.getDescription());
             service.update(oldAlbum);
         }
