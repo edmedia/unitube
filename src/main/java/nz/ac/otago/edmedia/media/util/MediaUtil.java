@@ -1024,16 +1024,16 @@ public class MediaUtil {
     public static Attributes getUserAttributesFromLDAP(String username, String url, String baseDN) {
         Attributes attributes = null;
         if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(url) && StringUtils.isNotBlank(baseDN)) {
-            log.info("Get user information from LDAP for \"{}\"", username);
+            log.info("Get user information for \"{}\" from LDAP {} base DN {}", new Object[]{username, url, baseDN});
             // Set up the environment for creating the initial context
             Hashtable<String, String> env = new Hashtable<String, String>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-            log.debug("ldap url = {}", url);
             env.put(Context.PROVIDER_URL, url);
             // set to none for anonymous bind
             env.put(Context.SECURITY_AUTHENTICATION, "none");
+            DirContext ctx = null;
             try {
-                DirContext ctx = new InitialDirContext(env);
+                ctx = new InitialDirContext(env);
                 // search controls to limit scope
                 SearchControls sc = new SearchControls();
                 sc.setSearchScope(SearchControls.ONELEVEL_SCOPE);
@@ -1050,6 +1050,13 @@ public class MediaUtil {
                 }
             } catch (NamingException e) {
                 log.error("NamingException when getting user information from LDAP", e);
+            } finally {
+                try {
+                    if (ctx != null)
+                        ctx.close();
+                } catch (NamingException ne) {
+                    log.error("NameException when closing context.", ne);
+                }
             }
         }
         return attributes;
