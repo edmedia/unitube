@@ -1,5 +1,11 @@
 var inDebugMode = true;
 
+if (!('trim' in String.prototype)) {
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, "");
+    };
+}
+
 function removeAlbumFromMedia(albumMediaID) {
     $.get('removeAlbumMedia.do?id=' + albumMediaID, function(xml) {
         if ($("action", xml).attr("success") == "true")
