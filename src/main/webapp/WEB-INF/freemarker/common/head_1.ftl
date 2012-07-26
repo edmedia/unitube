@@ -14,7 +14,7 @@
 <#assign needJQueryUI=(this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")))/>
 <#if needJQueryUI >
     <link rel="stylesheet" type="text/css" media="screen"
-          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/ui-lightness/jquery-ui.css"/>
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/ui-lightness/jquery-ui.css"/>
 </#if>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view'))>
     <link rel="stylesheet" type="text/css" href="${baseUrl}/shadowbox/shadowbox.css"/>
@@ -37,7 +37,7 @@
     <script type="text/javascript" src="${baseUrl}/ckeditor/ckeditor.js"></script>
 </#if>
 <#if needJQueryUI >
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
 </#if>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view') || this_url?contains('embed'))>
     <script type="text/javascript" src="${baseUrl}/jwplayer/jwplayer.js"></script>
