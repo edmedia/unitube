@@ -46,12 +46,14 @@
                 <#else>
                     <div id="${idDiv}">
                         <#if (obj.mediaType == 10) || (obj.mediaType ==20)>
-                            <div id="avPlayer"></div>
+                            <div id="avPlayer">
+                                Your browser can not support this file. <a href="${mediaFileLink?html}">Click here to download this file.</a>
+                            </div>
                             <#else>
                             <#-- flash format-->
                                 You need to install Adobe Flash Player.<br/>
-                                <a href="http://www.macromedia.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Click
-                                    here to download Adobe Flash Player</a>
+                                <a href="http://www.macromedia.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">
+                                    Click here to download Adobe Flash Player</a>
                         </#if>
                     </div>
             </#if>
