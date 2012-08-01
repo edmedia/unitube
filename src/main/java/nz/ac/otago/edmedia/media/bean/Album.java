@@ -1,5 +1,6 @@
 package nz.ac.otago.edmedia.media.bean;
 
+import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.WebID;
 import org.hibernate.search.annotations.*;
 
@@ -77,6 +78,7 @@ public class Album extends WebID {
 
 
     // --------------------------- RELATIONSHIP MANAGEMENT --------------------
+
     /**
      * @param albumMedia to add
      */
@@ -101,6 +103,7 @@ public class Album extends WebID {
         addAlbumMedias(newAlbumMedia);
         return newAlbumMedia;
     }
+
     /**
      * @param userAlbum to add
      */
@@ -184,6 +187,20 @@ public class Album extends WebID {
 
     public Long getOwnerID() {
         return this.ownerID;
+    }
+
+    /**
+     * Returns how many public finished media files this album has
+     *
+     * @return how many public finished media files this album has
+     */
+    public int getMediaNum() {
+        int mediaNum = 0;
+        for (AlbumMedia am : albumMedias) {
+            if (MediaUtil.isPublicFinished(am.getMedia()))
+                mediaNum++;
+        }
+        return mediaNum;
     }
 
     /**
