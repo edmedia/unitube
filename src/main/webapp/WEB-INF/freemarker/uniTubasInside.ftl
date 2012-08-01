@@ -9,7 +9,7 @@
     <tr>
         <th width="40" align="center"> RSS</th>
         <th width="200" align="center">UniTuba</th>
-        <th width="200" align="center"></th>
+        <th width="200" align="center">Albums</th>
     </tr>
     <tr>
         <td>&nbsp;</td>
@@ -17,9 +17,7 @@
         <td>&nbsp;</td>
     </tr>
     <#list pager.elements as entity>
-    <#assign mediaNum=countMediaNum(entity.medias)/>
-    <#assign albumNum=countAlbumNum(entity)/>
-    <#if mediaNum &gt; 0>
+    <#if entity.mediaNum &gt; 0>
     <tr>
         <td class="rss">
             <a href="${baseUrl}/feed.do?topic=media&amp;u=${entity.accessCode}">
@@ -28,12 +26,12 @@
         </td>
         <td class="alignC bold">
             <a href="${baseUrl}/media.do?u=${entity.accessCode}">
-                ${entity.firstName} ${entity.lastName} (${mediaNum})
+                ${entity.firstName} ${entity.lastName} (${entity.mediaNum})
             </a>
         </td>
         <td class="alignC">
-            <#if albumNum &gt; 0>
-            <a href="${baseUrl}/albums.do?u=${entity.accessCode}">Albums</a> (${albumNum})
+            <#if entity.albumNum &gt; 0>
+            <a href="${baseUrl}/albums.do?u=${entity.accessCode}">Albums</a> (${entity.albumNum})
             </#if>
         </td>
     </tr>

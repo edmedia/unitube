@@ -1223,6 +1223,13 @@ public class MediaUtil {
         return replaceHtmlTag(content, "script");
     }
 
+    public static boolean isPublicFinished(Media media) {
+        boolean result = false;
+        if ((media != null) && (media.getAccessType() == MEDIA_ACCESS_TYPE_PUBLIC) && (media.getStatus() == MEDIA_PROCESS_STATUS_FINISHED))
+            result = true;
+        return result;
+    }
+
     /**
      * Returns if an authUser is an instructor, according given comma separated instructors line, and courses line.
      *

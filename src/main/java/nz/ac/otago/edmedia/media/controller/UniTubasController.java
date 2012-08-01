@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * UniTubas controller. List all users' media.
+ * UniTubas controller. List all users and their media and albums.
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
  *         Date: 23/07/2008
@@ -21,7 +21,6 @@ import java.util.Map;
  */
 public class UniTubasController extends BaseListController {
 
-    @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -29,11 +28,13 @@ public class UniTubasController extends BaseListController {
             throws Exception {
 
         PageBean pageBean = (PageBean) command;
-        Map model = errors.getModel();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> model = (Map<String, Object>) errors.getModel();
         SearchCriteria criteria = new SearchCriteria.Builder()
                 .eq("isGuest", false)
                 .sizeGt("medias", 0)
-                .orderBy("lastLoginTime", false)
+                .orderBy("lastName")
+                .orderBy("firstName")
                 .build();
         Page page = service.pagination(User.class, pageBean.getP(), pageBean.getS(), criteria);
         model.put("pager", page);

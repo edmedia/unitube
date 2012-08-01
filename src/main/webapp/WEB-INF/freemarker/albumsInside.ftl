@@ -18,12 +18,11 @@
         <td>&nbsp;</td>
     </tr>
     <#list pager.elements as entity>
-    <#assign mediaNum=countMediaNumFromAlbumMediaList(entity.albumMedias)/>
-    <#if mediaNum &gt; 0>
+    <#if entity.mediaNum &gt; 0>
     <tr>
         <td class="rss"><a href="${baseUrl}/feed.do?topic=album&amp;a=${entity.accessCode}"><img
                 src="${baseUrl}/images/feed-icon.png" alt="RSS"/></a></td>
-        <td class="alignC bold"><a href="${baseUrl}/album?a=${entity.accessCode}">${entity.albumName}</a>
+        <td class="alignC bold"><a href="${baseUrl}/album?a=${entity.accessCode}">${entity.albumName} (${entity.mediaNum})</a>
         </td>
         <td class="alignC">
             <#if entity.owner??>
