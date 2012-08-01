@@ -38,7 +38,7 @@
                                 <a href="${baseUrl}/view?m=${entity.accessCode}"
                                    title="${linkTitle}"><@getShortTitle entity.title/></a>
                                 <#if entity.description?has_content>
-                                    <div><@getDesc entity.description/></div>
+                                    <div><@displayBrief entity.description maxDescriptionLength/></div>
                                 </#if>
                             </td>
                             <td>

@@ -52,7 +52,7 @@
 
 <#assign maxTitleLength = 32 />
 <#assign maxShortTitleLength = 16 />
-<#assign maxDescriptionLength = 256 />
+<#assign maxDescriptionLength = 128 />
 
 <#--
     name: displayMediaList
@@ -193,6 +193,59 @@
 </#macro>
 
 <#--
+    name: displayBrief
+    desc: display brief information, up to MAX_LEN characters. all html tags will be removed.
+    @param: content content to display
+    @param: MAX_LEN maximum characters to display, 0 means display all
+-->
+<#macro displayBrief content MAX_LEN>
+<#-- replace &nbsp; with space -->
+    <#local brief = content?replace("&nbsp;", " ")/>
+<#-- replace open html tag "<blah blah="blah ...">" with space -->
+    <#local brief = brief?replace("<\\w+[^>]*>", " ", "rm")/>
+<#-- replace open html tag "</blah blah="blah ...">" with space -->
+    <#local brief = brief?replace("<\\/\\w+[^>]*>", " ", "rm")/>
+<#-- replace any empty characters with only one space -->
+    <#local brief = brief?replace("\\s+", " ", "rm")/>
+    <#if MAX_LEN &gt; 0>
+        <#if brief?length &gt; MAX_LEN>
+            <#local index = MAX_LEN/>
+            <#if brief?contains(" ")>
+                <#local index = brief?index_of(" ")/>
+                <#list 0..MAX_LEN as i>
+                    <#local next = brief?index_of(" ", index+1)/>
+                    <#if next == -1>
+                        <#break />
+                    </#if>
+                    <#if next &gt; MAX_LEN>
+                        <#break />
+                        <#else>
+                            <#local index = next/>
+                    </#if>
+                </#list>
+            </#if>
+        <#-- only return MAX_LEN characters -->
+            <#local brief = brief?substring(0, index) + " ..."/>
+        </#if>
+    </#if>
+<#-- output content -->
+${brief}
+</#macro>
+
+<#--
+    name: displayContent
+    desc: display content. If there is html tag inside, display as is, otherwise, replace \n with <br/>
+    @param: content content to display
+-->
+<#macro displayContent content>
+    <#if content?matches("<\\w+>", "m") || content?matches("<\\w+[^>]*>", "m")>
+    ${content}
+        <#else>
+        ${content!?html?replace("\n", "<br/>")}
+    </#if>
+</#macro>
+
+<#--
     name: displayMediaInList
     desc: display a media object in list, such as on media.do, search.do
     @param: entity a media object to be displayed
@@ -253,42 +306,6 @@
         &nbsp;
     </#if>
 </#macro>
-
-<#function countMediaNum mediaList>
-    <#local num = 0 />
-    <#if mediaList?has_content>
-        <#list mediaList as media>
-            <#if media.accessType == 0>
-                <#local num=num+1 />
-            </#if>
-        </#list>
-    </#if>
-    <#return num />
-</#function>
-
-<#function countMediaNumFromAlbumMediaList albumMediaList>
-    <#local num = 0 />
-    <#if albumMediaList?has_content>
-        <#list albumMediaList as albumMedia>
-            <#if albumMedia.media.accessType == 0>
-                <#local num=num+1 />
-            </#if>
-        </#list>
-    </#if>
-    <#return num />
-</#function>
-
-<#function countAlbumNum user>
-    <#local num = 0 />
-    <#if user.userAlbums?has_content>
-        <#list user.userAlbums as userAlbum>
-            <#if (userAlbum.album.accessType == 0) && (countMediaNumFromAlbumMediaList(userAlbum.album.albumMedias) &gt; 0)>
-                <#local num=num+1 />
-            </#if>
-        </#list>
-    </#if>
-    <#return num />
-</#function>
 
 <#macro thumbnailLink media>
     <#local link>${baseUrl}/file.do?m=${media.accessCode}&name=<#if media.mediaType == 20>thumbnail.gif<#else>${media.thumbnail}</#if></#local>
