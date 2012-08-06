@@ -2,8 +2,6 @@ package nz.ac.otago.edmedia.media.timer;
 
 import nz.ac.otago.edmedia.media.bean.*;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
-import nz.ac.otago.edmedia.spring.bean.UploadLocation;
-import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
@@ -12,9 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.dao.DataAccessException;
 
@@ -24,7 +19,6 @@ import javax.mail.internet.MimeBodyPart;
 import java.io.*;
 import java.util.List;
 import java.util.Properties;
-import java.util.TimerTask;
 
 /**
  * Timer task to check email for new uploaded media file
@@ -33,18 +27,11 @@ import java.util.TimerTask;
  *         Date: 15/04/2010
  *         Time: 9:47:08 AM
  */
-public class CheckEmailTimerTask
-        extends TimerTask
-        implements ApplicationContextAware {
+public class CheckEmailTimerTask extends BaseTimerTask {
 
     private final static Logger log = LoggerFactory.getLogger(CheckEmailTimerTask.class);
 
     private static boolean isRunning = false;
-
-    // service
-    protected BaseService service;
-
-    private UploadLocation uploadLocation;
 
     private String consumerKey;
 
@@ -62,16 +49,6 @@ public class CheckEmailTimerTask
 
     private String proxyPassword;
 
-    private String mailHost;
-
-    private String fromEmail;
-
-    private String smtpUsername;
-
-    private String smtpPassword;
-
-    private int smtpPort;
-
     private String emailProtocol;
 
     private String emailServer;
@@ -79,18 +56,6 @@ public class CheckEmailTimerTask
     private String emailUsername;
 
     private String emailPassword;
-
-    private String appURL;
-
-    private ApplicationContext ctx;
-
-    public void setService(BaseService service) {
-        this.service = service;
-    }
-
-    public void setUploadLocation(UploadLocation uploadLocation) {
-        this.uploadLocation = uploadLocation;
-    }
 
     public void setConsumerKey(String consumerKey) {
         this.consumerKey = consumerKey;
@@ -124,26 +89,6 @@ public class CheckEmailTimerTask
         this.proxyPassword = proxyPassword;
     }
 
-    public void setMailHost(String mailHost) {
-        this.mailHost = mailHost;
-    }
-
-    public void setFromEmail(String fromEmail) {
-        this.fromEmail = fromEmail;
-    }
-
-    public void setSmtpUsername(String smtpUsername) {
-        this.smtpUsername = smtpUsername;
-    }
-
-    public void setSmtpPassword(String smtpPassword) {
-        this.smtpPassword = smtpPassword;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
-
     public void setEmailProtocol(String emailProtocol) {
         this.emailProtocol = emailProtocol;
     }
@@ -160,39 +105,32 @@ public class CheckEmailTimerTask
         this.emailPassword = emailPassword;
     }
 
-    public void setAppURL(String appURL) {
-        this.appURL = appURL;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-        ctx = applicationContext;
-    }
-
     /**
      * Run timer task.
      */
     public void run() {
-
         if (isRunning) {
-            log.info("CheckEmailTimerTask is already running.");
-        } else {
+            log.warn("CheckEmailTimerTask is already running.");
+            return;
+        }
+        boolean outputLog = outputLog();
+        try {
             isRunning = true;
-            log.info("CheckEmailTimerTask is running.");
-            try {
-                // check email posting
-                if (StringUtils.isNotBlank(emailProtocol)
-                        && StringUtils.isNotBlank(emailServer)
-                        && StringUtils.isNotBlank(emailUsername)
-                        && StringUtils.isNotBlank(emailPassword))
-                    checkEmailPosting();
+            if (outputLog)
+                log.info("CheckEmailTimerTask is running.");
+            // check email posting
+            if (StringUtils.isNotBlank(emailProtocol)
+                    && StringUtils.isNotBlank(emailServer)
+                    && StringUtils.isNotBlank(emailUsername)
+                    && StringUtils.isNotBlank(emailPassword))
+                checkEmailPosting();
 
-            } catch (Exception e) {
-                log.error("Exception when checking email.", e);
-            } finally {
-                isRunning = false;
+        } catch (Exception e) {
+            log.error("Exception when checking email.", e);
+        } finally {
+            isRunning = false;
+            if (outputLog)
                 log.info("CheckEmailTimerTask is not running.");
-            }
         }
     }
 
