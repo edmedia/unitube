@@ -246,6 +246,10 @@ public class FileController extends BaseOperationController {
             disposition = accept != null && accepts(accept, contentType) ? "inline" : "attachment";
         }
 
+        String t = request.getParameter("t");
+        if (StringUtils.isNotBlank(t) && "download".equalsIgnoreCase(t))
+            disposition = "attachment";
+
         // Initialize response.
         response.reset();
         response.setBufferSize(DEFAULT_BUFFER_SIZE);

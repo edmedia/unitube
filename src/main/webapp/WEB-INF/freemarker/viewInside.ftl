@@ -47,7 +47,7 @@
                     <div id="${idDiv}">
                         <#if (obj.mediaType == 10) || (obj.mediaType ==20)>
                             <div id="avPlayer">
-                                Your browser can not support this file. <a href="${mediaFileLink?html}">Click here to download this file.</a>
+                                Your browser can not support this file. <a href="${mediaFileLink?html}&amp;t=download">Click here to download this file.</a>
                             </div>
                             <#else>
                             <#-- flash format-->
@@ -184,28 +184,28 @@
     <#-- proviod original file link for upload only, swf, unrecognized, images-->
         <#if obj.uploadOnly || obj.realFilename!?ends_with(".swf") || (obj.status == 9) || (obj.mediaType == 5) || obj.realFilename!?ends_with(".png")>
         <#if originalFileLink?has_content>
-            <a href="${originalFileLink?html}">original file</a>
+            <a href="${originalFileLink?html}&amp;t=download">original file</a>
         </#if>
             <#elseif mediaFileLink?has_content>
-                <a href="${mediaFileLink?html}">media file</a>
+                <a href="${mediaFileLink?html}&amp;t=download">media file</a>
         </#if>
     <#-- for image files, display different size images -->
         <#if obj.mediaType == 5>
             <#if mediaFileLink??>
-                | <a href="${mediaFileLink?html}">medium size</a>
+                | <a href="${mediaFileLink?html}&amp;t=download">medium size</a>
             </#if>
             <#if largeImageFileLink??>
-                | <a href="${largeImageFileLink?html}">large size</a>
+                | <a href="${largeImageFileLink?html}&amp;t=download">large size</a>
             </#if>
             <#if veryLargeImageFileLink??>
-                | <a href="${veryLargeImageFileLink?html}">very large size</a>
+                | <a href="${veryLargeImageFileLink?html}&amp;t=download">very large size</a>
             </#if>
             <#if extraLargeImageFileLink??>
-                | <a href="${extraLargeImageFileLink?html}">extra large size</a>
+                | <a href="${extraLargeImageFileLink?html}&amp;t=download">extra large size</a>
             </#if>
         </#if>
         <#if obj.convertTo?has_content && otherFormatFileLink?has_content>
-            | <a href="${otherFormatFileLink?html}">MPEG format</a>
+            | <a href="${otherFormatFileLink?html}&amp;t=download">MPEG format</a>
         </#if>
     </p>
     <#if obj.albumMedias?has_content>
