@@ -3,7 +3,8 @@
 <@spring.bind "media.status" />
 <#if spring.status.value == 0>
     <div class="info">
-    <@spring.message "media.processing"/>
+        Well done! Your media file has been uploaded successfully and is now being processed. How long this will take
+        will depend on the size of the file and how busy our server is.
     </div>
 </#if>
 
