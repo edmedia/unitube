@@ -44,8 +44,12 @@
     <#if authUser??>
         <div class="registration">
             Welcome <strong>${authUser.userName}</strong>!
-            <a href="#"
-               onclick="logout('${baseUrl}/logout.do'<#if appInfo.usingCAS && authUser.wayf != "embeddedWayf" && appInfo.logoutUrl??>, '${appInfo.logoutUrl}'</#if>); return false;">Logout</a>
+            <#if appInfo.usingCAS && authUser.wayf != "embeddedWayf" && appInfo.logoutUrl??>
+            <a href="${appInfo.logoutUrl}?<#if appInfo.logoutUrl?contains('zita')>service<#else>end_url</#if>=${(context_url + '/logout.do')?url}"
+               onclick="logout('${context_url}/logout.do', '${appInfo.logoutUrl}'); return false;">Logout</a>
+            <#else>
+            <a href="${baseUrl}/logout.do">Logout</a>
+            </#if>
         </div>
         <#else>
             <div class="registration"> Welcome! Please <a href="${baseUrl}/myTube/list.do"> login</a></div>
@@ -58,4 +62,4 @@
     </div>
 
     <div class="mainStage">
-        <a name="mainStage" id="mainStage"></a>
+        <a name="mainStage"></a>

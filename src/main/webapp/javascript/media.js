@@ -75,21 +75,34 @@ function newWin(url) {
 // script for logout
 var popUp = null;
 var logoutUrl;
-function logout(url, bbLogoutUrl) {
+function logout(url, casLogoutUrl) {
     logoutUrl = url;
-    if (bbLogoutUrl && (bbLogoutUrl.length > 0)) {
-        if ((popUp != null) && (!popUp.closed))
-            popUp.location.href = bbLogoutUrl;
-        else
-            popUp = window.open(bbLogoutUrl, 'logout', 'left=10000,top=10000,width=10,height=10,toolbar=no,resize=no,status=no');
-        if (window.self)
-            window.self.focus();
-        window.setTimeout(goOn, 1000);
+    if (casLogoutUrl && (casLogoutUrl.length > 0)) {
+        var msg = 'As uniTube is protected by a Single Sign On service, you will be logged out of other applications as well. Do you really want to do this?';
+        if (confirm(msg)) {
+            if (casLogoutUrl.indexOf('zita') > 0) {         // if CAS
+                logoutUrl = casLogoutUrl + '?service=' + encodeURIComponent(url);
+                goOn();
+            } else if (casLogoutUrl.indexOf('idm') > 0) {   // if Oracle SSO
+                logoutUrl = casLogoutUrl + '?end_url=' + encodeURIComponent(url);
+                goOn();
+            } else {
+                // otherwise, access cas logout url in a pop-up window
+                // then redirect to UniTube logout page
+                if ((popUp != null) && (!popUp.closed))
+                    popUp.location.href = casLogoutUrl;
+                else
+                    popUp = window.open(casLogoutUrl, 'logout', 'left=10000,top=10000,width=10,height=10,toolbar=no,resize=no,status=no');
+                if (window.self)
+                    window.self.focus();
+                window.setTimeout(goOn, 1000);
+            }
+        }
     } else
         goOn();
 }
 
-// close Blackboard logout window, and redirect to home page
+// close cas logout window, and redirect to UniTube logout page
 function goOn() {
     if (popUp != null)
         popUp.close();
