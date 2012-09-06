@@ -56,7 +56,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 if ((appInfo != null) && appInfo.isUsingCAS()) {
                     String ldapUrl = context.getInitParameter("ldapUrl");
                     String baseDN = context.getInitParameter("baseDN");
-                    authUser = MediaUtil.getUserInfoFromLDAP(username, ldapUrl, baseDN);
+                    String ldapPrincipal = context.getInitParameter("ldapPrincipal");
+                    String ldapCredentials = context.getInitParameter("ldapCredentials");
+                    authUser = MediaUtil.getUserInfoFromLDAP(username, ldapUrl, baseDN, ldapPrincipal, ldapCredentials);
                     authUser = MediaUtil.alterAuthUser(authUser, appInfo);
                     if (authUser != null) {
                         log.debug("AuthUser is not set, set AuthUser to {}.", authUser);

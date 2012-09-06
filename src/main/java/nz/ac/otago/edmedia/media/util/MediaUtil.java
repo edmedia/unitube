@@ -1005,32 +1005,41 @@ public class MediaUtil {
      * Get user information from LDAP
      *
      * @param username username
-     * @param url      ldap url
+     * @param ldapUrl  ldap url
      * @param baseDN   base DN
      * @return authUser for given user
      */
-    public static AuthUser getUserInfoFromLDAP(String username, String url, String baseDN) {
-        return toAuthUser(getUserAttributesFromLDAP(username, url, baseDN));
+    public static AuthUser getUserInfoFromLDAP(String username, String ldapUrl, String baseDN, String ldapPrincipal, String ldapCredentials) {
+        return toAuthUser(getUserAttributesFromLDAP(username, ldapUrl, baseDN, ldapPrincipal, ldapCredentials));
     }
 
     /**
      * Get user attributes from LDAP
      *
      * @param username username
-     * @param url      ldap url
+     * @param ldapUrl  ldap url
      * @param baseDN   base DN
      * @return attributes for given user
      */
-    public static Attributes getUserAttributesFromLDAP(String username, String url, String baseDN) {
+    public static Attributes getUserAttributesFromLDAP(String username, String ldapUrl, String baseDN, String ldapPrincipal, String ldapCredentials) {
         Attributes attributes = null;
-        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(url) && StringUtils.isNotBlank(baseDN)) {
-            log.info("Get user information for \"{}\" from LDAP {} base DN {}", new Object[]{username, url, baseDN});
+        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(ldapUrl) && StringUtils.isNotBlank(baseDN)) {
+            log.info("Get user information for \"{}\" from LDAP {} base DN {}", new Object[]{username, ldapUrl, baseDN});
             // Set up the environment for creating the initial context
             Hashtable<String, String> env = new Hashtable<String, String>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-            env.put(Context.PROVIDER_URL, url);
-            // set to none for anonymous bind
-            env.put(Context.SECURITY_AUTHENTICATION, "none");
+            env.put(Context.PROVIDER_URL, ldapUrl);
+            if (StringUtils.isBlank(ldapPrincipal) || StringUtils.isBlank(ldapCredentials))
+                // set to none for anonymous bind
+                env.put(Context.SECURITY_AUTHENTICATION, "none");
+            else {
+                // set to simple for username and password bind
+                env.put(Context.SECURITY_AUTHENTICATION, "simple");
+                // hardcoded username and password
+                env.put(Context.SECURITY_PRINCIPAL, ldapPrincipal);
+                env.put(Context.SECURITY_CREDENTIALS, ldapCredentials);
+            }
+
             DirContext ctx = null;
             try {
                 ctx = new InitialDirContext(env);
