@@ -9,6 +9,8 @@ import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.spring.util.UploadUtil;
+import nz.ac.otago.edmedia.util.CommandReturn;
+import nz.ac.otago.edmedia.util.CommandRunner;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -17,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
@@ -1236,6 +1239,36 @@ public class MediaUtil {
         boolean result = false;
         if ((media != null) && (media.getAccessType() == MEDIA_ACCESS_TYPE_PUBLIC) && (media.getStatus() == MEDIA_PROCESS_STATUS_FINISHED))
             result = true;
+        return result;
+    }
+
+    /**
+     * Virus scan.
+     *
+     * @param antivirus   anti-virus command
+     * @param input       input file
+     * @param virusStatus status when viruses were discovered
+     * @return true if passed virus scan, or given parameters are empty; false when we found virus in given file
+     */
+    public static boolean passVirusCheck(String antivirus, File input, int virusStatus) {
+        boolean result = true;
+        if (StringUtils.isNotBlank(antivirus) && input.exists()) {
+            // only do virus scan when "anti-virus command" not empty
+            StopWatch sw = new StopWatch();
+            sw.start();
+            StringBuilder command = new StringBuilder(antivirus);
+            command.append(" ");
+            command.append(input.getAbsolutePath());
+            command.append("");
+            CommandReturn commandReturn = CommandRunner.run(command.toString());
+            sw.stop();
+            log.info("Virus scan for file \"{}\"", input);
+            log.debug("Virus scan run time {}", sw);
+            log.debug("{}", commandReturn);
+            String output = commandReturn.toString();
+            if (commandReturn.getExitStatus() == virusStatus)
+                result = false;
+        }
         return result;
     }
 

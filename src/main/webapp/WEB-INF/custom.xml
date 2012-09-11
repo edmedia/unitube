@@ -510,6 +510,8 @@
         <property name="swfdump" value="${command.swfdump}"/>
         <property name="pdf2swf" value="${command.pdf2swf}"/>
         <property name="swfcombine" value="${command.swfcombine}"/>
+        <property name="antivirus" value="${command.antivirus}"/>
+        <property name="virusStatus" value="${virus.status}"/>
         <property name="x264Option" value="${x264.option}"/>
     </bean>
 

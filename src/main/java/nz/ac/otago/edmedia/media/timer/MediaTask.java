@@ -85,12 +85,28 @@ class MediaTask implements Runnable {
                     if ((file != null) && file.exists()) {
                         // only remove old files if we have uploaded file
                         MediaUtil.removeMediaFiles(uploadLocation, media, false);
-                        StopWatch sw = new StopWatch();
-                        sw.start();
-                        // do conversion
-                        mediaInfo = mediaConverter.transcode(file, file.getParentFile());
-                        sw.stop();
-                        log.info("File [{}] [m={}] took [{}] to convert.", new Object[]{file.getAbsolutePath(), media.getAccessCode(), sw});
+                        if (MediaUtil.passVirusCheck(mediaConverter.getAntivirus(), file, mediaConverter.getVirusStatus())) {
+                            StopWatch sw = new StopWatch();
+                            sw.start();
+                            // do conversion
+                            mediaInfo = mediaConverter.transcode(file, file.getParentFile());
+                            sw.stop();
+                            log.info("File [{}] [m={}] took [{}] to convert.", new Object[]{file.getAbsolutePath(), media.getAccessCode(), sw});
+                        } else {
+                            log.error("Found virus in file {}, delete it and email user.", media.getUploadFileUserName());
+                            // send an email to owner about virus warning
+                            MessageSourceAccessor msa = new MessageSourceAccessor(ctx);
+                            String subject = msa.getMessage("media.virus.subject");
+                            String body = msa.getMessage("media.virus.body", new String[]{media.getUser().getFirstName(), media.getUploadFileUserName()});
+                            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                                    media.getUser().getEmail(), subject, body);
+                            // delete uploaded file, converted file and thumbnail
+                            MediaUtil.removeMediaFiles(uploadLocation, media, true);
+                            if (!media.getUser().getIsGuest())
+                                MediaUtil.removeTmpFile(uploadLocation, media.getAccessCode());
+                            // if we find virus in uploaded file, delete it immediately
+                            service.delete(media);
+                        }
                     } else {
                         // if upload file does not exist
                         // there is no conversion we can do
