@@ -58,16 +58,16 @@
         <!-- thumbnail: thumbnail picture-->
         <@spring.bind "media.thumbnail" />
         <#if spring.status.value??>
-        <#assign thumbUrl = mediaFileBaseUrl + "&name=" + spring.status.value />
+        <#assign filename = spring.status.value/>
+        <@spring.bind "media.mediaType" />
+        <#if spring.status.value == 20>
+        <#assign filename = "thumbnail.gif"/>
+        </#if>
+        <#assign thumbUrl = mediaFileBaseUrl + "&name=" + filename />
         <tr>
             <th>Thumbnail</th>
             <td>
-
-                <img src="${thumbUrl?html}"
-                        <@spring.bind "media.width"/>
- width="<#if spring.status.value?? && (spring.status.value &gt; 300)>300</#if>"
-                     alt=""/>
-
+                <img src="${thumbUrl?html}" alt="thumbnail"/>
             </td>
             <td>
 
