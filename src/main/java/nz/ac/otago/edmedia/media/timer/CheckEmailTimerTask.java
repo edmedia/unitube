@@ -7,6 +7,7 @@ import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -56,6 +58,8 @@ public class CheckEmailTimerTask extends BaseTimerTask {
     private String emailUsername;
 
     private String emailPassword;
+
+    private String antivirus;
 
     public void setConsumerKey(String consumerKey) {
         this.consumerKey = consumerKey;
@@ -103,6 +107,10 @@ public class CheckEmailTimerTask extends BaseTimerTask {
 
     public void setEmailPassword(String emailPassword) {
         this.emailPassword = emailPassword;
+    }
+
+    public void setAntivirus(String antivirus) {
+        this.antivirus = antivirus;
     }
 
     /**
@@ -384,10 +392,20 @@ public class CheckEmailTimerTask extends BaseTimerTask {
             media.setLocationCode(randomCode);
 
         File mediaDir = MediaUtil.getMediaDirectory(uploadLocation, media);
-        // MediaUtil.saveUploaedFile(getUploadLocation(), media);
-        // Save attchment in email to right place
-        saveFile(mediaDir, filename, part.getInputStream());
+        // Save attachment in email to right place
+        filename = saveFile(mediaDir, filename, part.getInputStream());
         media.setUploadFileUserName(filename);
+
+        // virus scan uploaded file
+        Map<String, Object> result = MediaUtil.virusScan(antivirus, media, uploadLocation);
+        // if has virus inside
+        if (!result.get("status").equals(0)) {
+            log.warn("Found virus in file " + media.getUploadFileUserName());
+            MediaUtil.removeMediaFiles(uploadLocation, media, true);
+            // delete this email
+            message.setFlag(Flags.Flag.DELETED, true);
+            return;
+        }
 
         media.setIsOnOtherServer(false);
         // we don't convert it at this time, leave it to TimerTask
@@ -454,7 +472,18 @@ public class CheckEmailTimerTask extends BaseTimerTask {
         }
     }
 
-    private void saveFile(File dir, String filename, InputStream input) {
+    private String saveFile(File dir, String filename, InputStream input) {
+        // if filename has non-alphanumeric character, replace it with "_"
+        char[] newNameArray = new char[filename.length()];
+        filename.getChars(0, filename.length(), newNameArray, 0);
+        for (int i = 0; i < filename.length(); i++) {
+            // ignore '.' and '-'
+            if ((filename.charAt(i) != '.') && (filename.charAt(i) != '-')) {
+                if (!CharUtils.isAsciiAlphanumeric(filename.charAt(i)))
+                    newNameArray[i] = '_';
+            }
+        }
+        filename = new String(newNameArray);
         OutputStream output = null;
         try {
             output = new FileOutputStream(new File(dir, filename));
@@ -467,6 +496,7 @@ public class CheckEmailTimerTask extends BaseTimerTask {
             IOUtils.closeQuietly(output);
             IOUtils.closeQuietly(input);
         }
+        return filename;
     }
 
 }

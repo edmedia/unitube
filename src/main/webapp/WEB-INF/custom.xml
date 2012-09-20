@@ -99,6 +99,7 @@
         <property name="formView" value="main"/>
         <property name="internalIpStart" value="${internal.ip.start}"/>
         <property name="internalIpEnd" value="${internal.ip.end}"/>
+        <property name="antivirus" value="${command.antivirus}"/>
         <property name="successView" value="uploadSuccess"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="commandName" value="media"/>
@@ -122,6 +123,7 @@
         <property name="smtpPort" value="${email.smtp.port}"/>
         <property name="internalIpStart" value="${internal.ip.start}"/>
         <property name="internalIpEnd" value="${internal.ip.end}"/>
+        <property name="antivirus" value="${command.antivirus}"/>
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="commandName" value="media"/>
         <property name="service" ref="myBaseService"/>
@@ -422,7 +424,7 @@
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
 
-     <bean id="authInterceptor" class="nz.ac.otago.edmedia.media.interceptor.AuthInterceptor">
+    <bean id="authInterceptor" class="nz.ac.otago.edmedia.media.interceptor.AuthInterceptor">
         <property name="service" ref="myBaseService"/>
     </bean>
 
@@ -510,8 +512,6 @@
         <property name="swfdump" value="${command.swfdump}"/>
         <property name="pdf2swf" value="${command.pdf2swf}"/>
         <property name="swfcombine" value="${command.swfcombine}"/>
-        <property name="antivirus" value="${command.antivirus}"/>
-        <property name="virusStatus" value="${virus.status}"/>
         <property name="x264Option" value="${x264.option}"/>
     </bean>
 
@@ -558,6 +558,7 @@
         <property name="emailUsername" value="${email.upload.username}"/>
         <property name="emailPassword" value="${email.upload.password}"/>
         <property name="appURL" value="${app.url}"/>
+        <property name="antivirus" value="${command.antivirus}"/>
     </bean>
 
     <bean id="checkEmailScheduledTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">

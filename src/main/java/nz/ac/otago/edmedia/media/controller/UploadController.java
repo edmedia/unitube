@@ -59,6 +59,8 @@ public class UploadController extends BaseFormController {
 
     private String internalIpEnd;
 
+    private String antivirus;
+
     public void setConsumerKey(String consumerKey) {
         this.consumerKey = consumerKey;
     }
@@ -119,8 +121,11 @@ public class UploadController extends BaseFormController {
         this.internalIpEnd = internalIpEnd;
     }
 
+    public void setAntivirus(String antivirus) {
+        this.antivirus = antivirus;
+    }
+
     @Override
-    @SuppressWarnings("unchecked")
     protected ModelAndView onSubmit(HttpServletRequest request,
                                     HttpServletResponse response,
                                     Object command,
@@ -167,6 +172,20 @@ public class UploadController extends BaseFormController {
 
         MediaUtil.saveUploaedFile(getUploadLocation(), media);
 
+        // virus scan uploaded file
+        Map<String, Object> result = MediaUtil.virusScan(antivirus, media, getUploadLocation());
+        // if has virus inside
+        if (!result.get("status").equals(0)) {
+            logger.warn("Found virus in file " + media.getUploadFileUserName());
+            MediaUtil.removeMediaFiles(getUploadLocation(), media, true);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> model = (Map<String, Object>) errors.getModel();
+            model.put("hasVirus", true);
+            model.put("status", result.get("status"));
+            model.put("detail", result.get("detail"));
+            return getModelAndView(model, request);
+        }
+
         media.setIsOnOtherServer(false);
         // if uploadOnly is true, don't convert
         if (media.getUploadOnly()) {
@@ -207,8 +226,7 @@ public class UploadController extends BaseFormController {
             logger.error(e);
             throw new ServletException("Exception when saving media", e);
         }
-        Map model = errors.getModel();
-        return getModelAndView(model, request);
+        return getModelAndView(errors.getModel(), request);
     }
 
     @Override

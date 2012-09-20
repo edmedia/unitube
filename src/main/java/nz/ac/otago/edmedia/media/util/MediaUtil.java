@@ -1245,29 +1245,40 @@ public class MediaUtil {
     /**
      * Virus scan.
      *
-     * @param antivirus   anti-virus command
-     * @param input       input file
-     * @param virusStatus status when viruses were discovered
+     * @param antivirus      anti-virus command
+     * @param media          media
+     * @param uploadLocation upload location
      * @return true if passed virus scan, or given parameters are empty; false when we found virus in given file
      */
-    public static boolean passVirusCheck(String antivirus, File input, int virusStatus) {
-        boolean result = true;
-        if (StringUtils.isNotBlank(antivirus) && input.exists()) {
-            // only do virus scan when "anti-virus command" not empty
-            StopWatch sw = new StopWatch();
-            sw.start();
-            StringBuilder command = new StringBuilder(antivirus);
-            command.append(" ");
-            command.append(input.getAbsolutePath());
-            command.append("");
-            CommandReturn commandReturn = CommandRunner.run(command.toString());
-            sw.stop();
-            log.info("Virus scan for file \"{}\"", input);
-            log.debug("Virus scan run time {}", sw);
-            log.debug("{}", commandReturn);
-            String output = commandReturn.toString();
-            if (commandReturn.getExitStatus() == virusStatus)
-                result = false;
+    public static Map<String, Object> virusScan(String antivirus, Media media, UploadLocation uploadLocation) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("status", 0);
+        if (media != null) {
+            File mediaDir = MediaUtil.getMediaDirectory(uploadLocation, media);
+            File input = new File(mediaDir, media.getUploadFileUserName());
+            if (StringUtils.isNotBlank(antivirus) && input.exists()) {
+                // only do virus scan when "anti-virus command" not empty and media file exists
+                StopWatch sw = new StopWatch();
+                sw.start();
+                StringBuilder command = new StringBuilder(antivirus);
+                command.append(" ");
+                command.append(input.getAbsolutePath());
+                command.append("");
+                CommandReturn commandReturn = CommandRunner.run(command.toString());
+                sw.stop();
+                log.info("Virus scan for file \"{}\"", input);
+                log.debug("Virus scan run time {}", sw);
+                log.debug("{}", commandReturn);
+                result.put("status", commandReturn.getExitStatus());
+                String detail = commandReturn.getStdout();
+                String token = "found in file";
+                if (detail.contains(token)) {
+                    int index = detail.indexOf(token);
+                    detail = detail.substring(0, index + token.length()) + " " + media.getUploadFileUserName();
+                }
+                if (StringUtils.isNotBlank(detail))
+                    result.put("detail", detail);
+            }
         }
         return result;
     }

@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Post controller: upload to UniTube by http post.
@@ -31,12 +32,18 @@ public class PostController extends EmailTwitterController {
 
     private String internalIpEnd;
 
+    private String antivirus;
+
     public void setInternalIpStart(String internalIpStart) {
         this.internalIpStart = internalIpStart;
     }
 
     public void setInternalIpEnd(String internalIpEnd) {
         this.internalIpEnd = internalIpEnd;
+    }
+
+    public void setAntivirus(String antivirus) {
+        this.antivirus = antivirus;
     }
 
     @Override
@@ -93,6 +100,18 @@ public class PostController extends EmailTwitterController {
 
         // save uploaded file
         MediaUtil.saveUploaedFile(getUploadLocation(), media);
+
+        // virus scan uploaded file
+        Map<String, Object> result = MediaUtil.virusScan(antivirus, media, getUploadLocation());
+        // if has virus inside
+        if (!result.get("status").equals(0)) {
+            logger.warn("Found virus in file " + media.getUploadFileUserName());
+            MediaUtil.removeMediaFiles(getUploadLocation(), media, true);
+            success = false;
+            String detail = (String) result.get("detail");
+            OtherUtil.responseXml(response, action, success, detail);
+            return null;
+        }
 
         // if uploadOnly is true, don't convert
         if (media.getUploadOnly()) {

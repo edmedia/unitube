@@ -50,10 +50,6 @@ public class MediaConverter {
     private String pdf2swf;
     private String swfcombine;
 
-    private String antivirus;
-
-    private int virusStatus;
-
     private String x264Option;
 
     public String getFfmpeg() {
@@ -131,22 +127,6 @@ public class MediaConverter {
 
     public void setSwfcombine(String swfcombine) {
         this.swfcombine = swfcombine;
-    }
-
-    public String getAntivirus() {
-        return antivirus;
-    }
-
-    public void setAntivirus(String antivirus) {
-        this.antivirus = antivirus;
-    }
-
-    public int getVirusStatus() {
-        return virusStatus;
-    }
-
-    public void setVirusStatus(int virusStatus) {
-        this.virusStatus = virusStatus;
     }
 
     public String getX264Option() {
