@@ -1,14 +1,11 @@
 <div class="infoBox">
-    <div class="infoHeader"></div>
-    <div class="infoContent">
-        <div class="info">
+    <div class="info">
 
-            <p>Go to <a href="${baseUrl}/myTube/list.do">My Media</a> to upload the files you require. You will then be
-                able to select them from the dropdown lists on the left. </p>
+        <p>Go to <a href="${baseUrl}/myTube/list.do">My Media</a> to upload the files you require. You will then be
+            able to select them from the dropdown lists on the left. </p>
 
-            <p><a href="${baseUrl}/myTube/avplist.do">Find out more about AVPs</a></p>
+        <p><a href="${baseUrl}/myTube/avplist.do">Find out more about AVPs</a></p>
 
-        </div>
     </div>
 </div>
 <#include "myOptions.ftl"/>

@@ -35,9 +35,12 @@
 
         <div class="topNavLinks">
             <a href="${baseUrl}/copyright.do" accesskey="6">Copyright &amp; IP</a><br/>
+            <a href="mailto:unitube@otago.ac.nz" accesskey="7">Feedback</a><br/>
+            <#--
             <a href="${baseUrl}/feedback.do" accesskey="7">
                 <img src="${baseUrl}/images/twitter.ico" style="float:left;margin-right:5px" alt="Twitter Icon"/>
                 Tweet about UniTube</a><br/>
+                -->
             <a href="${baseUrl}/about.do" accesskey="8">About</a>
         </div>
 

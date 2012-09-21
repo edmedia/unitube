@@ -365,27 +365,10 @@ div.topLine {
 }
 
 .infoBox {
+    padding-left: 20px;
     float: right;
-    margin-top: 30px;
     overflow: hidden;
     width: 236px;
-}
-
-.infoHeader, .infoFooter {
-    overflow: hidden;
-}
-
-.infoHeader {
-    /* background-image: url("../images/UniTube_04.png"); */
-    height: 15px;
-    width: 236px;
-}
-
-.infoHeaderTxt {
-    clear: both;
-    font-size: 18px;
-    height: 40px;
-    width: 200px;
 }
 
 .search {
@@ -426,12 +409,6 @@ div.topLine {
     margin: 10px auto;
 }
 
-.infoContent {
-    /* background-image: url("../images/UniTube_07.png"); */
-    padding: 0px 20px 20px;
-    width: 196px;
-}
-
 .infoBox h2{
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 5px;
@@ -440,13 +417,6 @@ div.topLine {
 
 .info {
     clear: both;
-}
-
-.infoFooter {
-  /*  background-image: url("../images/info_footer.png"); */
-    clear: both;
-    height: 15px;
-    width: 236px;
 }
 
 div.clearMe {

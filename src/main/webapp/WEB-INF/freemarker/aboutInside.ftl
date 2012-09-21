@@ -1,14 +1,3 @@
-<div class="infoBox">
-    <div class="infoHeader"></div>
-    <div class="infoContent">
-        <div class="info">
-        </div>
-    </div>
-    <!--end of infoContent-->
-    <div class="infoFooter"></div>
-</div>
-<!-- end of infoBox -->
-
 <div class="mediaArea">
 
     <p>UniTube is a hosting service provided for University of Otago staff and students to upload and share educational
