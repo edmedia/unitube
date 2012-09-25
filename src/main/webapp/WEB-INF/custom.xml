@@ -55,21 +55,6 @@
     <bean id="help" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
     </bean>
 
-    <bean id="feedback" class="nz.ac.otago.edmedia.media.controller.FeedbackController">
-        <property name="username" value="${twitter.username}"/>
-    </bean>
-
-    <bean id="sendFeedback" class="nz.ac.otago.edmedia.media.controller.SendFeedbackController">
-        <property name="consumerKey" value="${twitter.consumer.key}"/>
-        <property name="consumerSecret" value="${twitter.consumer.secret}"/>
-        <property name="accessToken" value="${twitter.access.token}"/>
-        <property name="accessTokenSecret" value="${twitter.access.token.secret}"/>
-        <property name="proxyHost" value="${twitter.http.proxyHost}"/>
-        <property name="proxyPort" value="${twitter.http.proxyPort}"/>
-        <property name="proxyUser" value="${twitter.http.proxyUser}"/>
-        <property name="proxyPassword" value="${twitter.http.proxyPassword}"/>
-    </bean>
-
     <bean id="register" class="nz.ac.otago.edmedia.media.controller.RegisterController">
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
         <property name="commandName" value="user"/>
@@ -446,8 +431,6 @@
                 /copyright.do=copyright
                 /help.do=help
                 /about.do=about
-                /feedback.do=feedback
-                /sendFeedback.do=sendFeedback
                 /register.do=register
                 /myTube/upload.do=upload
                 /__post__.do=post
