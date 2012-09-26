@@ -178,6 +178,11 @@ public class UploadController extends BaseFormController {
         if (!result.get("status").equals(0)) {
             logger.warn("Found virus in file " + media.getUploadFileUserName());
             MediaUtil.removeMediaFiles(getUploadLocation(), media, true);
+            // send an email to user
+            String subject = msa.getMessage("media.virus.subject");
+            String body = msa.getMessage("media.virus.body", new String[]{user.getFirstName(), originalFilename});
+            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    user.getEmail(), subject, body);
             @SuppressWarnings("unchecked")
             Map<String, Object> model = (Map<String, Object>) errors.getModel();
             model.put("hasVirus", true);

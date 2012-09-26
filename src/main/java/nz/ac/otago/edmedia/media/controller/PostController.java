@@ -107,6 +107,11 @@ public class PostController extends EmailTwitterController {
         if (!result.get("status").equals(0)) {
             logger.warn("Found virus in file " + media.getUploadFileUserName());
             MediaUtil.removeMediaFiles(getUploadLocation(), media, true);
+            // send an email to user
+            String subject = msa.getMessage("media.virus.subject");
+            String body = msa.getMessage("media.virus.body", new String[]{user.getFirstName(), originalFilename});
+            OtherUtil.sendEmail(getMailHost(), getFromEmail(), getSmtpUsername(), getSmtpPassword(), getSmtpPort(),
+                    user.getEmail(), subject, body);
             success = false;
             String detail = (String) result.get("detail");
             OtherUtil.responseXml(response, action, success, detail);

@@ -402,6 +402,12 @@ public class CheckEmailTimerTask extends BaseTimerTask {
         if (!result.get("status").equals(0)) {
             log.warn("Found virus in file " + media.getUploadFileUserName());
             MediaUtil.removeMediaFiles(uploadLocation, media, true);
+            MessageSourceAccessor msa = new MessageSourceAccessor(ctx);
+            // send an email to user
+            String subject = msa.getMessage("media.virus.subject");
+            String body = msa.getMessage("media.virus.body", new String[]{user.getFirstName(), filename});
+            OtherUtil.sendEmail(mailHost, fromEmail, smtpUsername, smtpPassword, smtpPort,
+                    user.getEmail(), subject, body);
             // delete this email
             message.setFlag(Flags.Flag.DELETED, true);
             return;
