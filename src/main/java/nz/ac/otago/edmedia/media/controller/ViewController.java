@@ -1,19 +1,20 @@
 package nz.ac.otago.edmedia.media.controller;
 
-import nz.ac.otago.edmedia.media.bean.*;
+import nz.ac.otago.edmedia.media.bean.Comment;
+import nz.ac.otago.edmedia.media.bean.IVOption;
+import nz.ac.otago.edmedia.media.bean.Media;
+import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
-import nz.ac.otago.edmedia.spring.util.OtherUtil;
 import nz.ac.otago.edmedia.util.CommonUtil;
-import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +105,16 @@ public class ViewController extends BaseOperationController {
                 if (StringUtils.isBlank(media.getLocationCode()))
                     media.setLocationCode(media.getRandomCode());
                 model.put("obj", media);
+                model.put("fileExists", false);
+                File mediaDir = MediaUtil.getMediaDirectory(getUploadLocation(), media);
+                if (StringUtils.isNotBlank(media.getRealFilename())) {
+                    File mediaFile = new File(mediaDir, media.getRealFilename());
+                    model.put("fileExists", mediaFile.exists());
+                }
+                if(media.getUploadOnly() && StringUtils.isNotBlank(media.getUploadFileUserName())) {
+                    File mediaFile = new File(mediaDir, media.getUploadFileUserName());
+                    model.put("fileExists", mediaFile.exists());
+                }
                 if (media.getMediaType() == MediaUtil.MEDIA_TYPE_IMAGE) {
                     // get ivOption for image file
                     IVOption ivOption = MediaUtil.getIVOption(media, service);

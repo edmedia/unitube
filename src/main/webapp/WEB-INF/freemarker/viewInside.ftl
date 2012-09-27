@@ -1,41 +1,29 @@
 <div class="stage">
-<#if obj??>
+<#if obj?? && obj.status &gt; 1>
 <div>
     <strong>${obj.title?html}</strong>
     <#if isOwner>
         &nbsp;
         <a href="${baseUrl}/myTube/edit.do?id=${obj.id?c}">Edit this media</a>
-    <#--
-     <#if obj.accessType == 20>
-    |
-    <a href="#" class="share">Share</a>
-    </#if>
-    -->
     </#if>
 </div>
-<#-- if media status is waiting or processing, display message -->
-    <#if (obj.status == 0) || (obj.status == 1)>
     <div class="info">
-    <@spring.message "media.processing"/>
-    </div>
-    </#if>
 <#-- if media status is unrecognized, display message -->
     <#if obj.status == 9>
-    <div class="info">
     <@spring.message "media.unrecognized"/>
-    </div>
-    </#if>
 <#-- if this media is upload only, display message -->
-    <#if obj.uploadOnly>
-    <div class="info">
+    <#elseif obj.uploadOnly>
     <@spring.message "media.uploadOnly"/>
-    </div>
+<#-- if can not find media file, display message -->
+    <#elseif !fileExists>
+    <@spring.message "media.file.not.found"/>
     </#if>
+    </div>
 
     <#include "viewHelper.ftl"/>
 
-<#-- if media status is finished, is not upload only, and realFilename is not empty, display video, audio, flash or iamge -->
-    <#if (obj.status ==2) && !obj.uploadOnly && obj.realFilename?has_content>
+<#-- if media status is finished, is not upload only, and realFilename is not empty, display video, audio, flash or image -->
+    <#if (obj.status ==2) && !obj.uploadOnly && obj.realFilename?has_content && fileExists>
     <div class="mediaBorder">
         <#assign idDiv="unitube___media___"/>
         <div id="unitube_media">
@@ -157,9 +145,9 @@
         <li><a rel="nofollow" target="_blank" href="http://www.stumbleupon.com/submit?url=${viewURL?url}&amp;title=${linkTitle}" title="StumbleUpon">
             <img src="${baseUrl}/images/sociable/stumbleupon.png" title="StumbleUpon" alt="StumbleUpon" class="sociable-hovers" /></a></li>
         -->
-            <li><a rel="nofollow" target="_blank" href="http://twitthis.com/twit?url=${viewURL?url}"
+            <li><a rel="nofollow" target="_blank" href="https://twitter.com/intent/tweet?url=${viewURL?url}&amp;text=${linkTitle}"
                    title="TwitThis">
-                <img src="${baseUrl}/images/sociable/twitter.png" title="TwitThis" alt="TwitThis"
+                <img src="${baseUrl}/images/twitter.png" title="Twitter" alt="Twitter"
                      class="sociable-hovers"/></a>
             </li>
         <#--
@@ -321,20 +309,6 @@
         });
 
         displayComment();
-    <#--
-    <#if isOwner && obj.accessType == 20>
-        shareDialog();
-        // when clicking "share" link for private media file
-        $('a.share').click(function() {
-            // set mediaID
-            $('#ar_mediaID').val("${obj.id?c}");
-            // open share dialog
-            $("#share-dialog").dialog('open');
-            $('#userInput').focus();
-            return false;
-        });
-    </#if>
-    -->
     });
     //-->
 </script>
@@ -342,8 +316,11 @@
     <div class="info">
         <#if accessDenied>
     <@spring.message "media.access.deny"/>
+    <#elseif obj?? && ((obj.status == 0) || (obj.status == 1))>
+<#-- if media status is waiting or processing, display message -->
+    <@spring.message "media.processing"/>
     <#else>
-        <@spring.message "media.not.found"/>
+        <@spring.message "media.record.not.found"/>
         </#if>
     </div>
 </#if>

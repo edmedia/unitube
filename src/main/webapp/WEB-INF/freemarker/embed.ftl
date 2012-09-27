@@ -1,5 +1,16 @@
 <#include "common/head.ftl" />
-<#if obj??>
+<style type="text/css" media="screen">
+    html, body {
+        height: 100%;
+        background-image: none;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+</style>
+<#if obj?? && (obj.status == 2) && !obj.uploadOnly && obj.realFilename?has_content && fileExists>
     <#include "viewHelper.ftl" />
 <#-- image -->
     <#if obj.mediaType == 5>
@@ -16,16 +27,8 @@
         <#-- flash format-->
         <style type="text/css" media="screen">
             html, body {
-                height: 100%;
                 background-color: black;
             }
-
-            body {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-            }
-
             #flashContent {
                 width: 100%;
                 height: 100%;
@@ -54,8 +57,18 @@
     <div class="info">
         <#if accessDenied>
     <@spring.message "media.access.deny"/>
-    <#else>
-        <@spring.message "media.not.found"/>
+    <#elseif !fileExists>
+        <@spring.message "media.file.not.found"/>
+            <#elseif obj??>
+                <#if (obj.status == 0) || (obj.status == 1)>
+                <@spring.message "media.processing"/>
+                    <#elseif obj.status == 9>
+                    <@spring.message "media.unrecognized"/>
+                    <#elseif obj.uploadOnly>
+                    <@spring.message "media.uploadOnly"/>
+                </#if>
+            <#else>
+            <@spring.message "media.record.not.found"/>
         </#if>
     </div>
 </#if>
