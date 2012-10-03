@@ -11,7 +11,7 @@
     <meta name="Author" content="Educational Media, HEDC, University of Otago"/>
     <meta name="keywords" content="UniTube, Educational Media, HEDC, University of Otago"/>
     <link rel="shortcut icon" href="http://www.otago.ac.nz/favicon.ico" type="image/x-icon"/>
-<#assign needJQueryUI=(this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync")))/>
+<#assign needJQueryUI=(this_url?? && (this_url?contains("myTube/") || this_url?contains("avpSync") || this_url?contains("album")))/>
 <#if needJQueryUI >
     <link rel="stylesheet" type="text/css" media="screen"
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/ui-lightness/jquery-ui.css"/>

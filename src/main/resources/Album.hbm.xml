@@ -35,7 +35,7 @@
         <many-to-one name="owner" column="ownerid"/>
 
         <!-- All AlbumMedias -->
-        <set name="albumMedias" cascade="all,delete-orphan" order-by="" inverse="true">
+        <set name="albumMedias" cascade="all,delete-orphan" order-by="orderNumber" inverse="true">
             <key column="albumid"/>
             <one-to-many class="AlbumMedia"/>
         </set>

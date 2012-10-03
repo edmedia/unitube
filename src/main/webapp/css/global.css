@@ -1160,3 +1160,11 @@ div.myOptions a.currentPage {
     cursor: default;
     font-weight: bold;
 }
+
+tr.albumMediaList {
+    background: #fff;
+}
+
+tr.placeHolder {
+    background: #eee;
+}

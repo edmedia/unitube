@@ -17,6 +17,11 @@
         <!-- Media -->
         <many-to-one name="media" column="mediaid"/>
 
+        <!-- orderNumber -->
+        <property name="orderNumber">
+            <column name="ordernumber"/>
+        </property>
+
     </class>
 
 </hibernate-mapping>

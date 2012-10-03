@@ -38,6 +38,8 @@ public class AlbumMedia {
 
     private Long mediaID;
 
+    private int orderNumber;
+
 
     // --------------------------- RELATIONSHIP MANAGEMENT --------------------
 
@@ -78,6 +80,9 @@ public class AlbumMedia {
         return this.mediaID;
     }
 
+    public int getOrderNumber() {
+        return this.orderNumber;
+    }
 
     // --------------------------- SET METHODS START --------------------------
 
@@ -116,6 +121,9 @@ public class AlbumMedia {
         this.mediaID = mediaID;
     }
 
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     /**
      * @return a short name which should meaningfully identify this row to the user
