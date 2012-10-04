@@ -20,7 +20,7 @@
                    class="linkURL"
                     />
         </form>
-        <#if isOwner??>
+        <#if isOwner>
             <span class="title">For album owner: you can re-order media files inside an album, by dragging a media file and dropping it to right place. </span>
         </#if>
     </div>
