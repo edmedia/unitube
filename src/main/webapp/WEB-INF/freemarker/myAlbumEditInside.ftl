@@ -75,9 +75,11 @@
                 <th>Access Type</th>
                 <td>
                     <input type="radio" name="${spring.status.expression}"
-                           value="0"<#if spring.status.value ==0> checked="checked"</#if>/> Public
+                           value="0"<#if spring.status.value ==0> checked="checked"</#if>/>
+                    Public: <@spring.message "album.access.public"/> <br/>
                     <input type="radio" name="${spring.status.expression}"
-                           value="10"<#if spring.status.value ==10> checked="checked"</#if>/> Hidden
+                           value="10"<#if spring.status.value ==10> checked="checked"</#if>/>
+                    Hidden:  <@spring.message "album.access.hidden"/>
                     <#--
                     <input type="radio" name="${spring.status.expression}"
                            value="20"<#if spring.status.value ==20> checked="checked"</#if>/> Private

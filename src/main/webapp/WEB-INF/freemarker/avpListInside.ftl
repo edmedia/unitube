@@ -6,16 +6,15 @@
         <input type="hidden" name="${param.name?html}" value="${param.value?html}"/>
     </#list>
 
-        <p>AVP stands for Audio/Video Presentation. This feature allows you to upload different types of media and
-            combine them within a single file. This would be handy if you wanted to present an audio or video recording
+        <p>Presenter allows you to combine different types of media to create your own presentation. This would be handy if you wanted to present an audio or video recording
             of your lecture together with your Powerpoint slides. You can specify the timing of the PowerPoint slideshow
-            to synchronise it with the audio/video file.</p>
+            to synchronise it with the audio/video file. <a href="${baseUrl}/myPresenterGuide.do">Find out more about how to use Presenter.</p>
 
         <div class="navDiv">
         <#if pager.elements?has_content>
             <input type="button" value="Delete"/>
         </#if>
-            <a href="avpEdit.do?aa=new">Create a new AVP</a>
+            <a href="avpEdit.do?aa=new">Create a new presentation</a>
             <span class="emptySpace">&nbsp; &nbsp; </span>
         <@displayGmailStylePager pager/>
         </div>
@@ -24,9 +23,8 @@
         <table summary="">
 
             <tr>
-                <th>
-                    <input type="checkbox" name="all"/>
-                    #
+                <th class="checkbox">
+                    <input type="checkbox" name="all"/> #
                 </th>
                 <th>name</th>
                 <th>URL</th>
@@ -56,7 +54,7 @@
 
         <div class="navDiv">
             <input type="button" value="Delete"/>
-            <a href="avpEdit.do?aa=new">Create a new AVP</a>
+            <a href="avpEdit.do?aa=new">Create a new presentation</a>
             <span class="emptySpace">&nbsp; &nbsp; </span>
         <@displayGmailStylePager pager/>
         </div>

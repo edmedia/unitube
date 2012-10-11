@@ -638,7 +638,7 @@ th {
 th, td {
     border-top: 1px dashed #CCCCCC;
     padding: 10px;
-    vertical-align: top;
+    /** vertical-align: top;   */
 	text-align:left;
 }
 
@@ -1167,4 +1167,9 @@ tr.albumMediaList {
 
 tr.placeHolder {
     background: #eee;
+}
+
+th.checkbox {
+    width: 35px;
+    vertical-align: baseline;
 }

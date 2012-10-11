@@ -55,6 +55,24 @@
     <bean id="help" class="nz.ac.otago.edmedia.spring.controller.StaticContentController">
     </bean>
 
+    <bean id="blackboardShareGuide" class="nz.ac.otago.edmedia.media.controller.BlackboardShareGuide">
+    </bean>
+
+    <bean id="emailUploadGuide" class="nz.ac.otago.edmedia.media.controller.EmailUploadGuide">
+    </bean>
+
+    <bean id="imageViewerGuide" class="nz.ac.otago.edmedia.media.controller.ImageViewerGuide">
+    </bean>
+
+    <bean id="myPresenterGuide" class="nz.ac.otago.edmedia.media.controller.MyPresenterGuide">
+    </bean>
+
+    <bean id="organiseAlbumsGuide" class="nz.ac.otago.edmedia.media.controller.OrganiseAlbumsGuide">
+    </bean>
+
+    <bean id="webUploadGuide" class="nz.ac.otago.edmedia.media.controller.WebUploadGuide">
+    </bean>
+
     <bean id="register" class="nz.ac.otago.edmedia.media.controller.RegisterController">
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.User"/>
         <property name="commandName" value="user"/>
@@ -434,6 +452,12 @@
                 /resetPassword.do=resetPassword
                 /copyright.do=copyright
                 /help.do=help
+                /blackboardShareGuide.do=blackboardShareGuide
+                /emailUploadGuide.do=emailUploadGuide
+                /imageViewerGuide.do=imageViewerGuide
+                /myPresenterGuide.do=myPresenterGuide
+                /organiseAlbumsGuide.do=organiseAlbumsGuide
+                /webUploadGuide.do=webUploadGuide
                 /about.do=about
                 /register.do=register
                 /myTube/upload.do=upload

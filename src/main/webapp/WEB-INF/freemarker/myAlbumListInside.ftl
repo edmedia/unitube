@@ -27,14 +27,14 @@
         <table summary="">
 
             <tr>
-                <th>
-                    <input type="checkbox" name="all"/>
-                    #
+                <th class="checkbox">
+                    <input type="checkbox" name="all"/> #
                 </th>
                 <th>name</th>
                 <th>URL</th>
                 <th>User(s)</th>
                 <th></th>
+                <th>Other</th>
             </tr>
 
             <#list pager.elements as obj>
@@ -62,6 +62,11 @@
                     <td>
                         <a href="#" rel="albumDelete.do?id=${obj.id?c}${pager.parameters?html}"
                            class="delete">delete</a>
+                    </td>
+                    <td>
+                        <#if obj.accessType ==10>
+                    <span title="<@spring.message "album.access.hidden"/>">hidden</span>
+                        </#if>
                     </td>
                 </tr>
             </#list>

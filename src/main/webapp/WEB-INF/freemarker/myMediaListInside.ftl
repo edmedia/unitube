@@ -25,7 +25,7 @@
             </#if>
             <a href="albumEdit.do?aa=new">Create a new album</a>
             | <a href="" title="Transfer Ownership to other user" class="transferOwner">Transfer Owner</a>
-            | <a href="avpEdit.do" title="" class="newAVP">Create a new AVP</a>
+            | <a href="avpEdit.do" title="" class="newAVP">Create a new presentation</a>
 
             <span class="emptySpace">&nbsp; &nbsp; </span>
             <@displayGmailStylePager pager/>
@@ -34,9 +34,8 @@
         <table summary="" width="100%">
             <thead>
             <tr>
-                <th>
-                    <input type="checkbox" name="all"/>
-                    #
+                <th class="checkbox">
+                    <input type="checkbox" name="all"/> #
                 </th>
                 <th>View</th>
                 <th>Title/Edit</th>

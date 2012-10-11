@@ -44,6 +44,8 @@
                     <a href="${baseUrl}/myTube/annotAuthor.do?a=${annotation.id?c}">Change Annotation</a>
                 </#if>
             </#if>
+            |
+            <a href="${baseUrl}/imageViewerGuide.do">ImageViewer help</a>
         </p>
     </div>
     <div id="right">

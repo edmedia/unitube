@@ -8,7 +8,7 @@
         My Albums</a> |
     <a href="${baseUrl}/myTube/avpList.do"
     <#if this_url?? && this_url?contains("avpList.do")> class="currentPage"</#if>>
-        My AVPs </a> |
+        My Presenter </a> |
     <a href="${baseUrl}/myTube/profile.do"
     <#if this_url?? && this_url?contains("profile.do")> class="currentPage"</#if>>
         My Profile </a>

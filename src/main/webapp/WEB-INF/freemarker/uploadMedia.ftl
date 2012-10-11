@@ -75,7 +75,8 @@
     </div>
 </form>
 <br />
-<p>Did you know you can also upload files by emailing them to UniTube? <a href="${baseUrl}/help.do">Find out more</a></p>
+<p>Stuck? <a href="${baseUrl}/webUploadGuide.do">Get help with uploading</a></p>
+<p>Did you know you can also upload files by emailing them to UniTube? <a href="${baseUrl}/emailUploadGuide.do">Find out more.</a></p>
 <br/>
 <hr/>
 <br/>

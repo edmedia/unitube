@@ -136,7 +136,7 @@
                 <@spring.bind "media.uploadFileUserName" />
                 <#if spring.status.value?has_content>
                 <#assign uploadFileUrl = mediaFileBaseUrl + "&name=" + spring.status.value />
-                <a href="${uploadFileUrl?html}"><@getTitle spring.status.value! /></a>
+                <a href="${uploadFileUrl?html}" title="<@getTitle spring.status.value! />"><@getTitle spring.status.value! /></a>
                 </#if>
             </td>
         </tr>

@@ -4,7 +4,7 @@
         <p>Go to <a href="${baseUrl}/myTube/list.do">My Media</a> to upload the files you require. You will then be
             able to select them from the dropdown lists on the left. </p>
 
-        <p><a href="${baseUrl}/myTube/avplist.do">Find out more about AVPs</a></p>
+        <p><a href="${baseUrl}/myPresenterGuide.do">Find out more about how to use Presenter.</a></p>
 
     </div>
 </div>
@@ -13,7 +13,7 @@
 <div class="stage">
 <@spring.bind "avp.id" />
 
-    <h2><#if spring.status.value??>Edit<#else>Create a new</#if> AVP</h2>
+    <h2><#if spring.status.value??>Edit<#else>Create a new</#if> presentation</h2>
 
     <form action="${this_url}" name="albumForm" method="post">
     <#if pageNumber??>
@@ -126,7 +126,7 @@
     <a href="<@spring.url "/admin.do"/>">Back to Admin List</a>
     -->
         <a href="avpList.do?aa=list<#if pageNumber??>&amp;p=${pb.p?c}</#if><#if pageSize??>&amp;s=${pb.s?c}</#if>">Back
-            to AVP list</a>
+            to Presenter list</a>
     </div>
 
 </div>
