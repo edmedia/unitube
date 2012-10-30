@@ -638,7 +638,7 @@ th {
 th, td {
     border-top: 1px dashed #CCCCCC;
     padding: 10px;
-    /** vertical-align: top;   */
+    vertical-align: top;
 	text-align:left;
 }
 

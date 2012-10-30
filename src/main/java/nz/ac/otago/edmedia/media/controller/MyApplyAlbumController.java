@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Applys album to media.
+ * Apply album to selected media.
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
  *         Date: 19/06/2008
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MyApplyAlbumController extends BaseOperationController {
 
-    @SuppressWarnings("unchecked")
+    @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -33,8 +33,9 @@ public class MyApplyAlbumController extends BaseOperationController {
         if ((albumID > 0) && (ids != null) && (ids.length > 0)) {
             Album album = (Album) service.get(Album.class, albumID);
             if (album != null)
-                for (int i = 0; i < ids.length; i++) {
-                    long mediaID = Long.parseLong(ids[i]);
+                for (String id : ids) {
+                    long mediaID = Long.parseLong(id);
+                    @SuppressWarnings("unchecked")
                     Media media = (Media) service.get(Media.class, mediaID);
                     if (media != null) {
                         SearchCriteria criteria = new SearchCriteria.Builder()

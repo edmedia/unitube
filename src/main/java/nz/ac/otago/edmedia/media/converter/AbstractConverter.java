@@ -60,8 +60,8 @@ abstract public class AbstractConverter implements Converter {
 
     /**
      * Check if this converter is capable to convert given file.
-     * Returns true only when given file exists, and firt capable file type is *
-     * or one of capable file types  matches given file.
+     * Returns true only when given file exists, and capable file type is *
+     * or one of capable file types matches given file.
      *
      * @param input input file
      * @return true only when
@@ -103,13 +103,13 @@ abstract public class AbstractConverter implements Converter {
             String output = commandReturn.toString();
             // try 10 times
             for (int i = 0; i < 10; i++) {
-                if ((output == null) || (output.indexOf("-X") == -1)) {
+                if ((output == null) || !output.contains("-X")) {
                     commandReturn = CommandRunner.run(command.toString());
                     log.debug("{}", commandReturn);
                     output = commandReturn.toString();
                 }
             }
-            if ((output != null) && (output.indexOf("-X") != -1)) {
+            if ((output != null) && output.contains("-X")) {
 
                 flash = new Flash();
                 // -X 720 -Y 540
@@ -134,7 +134,7 @@ abstract public class AbstractConverter implements Converter {
      *
      * @param input  input file
      * @param output output file
-     * @return true if successful, otherwize false
+     * @return true if successful, otherwise false
      */
     public boolean convertPDF2swf(File input, File output) {
         boolean result = false;
@@ -169,7 +169,7 @@ abstract public class AbstractConverter implements Converter {
      *
      * @param input  input file
      * @param output output file
-     * @return true if successful, otherwize false
+     * @return true if successful, otherwise false
      */
     public boolean generateThumbnail(File input, File output) {
         return imageMagickConvert(input, output, IMAGE_THUMBNAIL[0], IMAGE_THUMBNAIL[1]);
@@ -180,7 +180,7 @@ abstract public class AbstractConverter implements Converter {
      *
      * @param input  input file
      * @param output output file
-     * @return true if successful, otherwize false
+     * @return true if successful, otherwise false
      */
     public boolean imageMagickConvert(File input, File output) {
         return imageMagickConvert(input, output, 0, 0);
@@ -191,9 +191,9 @@ abstract public class AbstractConverter implements Converter {
      *
      * @param input        input file
      * @param output       output file
-     * @param resizeWidth  resized width
-     * @param resizeHeight resized height
-     * @return true if successful, otherwize false
+     * @param resizeWidth  resize width
+     * @param resizeHeight resize height
+     * @return true if successful, otherwise false
      */
     public boolean imageMagickConvert(File input, File output, int resizeWidth, int resizeHeight) {
         boolean result = false;
@@ -248,11 +248,11 @@ abstract public class AbstractConverter implements Converter {
                 log.debug("{}", commandReturn);
 
                 String output = commandReturn.toString();
-                if ((output != null) && (output.indexOf("x") != -1)) {
+                if ((output != null) && output.contains("x")) {
                     image = new Image();
                     int index = output.indexOf(file.getName()) + file.getName().length();
                     String sWidth = StringUtils.substringBetween(output, file.getName(), "x");
-                    while ((sWidth != null) && (sWidth.indexOf(" ") != -1)) {
+                    while ((sWidth != null) && sWidth.contains(" ")) {
                         sWidth = sWidth.substring(sWidth.indexOf(" ")).trim();
                     }
                     if (sWidth != null) {
@@ -281,7 +281,7 @@ abstract public class AbstractConverter implements Converter {
      *
      * @param input  input file
      * @param output output file
-     * @return true if sucess, false otherwise
+     * @return true if success, false otherwise
      */
     public boolean jodConvert(File input, File output) {
         boolean result = false;
@@ -335,10 +335,10 @@ abstract public class AbstractConverter implements Converter {
      * convert -density 144 your.pdf output.png
      * default density is 72dpi
      *
-     * @param input  input file
-     * @param output output file
+     * @param input   input file
+     * @param output  output file
      * @param density density
-     * @return true if successful, otherwize false
+     * @return true if successful, otherwise false
      */
     public boolean convertPDF2images(File input, File output, int density) {
         boolean result = false;
@@ -381,7 +381,7 @@ abstract public class AbstractConverter implements Converter {
      *
      * @param input  input file
      * @param output output file
-     * @return true if successful, otherwize false
+     * @return true if successful, otherwise false
      */
     public boolean convertPDF2images(File input, File output) {
         return convertPDF2images(input, output, 108);

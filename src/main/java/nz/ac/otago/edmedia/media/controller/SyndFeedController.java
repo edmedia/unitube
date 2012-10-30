@@ -125,7 +125,7 @@ public class SyndFeedController extends BaseOperationController {
         if ((user != null) && !user.validCode(u))
             user = null;
         if (user != null) {
-            feed.setTitle("Feed for " + user.getUserName() + "(" + user.getFirstName() + " " + user.getLastName() + ")");
+            feed.setTitle("Feed for " + user.getFirstName() + " " + user.getLastName());
             feed.setDescription("");
             feed.setLink(contextUrl + "/media.do?u=" + u);
         } else {

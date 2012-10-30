@@ -41,12 +41,13 @@
                             </td>
                             <td>
                                 <a href="${baseUrl}/view?m=${entity.accessCode}"
-                                   title="${linkTitle}"><@getShortTitle entity.title/></a>
+                                   title="${linkTitle}">${linkTitle}</a>
                                 <#if entity.description?has_content>
                                     <div><@displayBrief entity.description maxDescriptionLength/></div>
                                 </#if>
-                            </td>
-                            <td>
+
+                                <#if isOwner>
+                                <p>
                                 <span class="title">URL:</span>
                                 <input type="text"
                                        value="${context_url}/view?m=${entity.accessCode}"
@@ -54,8 +55,6 @@
                                        size="40"
                                        class="linkURL"
                                         />
-                            </td>
-                            <td>
                                 <span class="title">Embed:</span>
                                 <input type="text"
                                        value="${getEmbedCode(entity)?html}"
@@ -63,6 +62,8 @@
                                        size="40"
                                        class="linkURL"
                                         />
+                                    </p>
+                                </#if>
                             </td>
                         </tr>
                         </#if>

@@ -17,10 +17,13 @@
     <#if appInfo.usingCAS>
         <h1>University of Otago Member?</h1>
 
-        <a href="${fromUrl}" class="bold">Log in here</a><br/>
-        <a href="${fromUrl}"><img src="${baseUrl}/images/bb_logo.gif" width="152" height="29" alt=""
-                                  style="margin:10px auto 30px auto;"/></a>
+        <p>&nbsp; </p>
+        <a href="${fromUrl}"><img src="http://www.otago.ac.nz/prodcons/fragments/subsite_assets/gfx/logo.gif"
+                                  alt="University of Otago logo." width="160" height="80" /></a> <br/>
+        <a href="${fromUrl}" class="bold">Click here to log in</a><br/>
 
+        <p>&nbsp; </p>
+        <p>&nbsp; </p>
         <hr/>
     </#if>
         <h2 title="Click here to login using your UniTube username and password">

@@ -11,6 +11,7 @@ import java.util.Set;
  * <li><b>id </b>- ID</li>
  * <li><b>album </b>- Album</li>
  * <li><b>media </b>- Media</li>
+ * <li><b>orderNumber </b>- order number</li>
  * </ul>
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
