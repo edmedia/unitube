@@ -24,7 +24,7 @@
         </div>
 
     <#if pager.elements?has_content>
-        <table summary="">
+        <table summary="" width="100%">
 
             <tr>
                 <th class="checkbox">

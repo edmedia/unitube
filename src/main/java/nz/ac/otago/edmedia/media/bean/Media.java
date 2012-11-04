@@ -1,5 +1,6 @@
 package nz.ac.otago.edmedia.media.bean;
 
+import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.WebID;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import org.hibernate.search.annotations.*;
@@ -545,6 +546,14 @@ public class Media extends WebID {
      */
     public int getProcessTimes() {
         return this.processTimes;
+    }
+
+    public String getProvider() {
+        if(mediaType == MediaUtil.MEDIA_TYPE_AUDIO)
+            return "sound";
+        if(mediaType == MediaUtil.MEDIA_TYPE_VIDEO)
+            return "video";
+        return "image";
     }
 
     /**

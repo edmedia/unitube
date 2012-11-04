@@ -1,6 +1,6 @@
 <div class="infoBox">
     <div class="info">
-        <h2>Step-by-step guides</h2>
+        <h2 style='padding-top:0'>Step-by-step guides</h2>
         <ul>
             <li><a href="${baseUrl}/webUploadGuide.do">Upload via the web</a></li>
             <li><a href="${baseUrl}/emailUploadGuide.do">Upload via email</a></li>
@@ -14,7 +14,7 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Upload via email</h2>
+
 	<ol>
 		<li>Open your email client and create a new message.</li>
 		<li>Put post2unitube@otago.ac.nz in the To: field</li>

@@ -47,6 +47,13 @@ public class MyApplyAlbumController extends BaseOperationController {
                             AlbumMedia albumMedia = new AlbumMedia();
                             albumMedia.setAlbum(album);
                             albumMedia.setMedia(media);
+                            AlbumMedia lastAlbumMedia = null;
+                            for(AlbumMedia tmp : album.getAlbumMedias())
+                            lastAlbumMedia = tmp;
+                            if(lastAlbumMedia==null)
+                                albumMedia.setOrderNumber(0);
+                            else
+                            albumMedia.setOrderNumber(lastAlbumMedia.getOrderNumber() +1);
                             service.save(albumMedia);
                         }
                     }

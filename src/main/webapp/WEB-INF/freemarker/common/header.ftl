@@ -1,9 +1,18 @@
 <div id="container">
-    <div id="header">
+    <div id="header">			
+		
         <!-- added skip navigation link - jumps to mainstage -->
         <a id="skipNavigation" href="#mainStage">Skip Navigation</a>
 
         <div id="headerWrapper">
+			<div id="uniLogo">
+	            <a href="http://www.otago.ac.nz" target="_blank">
+    	            <img class="weblogo"
+                     src="http://www.otago.ac.nz/prodcons/fragments/otg_assets/gfx/grid16/logo-horizontal.gif"
+                     alt="University of Otago logo" width="160" height="80"/>
+            	</a>
+        	</div>
+		
             <img src="${baseUrl}/images/UniTube_nomap.png" width="960" height="183" alt="unitube"
                  usemap="#headerImage"/>
 
@@ -22,16 +31,7 @@
             <a href="${baseUrl}/albums.do" style="top:124px;left:652px;" accesskey="4">Albums</a>
             <a href="${baseUrl}/help.do" style="top:124px;left:753px;" accesskey="5">Help</a>
 
-        </div>
-
-
-        <div id="uniLogo">
-            <a href="http://www.otago.ac.nz" target="_blank">
-                <img class="weblogo"
-                     src="http://www.otago.ac.nz/prodcons/fragments/otg_assets/gfx/grid16/logo-horizontal.gif"
-                     alt="University of Otago logo" width="160" height="80"/>
-            </a>
-        </div>
+        </div>        
 
         <div class="topNavLinks">
             <a href="${baseUrl}/copyright.do" accesskey="6">Copyright &amp; IP</a><br/>

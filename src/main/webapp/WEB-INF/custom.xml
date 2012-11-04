@@ -258,6 +258,8 @@
         <property name="commandClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="normalView" value="redirect:/embed.do"/>
         <property name="loginView" value="redirect:/myTube/embed.do"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
@@ -277,6 +279,17 @@
 
     <bean id="album" class="nz.ac.otago.edmedia.media.controller.AlbumController">
         <property name="viewName" value="album"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="playlist" class="nz.ac.otago.edmedia.media.controller.PlaylistController">
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="embedPlaylist" class="nz.ac.otago.edmedia.media.controller.PlaylistController">
+        <property name="viewName" value="embedPlaylist"/>
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
     </bean>
@@ -485,6 +498,8 @@
                 /player=player
                 /file.do=file
                 /album=album
+                /playlist.do=playlist
+                /embedPlaylist.do=embedPlaylist
                 /feed.do=feed
                 /admin/monitor.do=monitor
                 /logout.do=logout

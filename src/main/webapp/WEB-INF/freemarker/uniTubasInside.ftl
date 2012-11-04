@@ -5,17 +5,13 @@
 <div class="info"><@spring.message "no.unitubas"/></div>
     </div>
 <#else>
-<table width="440" summary="">
+<table width="700" summary="">
     <tr>
         <th width="40" align="center"> RSS</th>
         <th width="200" align="center">UniTuba</th>
         <th width="200" align="center">Albums</th>
     </tr>
-    <tr>
-        <td>&nbsp;</td>
-        <td align="center">&nbsp;</td>
-        <td>&nbsp;</td>
-    </tr>
+
     <#list pager.elements as entity>
     <#if entity.mediaNum &gt; 0>
     <tr>

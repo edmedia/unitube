@@ -2,6 +2,7 @@ package nz.ac.otago.edmedia.media.controller;
 
 import nz.ac.otago.edmedia.media.bean.Album;
 import nz.ac.otago.edmedia.media.bean.AlbumMedia;
+import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
@@ -16,13 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Album controller. List all medias in an album.
+ * Playlist controller.
  *
  * @author Richard Zeng (richard.zeng@otago.ac.nz)
- *         Date: 17/06/2008
- *         Time: 16:18:20
+ *         Date: 31/10/12
+ *         Time: 11:29 AM
  */
-public class AlbumController extends BaseOperationController {
+public class PlaylistController extends BaseOperationController {
 
     @Override
     protected ModelAndView handle(HttpServletRequest request,
@@ -39,21 +40,21 @@ public class AlbumController extends BaseOperationController {
         if (a != null)
             album = (Album) service.get(Album.class, CommonUtil.getId(a));
         if ((album != null) && album.validCode(a)) {
-            List<AlbumMedia> list = new ArrayList<AlbumMedia>();
+            List<Media> playlist = new ArrayList<Media>();
             for (AlbumMedia am : album.getAlbumMedias()) {
                 // only list hidden media in hidden album
                 if ((am.getMedia().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                         || ((am.getMedia().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN) && (album.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN)))
-                    list.add(am);
+                    playlist.add(am.getMedia());
             }
-            model.put("list", list);
-            model.put("obj", album);
+            model.put("album", album);
+            model.put("playlist", playlist);
             model.put("isOwner", false);
+            model.put("title", "Playlist");
             // get user info
             User user = MediaUtil.getCurrentUser(service, request);
             if ((user != null) && album.getOwner().getId().equals(user.getId()))
                 model.put("isOwner", true);
-            model.put("title", "View Album");
         }
         return getModelAndView(model, request);
     }

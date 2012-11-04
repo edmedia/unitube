@@ -19,18 +19,16 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 body {
-    background: url(../images/bodybg.jpg) repeat-x #fff;
+    background: url(../images/bodybg1.jpg) repeat-x #fff;
     color: #000000;
     line-height: 1.2em;
 }
 
 #uniLogo {
-    margin-left: 35px;
+    left: 0;
     position: absolute;
     top: 50px;
 }
-
-
 
 ul {
     list-style: none outside none;
@@ -73,9 +71,10 @@ body {
 #container {
     background-repeat: repeat-y;
     margin: 0px auto;
+    padding: 0;
     /*position: relative;*/
     text-align: left;
-    width: 960px;
+    width: 1004px;
 }
 
 * html #container {
@@ -87,31 +86,31 @@ body {
 }
 
 #header {
-   /*  background-image: url("../images/UniTube_01.png");
-	background-repeat: no-repeat; */
-    height: 183px;
-    width: 960px;
+    /*  background-image: url("../images/UniTube_01.png");
+  background-repeat: no-repeat;
+  height: 183px;
+  width: 960px; */
 }
 
 #headerWrapper {
-	position:relative;
+    position: relative;
 }
 
 #headerWrapper a {
-	position:absolute;
-	text-transform:uppercase;
-	color:#fff;
+    position: absolute;
+    text-transform: uppercase;
+    color: #fff;
 }
 
 #headerWrapper a:hover {
-	color:#0CF;
+    color: #0CF;
 }
 
 /* CSS for skip navigation link - positioned top left */
 #skipNavigation {
-	position:absolute;
-	top:0;
-	left:0;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 /*.uniLogo {
@@ -183,16 +182,15 @@ body {
     right: 20px;
     text-align: right;
     top: 40px;
-    word-spacing: 3px;
 }
 
 .topNavLinks a {
     font-size: 10px;
-	color: #fff;
+    color: #fff;
 }
 
-.topNavLinks a:hover{
-	color:#0CF;
+.topNavLinks a:hover {
+    color: #0CF;
 }
 
 .headerText {
@@ -221,10 +219,9 @@ body {
     width: 230px;
 }
 
-
-.registration a{
-	color:#0CF;
-	font-size: 12px;
+.registration a {
+    color: #0CF;
+    font-size: 12px;
 }
 
 .mytube {
@@ -243,15 +240,10 @@ body {
 }
 
 .topLine {
-    /*background-image: url("../images/UniTube_10.png");
-    background-position: center bottom;
-    background-repeat: repeat-x; */
-    height: 1%;
     line-height: 20px;
     overflow: hidden;
-    padding-left: 35px;
-    width: 910px;
-	padding-bottom: 10px;
+    padding: 0;
+    /*	padding-bottom: 10px;*/
 }
 
 div.topLine {
@@ -267,15 +259,19 @@ div.topLine {
 
 .mainStage {
     /*float: left;*/
-    margin-bottom: 30px;
-    margin-left: 35px;
-    width: 900px;
+    margin-top: 10px;
+    /* margin-left: 35px;*/
+}
+
+.homeHeader {
+    padding: 0 0 5px;
+    margin: 0;
 }
 
 .mediaArea {
     float: left;
-    margin-left: 20px;
-    margin-top: 30px;
+    /*margin-left: 20px;*/
+    /*margin-top: 30px;*/
     width: 620px;
 }
 
@@ -287,7 +283,7 @@ div.topLine {
 
 .mediaDisplay2 {
     float: left;
-    margin-top: 40px;
+    /*margin-top: 40px;*/
 }
 
 .mediaArea2 {
@@ -302,33 +298,6 @@ div.topLine {
     float: left;
     height: 205px;
     margin: 0px 18px 0px 0px;
-    width: 150px;
-}
-
-.mediaHeader, .mediaTop, .mediaContent, .mediaFooter {
-    overflow: hidden;
-    width: 150px;
-}
-
-.mediaHeader {
-    background-image: url("../images/UniTube_13.png");
-    background-repeat: no-repeat;
-    height: 17px;
-}
-
-.mediaHeader2 {
-    height: 17px;
-}
-
-.mediaTop {
-    background-image: url("../images/UniTube_16.png");
-    background-repeat: no-repeat;
-    height: 12px;
-}
-
-.mediaContent {
-    background-image: url("../images/UniTube_28.png");
-    height: 164px;
     width: 150px;
 }
 
@@ -358,12 +327,6 @@ div.topLine {
     width: 100px;
 }
 
-.mediaFooter {
-    background-image: url("../images/media_footer.png");
-    background-repeat: no-repeat;
-    height: 12px;
-}
-
 .infoBox {
     padding-left: 20px;
     float: right;
@@ -375,8 +338,8 @@ div.topLine {
     float: right;
     height: 25px;
     margin-top: 20px;
-	padding-bottom:10px;
-    padding-right: 35px;
+    padding-bottom: 10px;
+    /*padding-right: 35px;*/
 }
 
 .searchText {
@@ -409,10 +372,10 @@ div.topLine {
     margin: 10px auto;
 }
 
-.infoBox h2{
-	border-bottom: 1px solid #ccc;
-	padding-bottom: 5px;
-	margin-bottom: 10px;
+.infoBox h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .info {
@@ -424,22 +387,13 @@ div.clearMe {
 }
 
 .footer {
-    clear: both;
     color: #777777;
     font-size: 10px;
     line-height: 10px;
     margin-bottom: 40px;
-    padding-top: 40px;
+    padding-top: 20px;
     text-align: center;
-    width: 955px;
-}
-
-.hedcLogo {
-    background-image: url("../images/hedcLogo.png");
-    float: left;
-    height: 48px;
-    margin: -100px auto auto 300px;
-    width: 70px;
+    clear: left;
 }
 
 .lastPage {
@@ -457,14 +411,9 @@ div.clearMe {
 
 div.pageNumber {
     clear: both;
-    float: left;
     font-size: 14px;
     font-weight: bold;
-    line-height: 20px;
     margin-top: 30px;
-    margin-left: 55px;
-    width: 700px;
-    word-spacing: 6px;
     text-align: center;
 }
 
@@ -489,7 +438,7 @@ a {
 }
 
 a:hover {
-    color: #FF9900;
+    color: #0CF;
 }
 
 .watching {
@@ -501,7 +450,11 @@ a:hover {
 .stage {
     padding-left: 0px;
     top: 30px;
-    width: 850px;
+    /*width: 850px;*/
+}
+
+.playlist_container {
+    border: 1px solid #E8E8E8;
 }
 
 .mediaBorder {
@@ -539,9 +492,7 @@ div.sociable .sociable-hovers {
 }
 
 table {
-    border-spacing: 2px;
     margin-bottom: 20px;
-    margin-top: 20px;
 }
 
 .rss {
@@ -580,11 +531,8 @@ table {
 }
 
 th {
-    background-color: #F6AF3F;
-    color: #fff;
-    line-height: 25px;
-    padding: 3px;
-    text-align: center;
+    font-weight: bold;
+    padding-bottom: 5px;
 }
 
 .blackBoard {
@@ -629,17 +577,11 @@ th {
     width: 490px;
 }
 
-th {
-    border-left: 1px solid white;
-    border-right: 1px solid white;
-    font-weight: bold;
-}
-
-th, td {
+td {
     border-top: 1px dashed #CCCCCC;
-    padding: 10px;
+    padding: 10px 10px 10px 0;
     vertical-align: top;
-	text-align:left;
+    text-align: left;
 }
 
 .hidden {
@@ -663,11 +605,11 @@ th, td {
 }
 
 h1 {
-    font-size: 17px;
-    font-weight: normal;
+    font-size: 26px;
+    font-weight: bold;
     margin-top: 20px;
-	font-family: Georgia, "Times New Roman", Times, serif;
-	text-transform:uppercase;
+    font-family: Arial;
+    color: #039;
 }
 
 h1 a img {
@@ -678,8 +620,6 @@ h2 {
     font-size: 14px;
     font-weight: bold;
     padding: 1em 0pt;
-	font-family: Georgia, "Times New Roman", Times, serif;
-	text-transform:uppercase;
 }
 
 p {
@@ -693,10 +633,11 @@ p {
 
 .mediaArea ol {
     list-style-position: inside;
+    padding-bottom: 20px;
 }
 
 .mediaArea li {
-    margin: 0.5em 0pt 0.5em 1em;
+    margin: 0.5em 0pt 1em 1em;
 }
 
 .mediaArea ul {
@@ -735,7 +676,7 @@ div#status {
 }
 
 .navDiv {
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 form .text {
@@ -757,9 +698,10 @@ form .text {
 */
 
 .mediacontent {
-	background:#fff url(../images/boxesBg.png) repeat-x;
+    overflow: hidden;
+    background: #fff url(../images/boxesBg.png) repeat-x;
     border-left: 1px solid #CCCCCC;
-	border-right: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
     float: left;
     height: 80px;
     width: 185px;
@@ -786,7 +728,7 @@ form .text {
 
 .mediaTitle {
     background: none repeat scroll 0% 0% #FFFFFF;
-   /* border-bottom: 1px solid #CCCCCC; */
+    /* border-bottom: 1px solid #CCCCCC; */
     color: #321277;
     font-weight: bold;
     height: 40px;
@@ -805,8 +747,8 @@ form .text {
     position: relative;
     top: 25px;
     width: 140px;
-	font-family: Georgia, "Times New Roman", Times, serif;
-	text-transform:uppercase;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    text-transform: uppercase;
 }
 
 #comments {
@@ -1128,7 +1070,6 @@ div.description {
     border-bottom: 1px #bbb dotted;
 }
 
-
 /** styles on stats page */
 div#pie {
     margin-left: 10px;
@@ -1141,6 +1082,7 @@ div#pie_num {
     float: right;
     width: 30%;
 }
+
 td.num {
     text-align: right;
 }
@@ -1150,7 +1092,7 @@ td.percent {
 }
 
 div#bar {
-    clear:both;
+    clear: both;
     margin-left: 10px;
 }
 
@@ -1173,3 +1115,19 @@ th.checkbox {
     width: 35px;
     vertical-align: baseline;
 }
+
+td p {
+    padding: 0;
+}
+
+.ui-helper-clearfix::before, .ui-helper-clearfix::after {
+    content: "";
+    display: inline-table !important;
+
+}
+
+.ui-widget-content, .ui-widget-header {
+    border: none;
+    background: none;
+}
+

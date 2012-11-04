@@ -1,6 +1,6 @@
 <div class="infoBox">
     <div class="info">
-        <h2>File formats and browsers</h2>
+        <h2 style='padding-top:0'>File formats and browsers</h2>
 
         <p>UniTube accepts the following file formats:</p>
         <ul>
@@ -21,7 +21,7 @@
         </ul>
     </div>
     <div class="info">
-        <h2>Step-by-step guides</h2>
+        <h2 style='padding-top:30px'>Step-by-step guides</h2>
         <ul>
             <li><a href="${baseUrl}/webUploadGuide.do">Upload via the web</a></li>
             <li><a href="${baseUrl}/emailUploadGuide.do">Upload via email</a></li>
@@ -35,7 +35,7 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Upload</h2>
+    <h2 style='padding-top:0'>Upload</h2>
 
     <p>Go to <a href="${baseUrl}/myTube/list.do">My Media</a> to get uploading. UniTube accepts a wide range of files,
         from audio and video to documents. The full list is available on the right.</p> <a href="${baseUrl}/webUploadGuide.do">Find out more about how to upload to UniTube.</a>

@@ -1,6 +1,6 @@
 <div class="infoBox">
     <div class="info">
-        <h2>Step-by-step guides</h2>
+        <h2 style='padding-top:0'>Step-by-step guides</h2>
         <ul>
             <li><a href="${baseUrl}/webUploadGuide.do">Upload via the web</a></li>
             <li><a href="${baseUrl}/emailUploadGuide.do">Upload via email</a></li>
@@ -14,7 +14,7 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Organise with albums</h2>
+    
     <ol>
 <li>From your 'My Media' page, click on 'Create New Album'.</li>
 <li>You will now be on the 'Edit album' page. The 'Album name' and 'Album description' fields will be blank. Give your new album a name, and optionally type in a description for it.</li>

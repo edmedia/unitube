@@ -1,6 +1,6 @@
 <div class="infoBox">
     <div class="info">
-        <h2>Step-by-step guides</h2>
+        <h2 style='padding-top:0'>Step-by-step guides</h2>
         <ul>
             <li><a href="${baseUrl}/webUploadGuide.do">Upload via the web</a></li>
             <li><a href="${baseUrl}/emailUploadGuide.do">Upload via email</a></li>
@@ -14,7 +14,7 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Presenter</h2>
+  
 	<ol>
 		<li>First, upload all the files required for your presentation (audio, PowerPoint etc.) as usual on the 'My Media’page. Once your files have been uploaded, from the ‘My Media’ page, click on ‘My Presenter’.</li>
 		<li>Click ‘Create new presentation’. This will load the screen where you can select your files. You can also find the ‘Create New Presentation’link above your media list on the ‘My Media’ page.</li>

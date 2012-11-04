@@ -59,6 +59,52 @@
     desc: dispaly media list, such as on media.do, search.do
     @param: elements list of media object to be displayed
 -->
+<#macro displayMediaList2 elements>
+    <#if elements?has_content>
+    <table summary="" width="100%">
+        <tbody>
+            <#list elements as entity>
+                <#assign linkTitle>${entity.title!?html}</#assign>
+            <tr>
+                <td width="70"><@viewLinkWithThumbnail entity/></td>
+                <td>
+                    <a href="${baseUrl}/view?m=${entity.accessCode}"
+                       title="${linkTitle}">${linkTitle}</a>
+                    <span style="font-size: small; float: right; color: #666">${entity.uploadTimePast}</span>
+                    <br/>
+                    <span class="title">From:</span>
+                    <a href="${baseUrl}/media.do?u=${entity.user.accessCode}">${entity.user.firstName} ${entity.user.lastName}</a>
+
+                    <#if entity.duration != 0>
+                        <br/>
+                        <span class="title">Length: </span>
+                    <#if entity.provider == 'image'>
+                    ${entity.duration}
+                    <#else>
+                    <#-- TODO: display time -->
+                      ${getTimeCode(entity.duration)}
+                    </#if>
+                    </#if>
+                    <#if entity.description?has_content>
+                        <div><@displayBrief entity.description maxDescriptionLength/></div>
+                    </#if>
+                </td>
+            </tr>
+            </#list>
+        </tbody>
+    </table>
+        <#else>
+        <div class="stage">
+            <div class="info"><@spring.message "no.media"/></div>
+        </div>
+    </#if>
+</#macro>
+
+<#--
+    name: displayMediaList
+    desc: dispaly media list, such as on media.do, search.do
+    @param: elements list of media object to be displayed
+-->
 <#macro displayMediaList elements>
     <#if elements?has_content>
     <div class="mediaDisplay2">
@@ -492,4 +538,16 @@ ${link?html}</#macro>
         </#if>
     </#if>
     <#return embedCode/>
+</#function>
+
+<#function getTimeCode timeInMilliseconds>
+    <#local h = (timeInMilliseconds/1000/60/60)?floor />
+<#local m = (timeInMilliseconds/1000/60 - h*60)?floor/>
+ <#local s = (timeInMilliseconds/1000 - h*60*60 - m*60)?floor/>
+<#local tt = ''/>
+         <#if h &gt; 0>
+            <#local tt>${h}:</#local>
+         </#if>
+            <#local tt>${tt}${m}:${s}</#local>
+<#return tt/>
 </#function>

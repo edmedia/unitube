@@ -23,12 +23,13 @@ from ${user.firstName} ${user.lastName}
 <a href="${baseUrl}/feed.do?topic=media<#if user??>&amp;u=${user.accessCode}</#if>" title="RSS Feed"><img
         src="${baseUrl}/images/feed-icon.png" alt=""/></a>
 <#if mediaType?has_content>
-    <a href="?">All Media</a>
+    <a href="?" style='font-size:26px'>All Media</a>
 <#else>
-All Media
+<div style='display: inline;'>All Media</div>
 </#if>
 <#if user?has_content>from ${user.firstName} ${user.lastName}
 <#else>
+<div style='font-size:small;display:inline'>
 (
 <#if mediaType?has_content && mediaType == 20>
 Video
@@ -54,6 +55,7 @@ Other
 <a href="?t=1">Other</a>
 </#if>
 )
+</div>
 </#if>
 </#assign>
 

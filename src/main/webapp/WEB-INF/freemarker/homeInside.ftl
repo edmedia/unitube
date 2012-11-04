@@ -1,40 +1,35 @@
 <#include "common/info.ftl" />
 
-<div style='margin-top:15px'>
-    <span style='font-size:16px;font-weight:bold;color:#031f69'>UPLOAD</span>
-    <i>&amp;</i>
-    <span style='font-size:16px;font-weight:bold;color:#031f69'>SHARE</span>
-    <span style="font-style:italic">video, audio, images, documents and more!</span>
+<h2 class='homeHeader'>Featured Videos</h2>
+
+<#if featured?has_content>
+    <#assign playlist = featured/>
+<div style="border:  1px solid #aaa; float:left">
+    <#include "playlistHelper.ftl"/>
 </div>
-
-<div class="mediaDisplay">
-
-    <div class="mediaBox">
-        <div class="mediaTitle">
-            <div class="titleText"> Most Viewed</div>
-        </div>
-    </div>
-
-<#if mostVisited?has_content>
-    <#list mostVisited as media>
-    <@displayMediaInList media />
-    </#list>
 </#if>
 
-</div>
 
-<div class="mediaDisplay">
+<div id="tabs" style="width: 730px; margin-top: 30px; float: left">
+    <ul>
+    <#if mostViewed?has_content>
+        <li><a href="#tabs-1">Most Viewed Media</a></li>
+    </#if>
+    <#if mostRecent?has_content>
+        <li><a href="#tabs-2">Recently Added Media</a></li>
+    </#if>
+    </ul>
 
-    <div class="mediaBox">
-        <div class="mediaTitle">
-            <div class="titleText"> Recently Added</div>
-        </div>
+<#if mostViewed?has_content>
+    <div id="tabs-1">
+    <@displayMediaList2 mostViewed/>
     </div>
+</#if>
 
 <#if mostRecent?has_content>
-    <#list mostRecent as media>
-    <@displayMediaInList media />
-    </#list>
+    <div id="tabs-2">
+    <@displayMediaList2 mostRecent/>
+    </div>
 </#if>
 
 </div>
@@ -42,3 +37,12 @@
 <div class="pageNumber">
     <p><a href="${baseUrl}/media.do">More media ...</a></p>
 </div>
+
+
+<script type="text/javascript">
+    <!--
+    $(function() {
+        $("#tabs").tabs();
+    });
+    //-->
+</script>

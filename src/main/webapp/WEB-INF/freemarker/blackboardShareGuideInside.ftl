@@ -1,6 +1,6 @@
 <div class="infoBox">
     <div class="info">
-        <h2>Step-by-step guides</h2>
+        <h2 style='padding-top:0'>Step-by-step guides</h2>
         <ul>
             <li><a href="${baseUrl}/webUploadGuide.do">Upload via the web</a></li>
             <li><a href="${baseUrl}/emailUploadGuide.do">Upload via email</a></li>
@@ -14,7 +14,7 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Share via BlackBoard</h2>
+   
 <p>There are two ways to provide access to video, audio, images or other media which have been uploaded to UniTube in Blackboard. The first way is to simply provide a link or URL, like this: http://unitube.otago.ac.nz/view?m=KOoX2byVu0t</p>
 <ol>
 <li>You can find the URL of your media file by clicking 'View media' on the 'My Media' page.</li>

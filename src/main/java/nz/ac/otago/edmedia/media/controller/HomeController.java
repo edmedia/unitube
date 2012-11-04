@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class HomeController extends BaseOperationController {
 
-    private final static int DISPLAY_NUM = 5;
+    private final static int DISPLAY_NUM = 4;
     private final static int CHOOSE_NUM = 20;
 
     @Override
@@ -37,39 +37,78 @@ public class HomeController extends BaseOperationController {
             throws Exception {
         Map model = errors.getModel();
 
-        // list all available media file by accessTimes
-        SearchCriteria criteria = new SearchCriteria.Builder()
-                .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
-                .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
-                .orderBy("accessTimes", false)
-                .result(0, CHOOSE_NUM)
-                .build();
-        List list = service.search(Media.class, criteria);
-        if (!list.isEmpty()) {
-            int displayNum = list.size();
-            if (displayNum > DISPLAY_NUM)
-                displayNum = DISPLAY_NUM;
+        {
+            // most featured
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .eq("mediaType", MediaUtil.MEDIA_TYPE_VIDEO)
+                    .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                            //.gt("duration", 5 * 60 * 1000) // 5 minutes
+                    .build();
+            List list = service.search(Media.class, criteria);
+            if (!list.isEmpty()) {
+                int displayNum = list.size();
+                if (displayNum > DISPLAY_NUM)
+                    displayNum = DISPLAY_NUM;
 
-            Object[] display1 = new Object[displayNum];
-            int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
-            for (int i = 0; i < displayNum; i++) {
-                display1[i] = list.get(randomArray[i]);
+                Object[] featured = new Object[displayNum];
+                int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
+                for (int i = 0; i < displayNum; i++) {
+                    featured[i] = list.get(randomArray[i]);
+                }
+                model.put("featured", featured);
+
             }
-            model.put("mostVisited", display1);
-            criteria = new SearchCriteria.Builder()
+        }
+
+        {
+            // most viewed
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                    .orderBy("accessTimes", false)
+                    .result(0, CHOOSE_NUM)
+                    .build();
+            List list = service.search(Media.class, criteria);
+            if (!list.isEmpty()) {
+                int displayNum = list.size();
+                if (displayNum > DISPLAY_NUM)
+                    displayNum = DISPLAY_NUM;
+
+                Object[] mostViewed = new Object[displayNum];
+                int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
+                for (int i = 0; i < displayNum; i++) {
+                    mostViewed[i] = list.get(randomArray[i]);
+                }
+                model.put("mostViewed", mostViewed);
+
+            }
+        }
+        {
+            // most recent
+            SearchCriteria criteria = new SearchCriteria.Builder()
                     .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                     .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
                     .orderBy("uploadTime", false)
                     .result(0, CHOOSE_NUM)
                     .build();
-            list = service.search(Media.class, criteria);
-            Object[] display2 = new Object[displayNum];
-            randomArray = CommonUtil.randomArray(list.size(), displayNum);
-            for (int i = 0; i < displayNum; i++) {
-                display2[i] = list.get(randomArray[i]);
+            List list = service.search(Media.class, criteria);
+            if (!list.isEmpty()) {
+                int displayNum = list.size();
+                if (displayNum > DISPLAY_NUM)
+                    displayNum = DISPLAY_NUM;
+
+                Object[] mostRecent = new Object[displayNum];
+                int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
+                for (int i = 0; i < displayNum; i++) {
+                    mostRecent[i] = list.get(randomArray[i]);
+                }
+                model.put("mostRecent", mostRecent);
+
             }
-            model.put("mostRecent", display2);
         }
+
+
         return getModelAndView(model, request);
     }
 }

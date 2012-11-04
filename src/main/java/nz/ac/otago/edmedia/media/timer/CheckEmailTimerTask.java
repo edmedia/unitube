@@ -18,6 +18,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import java.io.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -381,8 +382,8 @@ public class CheckEmailTimerTask extends BaseTimerTask {
         if (description != null)
             media.setDescription(description);
 
-        // set upload time to when we receive the email
-        media.setUploadTime(message.getReceivedDate());
+        // set upload time to current time
+        media.setUploadTime(new Date());
         String randomCode = CommonUtil.generateRandomCode();
         media.setRandomCode(randomCode);
         // for private file, set a different locationCode

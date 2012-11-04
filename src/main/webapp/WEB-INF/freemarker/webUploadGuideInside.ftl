@@ -1,6 +1,6 @@
 <div class="infoBox">
     <div class="info">
-        <h2>Step-by-step guides</h2>
+        <h2 style='padding-top:0'>Step-by-step guides</h2>
         <ul>
             <li><a href="${baseUrl}/webUploadGuide.do">Upload via the web</a></li>
             <li><a href="${baseUrl}/emailUploadGuide.do">Upload via email</a></li>
@@ -14,7 +14,6 @@
 <!-- end of infoBox -->
 
 <div class="mediaArea">
-    <h2>Upload via the web</h2>
     <ol>
 <li>Go to http://unitube.otago.ac.nz</li>
 <li>Login by clicking on the login button, top right of screen. This will take you to a page where you will be prompted to enter your usual University of Otago login details. Once you are logged in, you will be taken to the 'My Media' area of UniTube. You will see your username at the top right of the screen.</li>

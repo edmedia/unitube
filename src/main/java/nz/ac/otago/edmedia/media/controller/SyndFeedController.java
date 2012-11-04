@@ -159,7 +159,7 @@ public class SyndFeedController extends BaseOperationController {
         entry.setLink(contextUrl + "/view?m=" + media.getAccessCode());
         entry.setPublishedDate(media.getUploadTime());
         entry.setUpdatedDate(media.getUploadTime());
-        entry.setAuthor(media.getUser().getUserName());
+        entry.setAuthor(media.getUser().getFirstName() + " " + media.getUser().getLastName());
         if (media.getMediaType() == MediaUtil.MEDIA_TYPE_AUDIO ||
                 media.getMediaType() == MediaUtil.MEDIA_TYPE_VIDEO ||
                 media.getUploadFileUserName().endsWith(".pdf")) {

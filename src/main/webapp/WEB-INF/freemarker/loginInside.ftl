@@ -3,7 +3,7 @@
 <div class="mediaArea">
 
 <#if fromUrl?has_content>
-    <p style="color: red">Please Login before access.</p>
+    <p style="color: red;padding:0">Please log in before you can access your media.</p>
     <#if fromUrl?contains("?")>
         <#assign fromUrl>${fromUrl}&amp;cas=true&amp;login=true</#assign>
         <#else>
@@ -15,21 +15,19 @@
 
     <div>
     <#if appInfo.usingCAS>
-        <h1>University of Otago Member?</h1>
+        <h2>University of Otago Member?</h2>
 
-        <p>&nbsp; </p>
         <a href="${fromUrl}"><img src="http://www.otago.ac.nz/prodcons/fragments/subsite_assets/gfx/logo.gif"
                                   alt="University of Otago logo." width="160" height="80" /></a> <br/>
         <a href="${fromUrl}" class="bold">Click here to log in</a><br/>
 
         <p>&nbsp; </p>
-        <p>&nbsp; </p>
         <hr/>
     </#if>
-        <h2 title="Click here to login using your UniTube username and password">
+        <span style="font-weight:bold;float:left;clear:left;padding-bottom:20px" title="Click here to login using your UniTube username and password">
             Non University of Otago Member?
             <a href="#">Click here to login.</a>
-        </h2>
+        </span>
 
         <div id="uniTubeLogin">
             <img src="${baseUrl}/images/unitube_logo.png" alt=""/><br/>
@@ -60,9 +58,9 @@
             </form>
         </div>
 
-        <h2 title="Click here to register">
+        <span style="font-weight:bold;float:left;clear:left;padding-bottom:20px" title="Click here to register">
             New? <a href="#">Register here.</a>
-        </h2>
+        </span>
 
         <div id="newRegister">
 
@@ -97,10 +95,10 @@
             </form>
         </div>
 
-        <h2 title="Click here if you forgot your UniTube password">
+        <span style="font-weight:bold;float:left;clear:left;padding-bottom:20px" title="Click here if you forgot your UniTube password">
             Forgot your UniTube password?
             <a href="#">Click here to reset.</a>
-        </h2>
+        </span>
 
         <div id="forgotPassword">
 
