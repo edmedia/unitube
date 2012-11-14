@@ -24,33 +24,27 @@
         height: height,
         'playlist.position': 'right',
         'playlist.size': ${playlistSize?c},
-        //'skin': '${context_url}/jwplayer/whotube1.zip',
         events: {
             'onBeforePlay': function() {
                 log('onBeforePlay');
-                log('playlist item = ' + jwplayer('${id}').getPlaylistItem().provider);
                 if (jwplayer('${id}').getPlaylistItem().provider == 'image') {
+                    log('image');
                     jwplayer('${id}').getPlugin('controlbar').hide();
-                    jwplayer('${id}').getPlugin('display').hide();
                     log('open a new window here');
                     newWin(jwplayer('${id}').getPlaylistItem().file);
+                    log('stop playing.');
                     jwplayer('${id}').stop();
                 } else {
-                    log('here');
+                    log('audio or video');
                     jwplayer('${id}').getPlugin('controlbar').show();
-                    jwplayer('${id}').getPlugin('dock').show();
-                    jwplayer('${id}').getPlugin('display').show();
                 }
-            } ,
+            },
             'onPlaylistItem': function() {
-                log('onPlaylistItem')
+                log('onPlaylistItem');
                 if (jwplayer('${id}').getPlaylistItem().provider == 'image') {
                     jwplayer('${id}').getPlugin('controlbar').hide();
-                    jwplayer('${id}').getPlugin('display').hide();
                 } else {
                     jwplayer('${id}').getPlugin('controlbar').show();
-                    jwplayer('${id}').getPlugin('dock').show();
-                    jwplayer('${id}').getPlugin('display').show();
                 }
             }
         },

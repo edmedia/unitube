@@ -45,7 +45,8 @@ public class PlaylistController extends BaseOperationController {
                 // only list hidden media in hidden album
                 if ((am.getMedia().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                         || ((am.getMedia().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN) && (album.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN)))
-                    playlist.add(am.getMedia());
+                    if (am.getMedia().getStatus() == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                        playlist.add(am.getMedia());
             }
             model.put("album", album);
             model.put("playlist", playlist);

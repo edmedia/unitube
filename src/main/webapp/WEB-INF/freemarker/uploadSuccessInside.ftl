@@ -1,5 +1,4 @@
 <div class="stage">
-    <p>&nbsp;</p>
 
 <#if hasVirus??>
     <div class="info">
@@ -26,5 +25,7 @@
         <p>You can change details of your media file by using this link:
             <a href="edit.do?id=${spring.status.value?c}">Edit Media</a>
         </p>
-    </div>
+
+    <p><a href="${baseUrl}/myTube/list.do">Click here to upload more files.</a> </p>
 </#if>
+</div>
