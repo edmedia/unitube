@@ -11,16 +11,13 @@
     <meta name="Author" content="Educational Media, HEDC, University of Otago"/>
     <meta name="keywords" content="UniTube, Educational Media, HEDC, University of Otago"/>
     <link rel="shortcut icon" href="http://www.otago.ac.nz/favicon.ico" type="image/x-icon"/>
-<#assign needJQueryUI=(this_url?? && (this_url?contains("home") || this_url?contains("myTube/") || this_url?contains("avpSync") || this_url?contains("album")))/>
-<#if needJQueryUI >
     <link rel="stylesheet" type="text/css" media="screen"
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css"/>
-</#if>
-<#if this_url?? && (this_url?contains('avp') || this_url?contains('view'))>
+<#if this_url?? && (this_url?contains('avp') || this_url?contains('view') || this_url?contains('embed')|| this_url?contains('playlist')|| this_url?contains('home'))>
     <link rel="stylesheet" type="text/css" href="${baseUrl}/shadowbox/shadowbox.css"/>
 </#if>
     <link rel="stylesheet" type="text/css" media="screen" href="${baseUrl}/css/global.css"/>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <#if this_url?? && (this_url?contains("login") || this_url?contains("myTube/profile")|| this_url?contains("admin/userEdit")) >
 <#-- md5.js is only needed when changing password -->
     <script type="text/javascript" src="${baseUrl}/javascript/md5.js"></script>
@@ -36,9 +33,8 @@
 <#if this_url?? && (this_url?contains("myTube/") || this_url?contains("admin/"))>
     <script type="text/javascript" src="${baseUrl}/ckeditor/ckeditor.js"></script>
 </#if>
-<#if needJQueryUI >
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-</#if>
+    <script type="text/javascript" src="${baseUrl}/slimScroll/slimScroll.min.js"></script>
 <#if this_url?? && (this_url?contains('avp') || this_url?contains('view') || this_url?contains('embed')|| this_url?contains('playlist')|| this_url?contains('home'))>
     <script type="text/javascript" src="${baseUrl}/jwplayer/jwplayer.js"></script>
     <script type="text/javascript" src="${baseUrl}/shadowbox/shadowbox.js"></script>

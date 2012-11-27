@@ -142,14 +142,6 @@ body {
     width: 64px;
 }
 
-.media {
-    height: 37px;
-    left: 459px;
-    position: absolute;
-    top: 90px;
-    width: 54px;
-}
-
 .unitubasLink {
     height: 36px;
     left: 371px;
@@ -315,18 +307,6 @@ div.topLine {
     padding: 1px;
 }
 
-.mediaDetails {
-    display: inline;
-    float: left;
-    font-size: 9px;
-    height: 50px;
-    line-height: 12px;
-    margin: 7px 14px 0px;
-    overflow: hidden;
-    padding: 5px;
-    width: 100px;
-}
-
 .infoBox {
     padding-left: 20px;
     float: right;
@@ -453,10 +433,6 @@ a:hover {
     /*width: 850px;*/
 }
 
-.playlist_container {
-    border: 1px solid #E8E8E8;
-}
-
 .mediaBorder {
     border: 5px solid #006699;
     float: left;
@@ -533,6 +509,7 @@ table {
 th {
     font-weight: bold;
     padding-bottom: 5px;
+    vertical-align: middle;
 }
 
 .blackBoard {
@@ -580,7 +557,7 @@ th {
 td {
     border-top: 1px dashed #CCCCCC;
     padding: 10px 10px 10px 0;
-    vertical-align: top;
+    vertical-align: middle;
     text-align: left;
 }
 
@@ -821,13 +798,14 @@ table input {
 }
 
 /** presentation slides */
-div#slides {
-    text-align: center;
+
+div.slides_container {
+    margin: 0 auto;
 }
 
 ul.pagination {
+    background-color: white;
     text-align: center;
-    width: 800px;
 }
 
 ul.pagination li {
@@ -1131,3 +1109,51 @@ td p {
     background: none;
 }
 
+
+/** playlist styles */
+
+div.media {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* put image in centre */
+div.media img {
+    margin: auto;
+}
+
+/* put video in centre */
+div.media div {
+    margin: auto;
+}
+
+div.playlistPlayer {
+    float: left;
+    background-color: black;
+}
+
+div.playlistNav {
+    float: left;
+}
+
+div.playlistNav li {
+    background-color: #eeeeee;
+    margin: 2px;
+    height: 50px;
+}
+
+div.playlistPlayer li.player {
+}
+
+span.thumbnail {
+    width: 80px;
+    height: 50px;
+    overflow: hidden;
+    float: left;
+    background-color: white;
+}
+
+span.mediaDetail {
+    display: inline-block;
+    padding:  10px;
+}

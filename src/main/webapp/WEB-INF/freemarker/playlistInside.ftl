@@ -1,10 +1,10 @@
 <div class="stage">
-    <#assign width = 720/>
-    <#assign height = 540/>
-    <#assign playlistSize = 280/>
+    <#assign playerWidth = 720/>
+    <#assign playerHeight = 540/>
+    <#assign playlistNav = 260/>
     <#include "playlistHelper.ftl"/>
 
-     <#assign embedCode><div id="__unitube_${album.id?c}" style="width:600px"><iframe width="600" height="360" src="${context_url}/embedPlaylist.do?a=${album.accessCode}" frameborder="0" allowfullscreen></iframe><div style="text-align:center"><a href="${context_url}/playlist.do?a=${album.accessCode}">Hosted by UniTube</a></div></div></#assign>
+     <#assign embedCode><div id="__unitube_${album.id?c}" style="width:${(playerWidth+playlistNav)?c}px"><iframe width="${(playerWidth+playlistNav)?c}" height="${height?c}" src="${context_url}/embedPlaylist.do?a=${album.accessCode}" frameborder="0" allowfullscreen></iframe><div style="text-align:center"><a href="${context_url}/playlist.do?a=${album.accessCode}">Hosted by UniTube</a></div></div></#assign>
 
     <form action="" name="linkForm">
             <p>
@@ -27,8 +27,6 @@
         $('input.linkURL').click(function() {
             $(this).select();
         });
-
-
     });
     //-->
 </script>

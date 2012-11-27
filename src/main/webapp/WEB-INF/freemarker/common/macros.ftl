@@ -380,7 +380,7 @@ ${link?html}</#macro>
              width="${realWidth?c}" height="${realHeight?c}"
              title="${linkTitle?html}"
              alt="${linkTitle?html}"/>
-        <#elseif media.realFilename!?ends_with("mp3")>
+        <#elseif media.mediaType == 10>  <#-- for audio file -->
             <img src="${baseUrl}/images/mp3.jpg" width="${defaultWidth?c}" height="${defaultHeight?c}"
                  title="${linkTitle?html}"
                  alt="${linkTitle?html}"/>
@@ -389,6 +389,53 @@ ${link?html}</#macro>
                  title="${linkTitle?html}"
                  alt="${linkTitle?html}"/>
     </#if>
+</a>
+</#macro>
+
+<#macro getThumbnail media>
+<#-- default width and height -->
+    <#local defaultWidth = 80 />
+    <#local defaultHeight = 50 />
+    <#local realWidth = defaultWidth />
+    <#local realHeight = defaultHeight />
+    <#local useWidth = false/>
+<#-- calculate real width and height according media's width and height -->
+    <#if media.width != 0 && media.height != 0>
+        <#if (defaultWidth/defaultHeight) &gt; (media.width/media.height)>
+            <#local useWidth = true/>
+            <#local realWidth = defaultWidth/>
+            <#local realHeight = (defaultWidth*media.height/media.width)?round />
+            <#else>
+                <#local useWidth = false/>
+                <#local realWidth = (defaultHeight*media.width/media.height)?round />
+                <#local realHeight = defaultHeight/>
+        </#if>
+    </#if>
+    <#local linkTitle>${media.title!?html}</#local>
+<a href="${baseUrl}/view?m=${media.accessCode}" title="${linkTitle?html}">
+    <img
+        <#if useWidth>
+                width="${defaultWidth?c}"
+            <#if realHeight &gt; defaultHeight>
+                style="margin-top: -${((realHeight-defaultHeight)/2)?round?c}px"
+            </#if>
+            <#else>
+                height="${defaultHeight?c}"
+                <#if realWidth &gt; defaultWidth>
+                style="margin-left: -${((realWidth-defaultWidth)/2)?round?c}px"
+                </#if>
+        </#if>
+        <#if media.mediaType == 20> <#-- for video file -->
+                src="${baseUrl}/file.do?m=${media.accessCode}&name=${media.thumbnail}"
+            <#elseif media.mediaType == 10>  <#-- for audio file -->
+                src="${baseUrl}/images/mp3.jpg"
+            <#elseif media.mediaType == 5>  <#-- for image file -->
+                src="${baseUrl}/file.do?m=${media.accessCode}"
+            <#elseif media.mediaType == 1>  <#-- for other file -->
+                src="${baseUrl}/file.do?m=${media.accessCode}"
+        </#if>
+                title="${linkTitle?html}"
+                alt="${linkTitle?html}"/>
 </a>
 </#macro>
 
@@ -463,6 +510,44 @@ ${link?html}</#macro>
         <span>255</span>
     </form>
 </div>
+</#macro>
+
+<#macro viewMedia obj>
+    <#assign idDiv="unitube___media___${obj.id?c}"/>
+<div id="${idDiv}" class="media">
+    <#if obj.mediaType == 5>
+        <#include "../viewImage.ftl"/>
+        <#elseif (obj.mediaType == 1) && obj.realFilename?ends_with(".png")>
+            <#include "../viewImages.ftl"/>
+        <#else>
+            <#if (obj.mediaType == 10) || (obj.mediaType ==20)>
+                <div id="avPlayer__${obj.id?c}">
+                    Your browser can not support this file. <a href="${mediaFileLink?html}&amp;t=download">Click here to
+                    download this file.</a>
+                </div>
+                <#else>
+                <#-- flash format-->
+                    You need to install Adobe Flash Player.<br/>
+                    <a href="http://www.macromedia.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">
+                        Click here to download Adobe Flash Player</a>
+            </#if>
+    </#if>
+</div>
+<#-- javascript here to display flash, or jwplay to play video and audio -->
+    <#if obj.realFilename?ends_with(".swf")> <#-- flash -->
+        <#include "../viewFlash.ftl"/>
+        <#elseif (obj.mediaType == 10) || (obj.mediaType == 20)> <#-- audio/video -->
+            <#include "../viewAV.ftl"/>
+    </#if>
+<!--
+    // DEBUG INFO
+    // original size: ${obj.width}x${obj.height}
+    // display size:${width}x${height}
+    // JWPLAYER=${JWPLAYER}
+    // originalFileLink=${originalFileLink!}
+    // mediaFileLink=${mediaFileLink!}
+    // otherFormatFileLink=${otherFormatFileLink!}
+-->
 </#macro>
 
 <#--
@@ -541,13 +626,22 @@ ${link?html}</#macro>
 </#function>
 
 <#function getTimeCode timeInMilliseconds>
+    <#local tt = ''/>
     <#local h = (timeInMilliseconds/1000/60/60)?floor />
-<#local m = (timeInMilliseconds/1000/60 - h*60)?floor/>
- <#local s = (timeInMilliseconds/1000 - h*60*60 - m*60)?floor/>
-<#local tt = ''/>
-         <#if h &gt; 0>
-            <#local tt>${h}:</#local>
-         </#if>
-            <#local tt>${tt}${m}:${s}</#local>
-<#return tt/>
+    <#if h &gt; 0>
+        <#local tt>${h}:</#local>
+    </#if>
+    <#local m = (timeInMilliseconds/1000/60 - h*60)?floor/>
+    <#if m &lt; 10>
+        <#local tt>${tt}0${m}:</#local>
+        <#else>
+            <#local tt>${tt}${m}:</#local>
+    </#if>
+    <#local s = (timeInMilliseconds/1000 - h*60*60 - m*60)?floor/>
+    <#if s &lt; 10>
+        <#local tt>${tt}0${s}</#local>
+        <#else>
+            <#local tt>${tt}${s}</#local>
+    </#if>
+    <#return tt/>
 </#function>

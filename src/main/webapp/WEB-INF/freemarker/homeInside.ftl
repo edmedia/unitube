@@ -1,10 +1,10 @@
 <#include "common/info.ftl" />
 
-<h2 class='homeHeader'>Featured Videos</h2>
-
 <#if featured?has_content>
+
+<h2 class='homeHeader'>Featured Videos</h2>
     <#assign playlist = featured/>
-<div style="border:  1px solid #aaa; float:left">
+<div style="float:left">
     <#include "playlistHelper.ftl"/>
 </div>
 </#if>

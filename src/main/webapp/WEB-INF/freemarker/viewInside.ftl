@@ -25,44 +25,11 @@
 <#-- if media status is finished, is not upload only, and realFilename is not empty, display video, audio, flash or image -->
     <#if (obj.status ==2) && !obj.uploadOnly && obj.realFilename?has_content && fileExists>
     <div class="mediaBorder">
-        <#assign idDiv="unitube___media___"/>
         <div id="unitube_media">
-            <#if obj.mediaType == 5>
-                <#include "viewImage.ftl"/>
-                <#elseif (obj.mediaType == 1) && obj.realFilename?ends_with(".png")>
-                    <#include "viewImages.ftl"/>
-                <#else>
-                    <div id="${idDiv}">
-                        <#if (obj.mediaType == 10) || (obj.mediaType ==20)>
-                            <div id="avPlayer">
-                                Your browser can not support this file. <a href="${mediaFileLink?html}&amp;t=download">Click here to download this file.</a>
-                            </div>
-                            <#else>
-                            <#-- flash format-->
-                                You need to install Adobe Flash Player.<br/>
-                                <a href="http://www.macromedia.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">
-                                    Click here to download Adobe Flash Player</a>
-                        </#if>
-                    </div>
-            </#if>
+            <@viewMedia obj/>
         </div>
     </div>
     <div class="clearMe"></div>
-    <#-- javascript here to display flash, or jwplay to play video and audio -->
-        <#if obj.realFilename?ends_with(".swf")> <#-- flash -->
-            <#include "viewFlash.ftl"/>
-            <#elseif (obj.mediaType == 10) || (obj.mediaType == 20)> <#-- audio/video -->
-                <#include "viewAV.ftl"/>
-        </#if>
-    <!--
-    // DEBUG INFO
-    // original size: ${obj.width}x${obj.height}
-    // display size:${width}x${height}
-    // JWPLAYER=${JWPLAYER}
-    // originalFileLink=${originalFileLink!}
-    // mediaFileLink=${mediaFileLink!}
-    // otherFormatFileLink=${otherFormatFileLink!}
--->
     </#if>
 
     <#if obj.description?has_content>

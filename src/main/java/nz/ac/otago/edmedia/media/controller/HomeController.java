@@ -25,25 +25,25 @@ import java.util.Map;
  */
 public class HomeController extends BaseOperationController {
 
-    private final static int DISPLAY_NUM = 4;
-    private final static int CHOOSE_NUM = 20;
+    private final static int DISPLAY_NUM = 5;
+    private final static int CHOOSE_NUM = 30;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
                                   BindException errors)
             throws Exception {
-        Map model = errors.getModel();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> model = (Map<String, Object>) errors.getModel();
 
-        {
-            // most featured
+        {   // most featured videos
             SearchCriteria criteria = new SearchCriteria.Builder()
                     .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                     .eq("mediaType", MediaUtil.MEDIA_TYPE_VIDEO)
                     .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
-                            //.gt("duration", 5 * 60 * 1000) // 5 minutes
+                    .gt("duration", 5 * 60 * 1000) // 5 minutes
+                            //.gt("accessTimes", 10) // accessed at least 10 times
                     .build();
             List list = service.search(Media.class, criteria);
             if (!list.isEmpty()) {
@@ -57,12 +57,10 @@ public class HomeController extends BaseOperationController {
                     featured[i] = list.get(randomArray[i]);
                 }
                 model.put("featured", featured);
-
             }
         }
 
-        {
-            // most viewed
+        {   // most viewed
             SearchCriteria criteria = new SearchCriteria.Builder()
                     .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                     .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
@@ -81,11 +79,9 @@ public class HomeController extends BaseOperationController {
                     mostViewed[i] = list.get(randomArray[i]);
                 }
                 model.put("mostViewed", mostViewed);
-
             }
         }
-        {
-            // most recent
+        {   // most recent
             SearchCriteria criteria = new SearchCriteria.Builder()
                     .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                     .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
@@ -104,11 +100,8 @@ public class HomeController extends BaseOperationController {
                     mostRecent[i] = list.get(randomArray[i]);
                 }
                 model.put("mostRecent", mostRecent);
-
             }
         }
-
-
         return getModelAndView(model, request);
     }
 }
