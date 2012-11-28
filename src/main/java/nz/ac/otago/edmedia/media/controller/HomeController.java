@@ -42,7 +42,7 @@ public class HomeController extends BaseOperationController {
                     .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
                     .eq("mediaType", MediaUtil.MEDIA_TYPE_VIDEO)
                     .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
-                    .gt("duration", 5 * 60 * 1000) // 5 minutes
+                    .gt("duration", 3 * 60 * 1000) // 3 minutes
                             //.gt("accessTimes", 10) // accessed at least 10 times
                     .build();
             List list = service.search(Media.class, criteria);

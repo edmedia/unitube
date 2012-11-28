@@ -18,7 +18,8 @@
                    size="60"
                    class="linkURL"
                     />
-            <a href="playlist.do?a=${obj.accessCode}"><img src="${baseUrl}/images/play-icon.png" alt="Play this album"/> Play this album</a>
+            <#--
+            <a href="playlist.do?a=${obj.accessCode}"><img src="${baseUrl}/images/play-icon.png" alt="Play this album"/> Play this album</a>  -->
         </form>
         <#if isOwner>
             <span class="title">For album owner: you can re-order media files inside an album, by dragging a media file and dropping it to right place. </span>
