@@ -78,7 +78,7 @@
                 $(this).focus();
                 $(this).select();
             });
-            <#if isOwner??>
+            <#if isOwner>
                 $('tbody').sortable({
                     cursor:'move',
                     placeholder: {

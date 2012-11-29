@@ -197,7 +197,7 @@ public class Album extends WebID {
     public int getMediaNum() {
         int mediaNum = 0;
         for (AlbumMedia am : albumMedias) {
-            if (MediaUtil.isPublicFinished(am.getMedia()))
+            if (MediaUtil.isVisible(am.getAlbum(), am.getMedia()))
                 mediaNum++;
         }
         return mediaNum;

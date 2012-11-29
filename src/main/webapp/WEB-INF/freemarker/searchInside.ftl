@@ -8,71 +8,46 @@
 </div>
     <#else>
 
-<#if mediaList?has_content>
-<div class="mediaDisplay2">
-    <div class="mediaBox">
-        <div class="mediaTitle">
-            <div class="titleText">Matched Media</div>
-        </div>
-    </div>
-    <#list mediaList as entity>
-    <@displayMediaInList entity />
-    </#list>
-</div>
-</#if>
+    <div id="tabs" style="width: 1004px; margin-top: 30px; float: left">
+        <ul>
+            <#if mediaList?has_content>
+                <li><a href="#tabs-1">Matched Media (${mediaList?size})</a></li>
+            </#if>
+            <#if albumList?has_content>
+                <li><a href="#tabs-2">Matched Albums (${albumList?size})</a></li>
+            </#if>
+            <#if userList?has_content>
+                <li><a href="#tabs-3">Matched UniTubas (${userList?size})</a></li>
+            </#if>
+        </ul>
 
-<div class="clear"></div>
-
-<#if albumList?has_content>
-<div class="mediaDisplay2">
-    <div class="mediaBox">
-        <div class="mediaTitle">
-            <div class="titleText">Matched Albums</div>
-        </div>
-    </div>
-    <#list albumList as album>
-    <div class="mediaBox">
-        <div class="mediaLine"></div>
-        <div class="mediacontent">
-            <a href="${baseUrl}/album?a=${album.accessCode}">
-                <img class="mediaImage" src="${baseUrl}/images/albums.png" alt=""/>
-            </a>
-
-            <div class="mediadetails">
-                <a href="${baseUrl}/album?a=${album.accessCode}">${album.albumName}</a>
+        <#if mediaList?has_content>
+            <div id="tabs-1">
+            <@displayMediaList2 mediaList/>
             </div>
-        </div>
-    </div>
-    </#list>
-</div>
-</#if>
+        </#if>
 
-<div class="clear"></div>
-
-<#if userList?has_content>
-<div class="mediaDisplay2">
-    <div class="mediaBox">
-        <div class="mediaTitle">
-            <div class="titleText">Matched UniTubas</div>
-        </div>
-    </div>
-    <#list userList as user>
-    <div class="mediaBox">
-        <div class="mediaLine"></div>
-        <div class="mediacontent">
-            <a href="${baseUrl}/media.do?u=${user.accessCode}">
-                <img class="mediaImage" src="${baseUrl}/images/unitubas.png" alt=""/>
-            </a>
-
-            <div class="mediadetails">
-                <a href="${baseUrl}/media.do?u=${user.accessCode}">${user.userName}</a>
+        <#if albumList?has_content>
+            <div id="tabs-2">
+            <@displayAlbumList albumList/>
             </div>
-        </div>
-    </div>
-    </#list>
-</div>
-</#if>
+        </#if>
 
+        <#if userList?has_content>
+            <div id="tabs-3">
+            <@displayUserList userList/>
+            </div>
+        </#if>
+
+    </div>
+
+    <script type="text/javascript">
+        <!--
+        $(function() {
+            $("#tabs").tabs();
+        });
+        //-->
+    </script>
 </#if>
 
 

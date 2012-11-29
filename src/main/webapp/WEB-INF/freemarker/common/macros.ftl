@@ -55,8 +55,8 @@
 <#assign maxDescriptionLength = 128 />
 
 <#--
-    name: displayMediaList
-    desc: dispaly media list, such as on media.do, search.do
+    name: displayMediaList2
+    desc: display media list, such as on media.do, search.do
     @param: elements list of media object to be displayed
 -->
 <#macro displayMediaList2 elements>
@@ -78,16 +78,83 @@
                     <#if entity.duration != 0>
                         <br/>
                         <span class="title">Length: </span>
-                    <#if entity.provider == 'image'>
-                    ${entity.duration}
-                    <#else>
-                    <#-- TODO: display time -->
-                      ${getTimeCode(entity.duration)}
-                    </#if>
+                        <#if entity.provider == 'image'>
+                        ${entity.duration}
+                            <#else>
+                            ${getTimeCode(entity.duration)}
+                        </#if>
                     </#if>
                     <#if entity.description?has_content>
                         <div><@displayBrief entity.description maxDescriptionLength/></div>
                     </#if>
+                </td>
+            </tr>
+            </#list>
+        </tbody>
+    </table>
+        <#else>
+        <div class="stage">
+            <div class="info"><@spring.message "no.media"/></div>
+        </div>
+    </#if>
+</#macro>
+
+<#--
+    name: displayAlbumList
+    desc: display album list, such as on search.do
+    @param: elements list of album object to be displayed
+-->
+<#macro displayAlbumList elements>
+    <#if elements?has_content>
+    <table summary="" width="100%">
+        <tbody>
+            <#list elements as album>
+            <tr>
+                <td width="70"><a href="${baseUrl}/album?a=${album.accessCode}">
+                    <img src="${baseUrl}/images/albums.png" alt=""/>
+                </a></td>
+                <td>
+                    <a href="${baseUrl}/album?a=${album.accessCode}"
+                       title="${album.albumName!?html}">${album.albumName!?html} (${album.mediaNum})</a>
+
+                    <br/>
+                    <span class="title">From:</span>
+                    <a href="${baseUrl}/media.do?u=${album.owner.accessCode}">${album.owner.firstName} ${album.owner.lastName}</a>
+
+                    <#if album.description?has_content>
+                        <div><@displayBrief album.description maxDescriptionLength/></div>
+                    </#if>
+                </td>
+            </tr>
+            </#list>
+        </tbody>
+    </table>
+        <#else>
+        <div class="stage">
+            <div class="info"><@spring.message "no.album"/></div>
+        </div>
+    </#if>
+</#macro>
+
+<#--
+    name: displayUserList
+    desc: display user list, such as on search.do
+    @param: elements list of user object to be displayed
+-->
+<#macro displayUserList elements>
+    <#if elements?has_content>
+    <table summary="" width="100%">
+        <tbody>
+            <#list elements as user>
+            <tr>
+                <td width="70"><a href="${baseUrl}/media.do?u=${user.accessCode}">
+                    <img src="${baseUrl}/images/unitubas.png" alt=""/>
+                </a></td>
+                <td>
+                    <a href="${baseUrl}/media.do?u=${user.accessCode}">
+                    ${user.firstName?html}  ${user.lastName?html}   (${user.mediaNum})
+                    </a>
+
                 </td>
             </tr>
             </#list>

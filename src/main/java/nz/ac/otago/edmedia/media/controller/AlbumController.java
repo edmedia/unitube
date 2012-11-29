@@ -41,9 +41,7 @@ public class AlbumController extends BaseOperationController {
         if ((album != null) && album.validCode(a)) {
             List<AlbumMedia> list = new ArrayList<AlbumMedia>();
             for (AlbumMedia am : album.getAlbumMedias()) {
-                // only list hidden media in hidden album
-                if ((am.getMedia().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
-                        || ((am.getMedia().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN) && (album.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN)))
+                    if(MediaUtil.isVisible(am.getAlbum(), am.getMedia()))
                     list.add(am);
             }
             model.put("list", list);

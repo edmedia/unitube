@@ -1235,10 +1235,33 @@ public class MediaUtil {
         return replaceHtmlTag(content, "script");
     }
 
+    /**
+     * Check if given media file is public and finished media file
+     *
+     * @param media media
+     * @return true if given media file is public and finished media file
+     */
     public static boolean isPublicFinished(Media media) {
         boolean result = false;
         if ((media != null) && (media.getAccessType() == MEDIA_ACCESS_TYPE_PUBLIC) && (media.getStatus() == MEDIA_PROCESS_STATUS_FINISHED))
             result = true;
+        return result;
+    }
+
+    /**
+     * Check if a media file is visible in an album
+     *
+     * @param album album
+     * @param media media
+     * @return if given media file is visible in given album
+     */
+    public static boolean isVisible(Album album, Media media) {
+        boolean result = false;
+        if ((album != null) && (media != null)) {
+            if (media.getStatus() == MEDIA_PROCESS_STATUS_FINISHED) {
+                result = (album.getAccessType() >= media.getAccessType());
+            }
+        }
         return result;
     }
 
