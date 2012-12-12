@@ -80,7 +80,7 @@
                 $(this).focus();
                 $(this).select();
             });
-            <#if authUser??>
+            <#if isOwner??>
                 $('tbody').sortable({
                     cursor:'move',
                     placeholder: {
