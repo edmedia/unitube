@@ -54,12 +54,17 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 ServletContext context = session.getServletContext();
                 AppInfo appInfo = AuthUtil.getAppInfo(context);
                 if ((appInfo != null) && appInfo.isUsingCAS()) {
-                    String ldapUrl = context.getInitParameter("ldapUrl");
-                    String baseDN = context.getInitParameter("baseDN");
-                    String ldapPrincipal = context.getInitParameter("ldapPrincipal");
-                    String ldapCredentials = context.getInitParameter("ldapCredentials");
-                    authUser = MediaUtil.getUserInfoFromLDAP(username, ldapUrl, baseDN, ldapPrincipal, ldapCredentials);
-                    authUser = MediaUtil.alterAuthUser(authUser, appInfo);
+                    // if CAS communication url is not empty, get user info from CAS
+                    if (StringUtils.isNotBlank(appInfo.getCasCommunicationUrl()))
+                        authUser = MediaUtil.getUserInfo(appInfo, username);
+                    if (authUser == null) {
+                        String ldapUrl = context.getInitParameter("ldapUrl");
+                        String baseDN = context.getInitParameter("baseDN");
+                        String ldapPrincipal = context.getInitParameter("ldapPrincipal");
+                        String ldapCredentials = context.getInitParameter("ldapCredentials");
+                        authUser = MediaUtil.getUserInfoFromLDAP(username, ldapUrl, baseDN, ldapPrincipal, ldapCredentials);
+                        authUser = MediaUtil.alterAuthUser(authUser, appInfo);
+                    }
                     if (authUser != null) {
                         log.debug("AuthUser is not set, set AuthUser to {}.", authUser);
                         AuthUtil.setAuthUser(session, authUser);

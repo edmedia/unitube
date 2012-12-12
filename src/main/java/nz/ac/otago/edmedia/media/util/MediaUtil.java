@@ -31,6 +31,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -46,9 +48,13 @@ import javax.naming.directory.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 /**
@@ -1366,6 +1372,101 @@ public class MediaUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * Get user info from CAS.
+     *
+     * @param appInfo  AppInfo object
+     * @param userName username
+     * @return AuthUser object from CAS
+     */
+    public static AuthUser getUserInfo(AppInfo appInfo, String userName) {
+        AuthUser authUser = parseUser(getUserFromCAS(appInfo, userName));
+        if (authUser != null)
+            authUser = alterAuthUser(authUser, appInfo);
+        return authUser;
+    }
+
+    private static String getUserFromCAS(AppInfo appInfo, String userName) {
+        String json = "";
+        if ((appInfo != null) && StringUtils.isNotBlank(userName)) {
+            if (appInfo.isUsingCAS()) {
+                log.info("Get user information from CAS for \"{}\"", userName);
+                String url = appInfo.getCasCommunicationUrl();
+                url = url.replace("{username}", userName);
+                log.info("cas url = {}", url);
+                try {
+                    json = retrieve(url);
+                } catch (IOException ioe) {
+                    log.error("IOException when retrieving user info for " + userName + ".", ioe);
+                }
+            }
+        }
+        return json;
+    }
+
+    /**
+     * Copy from  edu.yale.its.tp.cas.util.SecureURL
+     * <p/>
+     * Retrieve the contents from the given URL as a String, assuming the
+     * URL's server matches what we expect it to match.
+     *
+     * @param url url to retrieve
+     * @return returns result
+     * @throws IOException if there's problem to retrieve data
+     */
+    private static String retrieve(String url) throws IOException {
+        BufferedReader r = null;
+        try {
+            log.debug("retrieving data from {}", url);
+            URL u = new URL(url);
+            if (!u.getProtocol().equals("https"))
+                throw new IOException("only 'https' URLs are valid for this method");
+            URLConnection uc = u.openConnection();
+            uc.setRequestProperty("Connection", "close");
+            r = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+            String line;
+            StringBuilder buf = new StringBuilder();
+            while ((line = r.readLine()) != null)
+                buf.append(line + "\n");
+            return buf.toString();
+        } finally {
+            try {
+                if (r != null)
+                    r.close();
+            } catch (IOException ex) {
+                // ignore
+            }
+        }
+    }
+
+    private static final List<String> userFields = Arrays.asList("userName", "firstName", "lastName", "title", "email", "employeeNumber", "employeeType");
+
+    private static AuthUser parseUser(String json) {
+        AuthUser user = null;
+        if (StringUtils.isNotBlank(json)) {
+            JSONParser parser = new JSONParser();
+            try {
+                JSONObject obj = (JSONObject) parser.parse(json);
+                if (!obj.isEmpty()) {
+                    user = new AuthUser();
+                    user.setUserName((String) obj.get("userName"));
+                    user.setFirstName((String) obj.get("firstName"));
+                    user.setLastName((String) obj.get("lastName"));
+                    user.setEmail((String) obj.get("email"));
+                    user.setStudentID((String) obj.get("employeeNumber"));
+                    user.setWayf("blackboard.otago.ac.nz");
+                    if (obj.get("employeeType") != null) {
+                        user.setIsStaff(((String) obj.get("employeeType")).equalsIgnoreCase("staff"));
+                        user.setIsStudent(((String) obj.get("employeeType")).equalsIgnoreCase("student"));
+                    }
+                }
+            } catch (org.json.simple.parser.ParseException e) {
+                log.error("ParseException when parse " + json, e);
+            }
+        }
+        return user;
     }
 
     public static void main(String args[]) {
