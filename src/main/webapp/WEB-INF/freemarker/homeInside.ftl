@@ -1,5 +1,4 @@
 <#include "common/info.ftl" />
-
 <#--
 <#if featured?has_content>
 <h2 class='homeHeader'>Featured Videos</h2>
@@ -9,7 +8,6 @@
 </div>
 </#if>
 -->
-
 <div id="tabs" style="width: 730px; margin-top: 30px; float: left">
     <ul>
     <#if mostViewed?has_content>

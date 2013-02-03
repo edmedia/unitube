@@ -12,7 +12,7 @@
         <label><input type="radio" name="t" value="0"<#if (mediaType!0) == 0>
                       checked="checked"</#if>/>All</label>
     </span>
-        <input name="q" type="text" value="${searchWords!?html}" class="searchText"/>
+        <input name="q" type="text" value="${searchWords!?html}" class="searchText" x-webkit-speech/>
         <input type="submit" name="button" value="Search"/>
     </form>
 </div>
