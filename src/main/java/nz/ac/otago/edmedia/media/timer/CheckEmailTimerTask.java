@@ -365,12 +365,9 @@ public class CheckEmailTimerTask extends BaseTimerTask {
         if (album != null) {
             media.setAccessType(MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN);
             media.setTags(StringUtils.substringBefore(album.getAlbumName(), "."));
-        } else if (user.getIsGuest()) {
-            // set access type to private for guest
-            media.setAccessType(MediaUtil.MEDIA_ACCESS_TYPE_HIDDEN);
-        } else {
-            // use user default access type
-            media.setAccessType(user.getEmailUploadAccessType());
+        } else  {
+            // always set access type to private for email upload
+            media.setAccessType(MediaUtil.MEDIA_ACCESS_TYPE_PRIVATE);
         }
         // if title is not null, set to title
         if (title != null)

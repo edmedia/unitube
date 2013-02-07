@@ -147,28 +147,6 @@
             <@displayError/>
             </td>
         </tr>
-        <!-- emailUploadAccessType: Default Email Upload Access Type -->
-        <tr>
-            <th>Default Email Upload Access Type</th>
-            <td>
-            <@spring.bind "user.emailUploadAccessType" />
-                <input type="radio" name="${spring.status.expression}" value="0"
-                       title="<@spring.message "media.access.public"/>"
-                       <#if spring.status.value?? && spring.status.value?is_number && spring.status.value==0>checked="checked"</#if>/>
-                <span title="<@spring.message "media.access.public"/>">Public</span>
-                <input type="radio" name="${spring.status.expression}" value="10"
-                       title="<@spring.message "media.access.hidden"/>"
-                       <#if spring.status.value?? && spring.status.value?is_number && spring.status.value==10>checked="checked"</#if>/>
-                <span title="<@spring.message "media.access.hidden"/>">Hidden</span>
-                <input type="radio" name="${spring.status.expression}" value="20"
-                       title="<@spring.message "media.access.private"/>"
-                       <#if spring.status.value?? && spring.status.value?is_number && spring.status.value==20>checked="checked"</#if>/>
-                <span title="<@spring.message "media.access.private"/>">Private</span>
-            </td>
-            <td>
-            <@displayError/>
-            </td>
-        </tr>
         <tr>
             <td colspan="3">
                 <input name="submit" type="submit" value="Save"/>

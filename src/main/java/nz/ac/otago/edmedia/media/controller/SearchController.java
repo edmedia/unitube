@@ -24,7 +24,7 @@ public class SearchController extends BaseListController {
     private final static String QUERY_KEY = "q";
     private final static String MEDIA_TYPE_KEY = "t";
 
-    @SuppressWarnings("unchecked")
+    @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -32,18 +32,25 @@ public class SearchController extends BaseListController {
             throws Exception {
 
         //PageBean pageBean = (PageBean) command;
-        Map model = errors.getModel();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> model = errors.getModel();
+
+        int mediaType = ServletUtil.getParameter(request, MEDIA_TYPE_KEY, MediaUtil.MEDIA_TYPE_UNKNOWN);
+        if ((mediaType != MediaUtil.MEDIA_TYPE_VIDEO) &&
+                (mediaType != MediaUtil.MEDIA_TYPE_AUDIO) &&
+                (mediaType != MediaUtil.MEDIA_TYPE_IMAGE) &&
+                (mediaType != MediaUtil.MEDIA_TYPE_OTHER_MEDIA))
+            mediaType = MediaUtil.MEDIA_TYPE_UNKNOWN;
         // get query words from request
         String words = ServletUtil.getParameter(request, QUERY_KEY);
-        int mediaType = ServletUtil.getParameter(request, MEDIA_TYPE_KEY, MediaUtil.MEDIA_TYPE_UNKNOWN);
-        if (StringUtils.isBlank(words)) {
+        words = MediaUtil.preprocessSearch(words);
+        if (StringUtils.isBlank(words))
             // if not exist, get query words from session
             words = ServletUtil.getAttribute(request.getSession(), QUERY_KEY);
-        }
+        model.put("searchWords", words);
         if (StringUtils.isNotBlank(words)) {
             // put query words into session
-            request.getSession().setAttribute(QUERY_KEY, words.trim());
-            model.put("searchWords", words.trim());
+            request.getSession().setAttribute(QUERY_KEY, words);
             if (mediaType != MediaUtil.MEDIA_TYPE_UNKNOWN) {
                 model.put("mediaType", mediaType);
             }

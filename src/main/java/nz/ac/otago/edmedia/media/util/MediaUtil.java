@@ -66,30 +66,35 @@ import java.util.*;
  */
 public class MediaUtil {
 
-    private final static Logger log = LoggerFactory.getLogger(MediaUtil.class);
-
     // 0: waiting, 1: processing, 2:finished
     public static final int MEDIA_PROCESS_STATUS_WAITING = 0;
     public static final int MEDIA_PROCESS_STATUS_PROCESSING = 1;
     public static final int MEDIA_PROCESS_STATUS_FINISHED = 2;
     public static final int MEDIA_PROCESS_STATUS_UNRECOGNIZED = 9;
-
     public static final int MEDIA_TYPE_UNKNOWN = 0;
     public static final int MEDIA_TYPE_OTHER_MEDIA = 1;
     public static final int MEDIA_TYPE_IMAGE = 5;
     public static final int MEDIA_TYPE_AUDIO = 10;
     public static final int MEDIA_TYPE_VIDEO = 20;
-
     public static final int MEDIA_ACCESS_TYPE_PUBLIC = 0;
     public static final int MEDIA_ACCESS_TYPE_HIDDEN = 10;
     public static final int MEDIA_ACCESS_TYPE_PRIVATE = 20;
-
     // action(1: Upload, 2: Update, 3: View, 4: Delete)
     public static final int MEDIA_ACTION_UPLOAD = 1;
     public static final int MEDIA_ACTION_UPDATE = 2;
     public static final int MEDIA_ACTION_VIEW = 3;
     public static final int MEDIA_ACTION_DELETE = 4;
-
+    private final static Logger log = LoggerFactory.getLogger(MediaUtil.class);
+    private static final Map<String, String> map = new HashMap<String, String>() {
+        {
+            put("cn", "userName");
+            put("sn", "lastName");
+            put("givenname", "firstName");
+            put("mail", "email");
+            put("employeenumber", "studentID");
+        }
+    };
+    private static final List<String> userFields = Arrays.asList("userName", "firstName", "lastName", "title", "email", "employeeNumber", "employeeType");
 
     /**
      * Returns user for given userName and wayf
@@ -1009,7 +1014,6 @@ public class MediaUtil {
         return authUser;
     }
 
-
     /**
      * Get user information from LDAP
      *
@@ -1080,16 +1084,6 @@ public class MediaUtil {
         return attributes;
     }
 
-    private static final Map<String, String> map = new HashMap<String, String>() {
-        {
-            put("cn", "userName");
-            put("sn", "lastName");
-            put("givenname", "firstName");
-            put("mail", "email");
-            put("employeenumber", "studentID");
-        }
-    };
-
     private static AuthUser toAuthUser(Attributes attributes) {
         String employeeType = "employeetype";
         AuthUser authUser = null;
@@ -1156,7 +1150,6 @@ public class MediaUtil {
         }
         return user;
     }
-
 
     public static AuthUser alterAuthUser(AuthUser authUser, AppInfo appInfo) {
         if ((authUser != null) && (appInfo != null)) {
@@ -1388,6 +1381,23 @@ public class MediaUtil {
         return authUser;
     }
 
+    /**
+     * Pre-process search term, get rid of extra characters
+     *
+     * @param term user input
+     * @return normalised term
+     */
+    public static String preprocessSearch(String term) {
+        String t = term;
+        if (StringUtils.isNotBlank(t)) {
+            t = t.trim();
+            t = t.replace("<", "");
+            t = t.replace(">", "");
+            t = t.replace("/", "");
+        }
+        return t;
+    }
+
     private static String getUserFromCAS(AppInfo appInfo, String userName) {
         String json = "";
         if ((appInfo != null) && StringUtils.isNotBlank(userName)) {
@@ -1440,8 +1450,6 @@ public class MediaUtil {
             }
         }
     }
-
-    private static final List<String> userFields = Arrays.asList("userName", "firstName", "lastName", "title", "email", "employeeNumber", "employeeType");
 
     private static AuthUser parseUser(String json) {
         AuthUser user = null;

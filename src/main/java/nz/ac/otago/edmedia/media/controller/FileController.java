@@ -36,6 +36,7 @@ public class FileController extends BaseOperationController {
     private static final long DEFAULT_EXPIRE_TIME = 604800000L; // ..ms = 1 week.
     private static final String MULTIPART_BOUNDARY = "MULTIPART_BYTERANGES";
 
+    @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -65,6 +66,10 @@ public class FileController extends BaseOperationController {
                     name = media.getRealFilename();
                 if (name.contains("?"))
                     name = name.substring(0, name.indexOf("?"));
+
+                logger.info("name = " + name);
+                name = name.replace("..", "");
+                name = name.replace("/", "");
                 file = new File(MediaUtil.getMediaDirectory(getUploadLocation(), media), name);
                 if (media.getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PRIVATE) {
                     User user = MediaUtil.getCurrentUser(service, request);
