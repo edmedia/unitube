@@ -1,5 +1,7 @@
 package nz.ac.otago.edmedia.media.util;
 
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import nz.ac.otago.edmedia.auth.bean.AppInfo;
 import nz.ac.otago.edmedia.auth.bean.AuthUser;
 import nz.ac.otago.edmedia.auth.bean.Course;
@@ -8,6 +10,7 @@ import nz.ac.otago.edmedia.media.bean.*;
 import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
+import nz.ac.otago.edmedia.spring.util.BeanUtil;
 import nz.ac.otago.edmedia.spring.util.UploadUtil;
 import nz.ac.otago.edmedia.util.CommandReturn;
 import nz.ac.otago.edmedia.util.CommandRunner;
@@ -36,6 +39,8 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -45,13 +50,11 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -1396,6 +1399,37 @@ public class MediaUtil {
             t = t.replace("/", "");
         }
         return t;
+    }
+
+    /**
+     * Generate data for specific page.
+     *
+     * @param ctx          Servlet context
+     * @param dataModel    data model
+     * @param templateFile template file
+     * @param outputFile   output file
+     */
+    public static void generateData(ServletContext ctx,
+                                    Map dataModel,
+                                    String templateFile,
+                                    File outputFile) {
+        WebApplicationContext webCtx = BeanUtil.getWebApplicationContext(ctx);
+        if ((webCtx != null) && webCtx.containsBean("freemarkerConfig")) {
+            // get freemarker config
+            FreeMarkerConfigurer cfg = (FreeMarkerConfigurer) webCtx.getBean("freemarkerConfig");
+            try {
+                // Get or create a template
+                Template temp = cfg.getConfiguration().getTemplate(templateFile);
+                // Merge data-model with template
+                Writer out = new FileWriter(outputFile);
+                temp.process(dataModel, out);
+                out.flush();
+            } catch (IOException ioe) {
+                log.error("IOException when generating data for home page", ioe);
+            } catch (TemplateException te) {
+                log.error("TemplateException when generating data for home page", te);
+            }
+        }
     }
 
     private static String getUserFromCAS(AppInfo appInfo, String userName) {

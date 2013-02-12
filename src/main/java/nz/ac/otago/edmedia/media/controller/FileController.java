@@ -66,8 +66,7 @@ public class FileController extends BaseOperationController {
                     name = media.getRealFilename();
                 if (name.contains("?"))
                     name = name.substring(0, name.indexOf("?"));
-
-                logger.info("name = " + name);
+                // get rid of .. and /, which can access to any file
                 name = name.replace("..", "");
                 name = name.replace("/", "");
                 file = new File(MediaUtil.getMediaDirectory(getUploadLocation(), media), name);
