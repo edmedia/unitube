@@ -10,6 +10,7 @@ import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,6 +31,8 @@ import java.util.Map;
  */
 public class MediaController extends BaseListController {
 
+    // update cache every 30 minutes
+    private final static long CACHE_UPDATE_INTERVAL = 30 * DateUtils.MILLIS_PER_MINUTE;
     private final static String DATA_FILENAME = "dataMedia-#s-#p.data";
     private final static String TEMPLATE_FILENAME = "dataMedia.ftl";
 
@@ -69,10 +72,13 @@ public class MediaController extends BaseListController {
             if (s == 0)
                 s = pageBean.getDefaultPageSize();
             File cacheRoot = new File(getUploadLocation().getUploadDir(), "cache");
-            if (!cacheRoot.exists())
-                cacheRoot.mkdirs();
+            if (!cacheRoot.exists()) {
+                boolean result = cacheRoot.mkdirs();
+                if(!result)
+                    logger.error("Failed to create directory " + cacheRoot.getAbsolutePath());
+            }
             File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
-            if (!file.exists() || ((new Date().getTime() - file.lastModified()) > HomeController.CACHE_UPDATE_INTERVAL)) {
+            if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL)) {
                 // generate data
                 Map<String, Object> dataModel = new HashMap<String, Object>();
                 SearchCriteria criteria = new SearchCriteria.Builder()

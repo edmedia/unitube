@@ -7,6 +7,7 @@ import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,8 +32,8 @@ import java.util.Map;
  */
 public class HomeController extends BaseOperationController {
 
-    // update cache every 15 minutes
-    public final static long CACHE_UPDATE_INTERVAL = 15 * 60 * 1000;
+    // update cache every 2 days
+    private final static long CACHE_UPDATE_INTERVAL = 2 * DateUtils.MILLIS_PER_DAY;
     private final static int DISPLAY_NUM = 5;
     private final static int CHOOSE_NUM = 30;
     private final static String DATA_FILENAME = "dataHome.data";
@@ -48,8 +49,11 @@ public class HomeController extends BaseOperationController {
         @SuppressWarnings("unchecked")
         Map<String, Object> model = errors.getModel();
         File cacheRoot = new File(getUploadLocation().getUploadDir(), "cache");
-        if (!cacheRoot.exists())
-            cacheRoot.mkdirs();
+        if (!cacheRoot.exists()) {
+            boolean result = cacheRoot.mkdirs();
+            if (!result)
+                logger.error("Failed to create directory " + cacheRoot.getAbsolutePath());
+        }
         File file = new File(cacheRoot, DATA_FILENAME);
         if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL)) {
             // generate data
