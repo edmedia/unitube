@@ -4,6 +4,7 @@ import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.controller.BaseOperationController;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,6 +39,8 @@ public class HomeController extends BaseOperationController {
         Map<String, Object> model = errors.getModel();
         File cacheRoot = MediaUtil.getCacheRoot(getUploadLocation());
         File file = new File(cacheRoot, DATA_FILENAME);
+        if (Boolean.parseBoolean(request.getParameter("clearCache")))
+            file.delete();
         if (!file.exists()) {
             MediaUtil.generateHome(MediaUtil.getFreemarkerConfig(getServletContext()), service, getUploadLocation(), ServletUtil.getContextURL(request));
         }

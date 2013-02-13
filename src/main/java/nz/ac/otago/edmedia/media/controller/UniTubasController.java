@@ -5,6 +5,7 @@ import nz.ac.otago.edmedia.page.PageBean;
 import nz.ac.otago.edmedia.spring.controller.BaseListController;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,6 +47,8 @@ public class UniTubasController extends BaseListController {
             s = pageBean.getDefaultPageSize();
         File cacheRoot = new File(getUploadLocation().getUploadDir(), "cache");
         File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
+        if (Boolean.parseBoolean(request.getParameter("clearCache")))
+            file.delete();
         if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL))
             file = MediaUtil.generateUniTubas(MediaUtil.getFreemarkerConfig(this.getServletContext()), service, getUploadLocation(), pageBean, ServletUtil.getContextURL(request));
         String content = IOUtils.toString(new FileReader(file));

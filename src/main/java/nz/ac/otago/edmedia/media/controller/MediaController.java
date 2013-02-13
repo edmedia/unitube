@@ -10,6 +10,7 @@ import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -76,6 +77,8 @@ public class MediaController extends BaseListController {
                     logger.error("Failed to create directory " + cacheRoot.getAbsolutePath());
             }
             File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
+            if (Boolean.parseBoolean(request.getParameter("clearCache")))
+                file.delete();
             if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL))
                 file = MediaUtil.generateMedia(MediaUtil.getFreemarkerConfig(getServletContext()), service, getUploadLocation(), pageBean, ServletUtil.getContextURL(request));
             String content = IOUtils.toString(new FileReader(file));
