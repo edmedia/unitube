@@ -556,6 +556,10 @@ public class Media extends WebID {
         return "image";
     }
 
+    public boolean isPublicAvailable() {
+        return ((accessType == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)  && (status == MediaUtil.MEDIA_PROCESS_STATUS_FINISHED));
+    }
+
     /**
      * Returns User.
      *

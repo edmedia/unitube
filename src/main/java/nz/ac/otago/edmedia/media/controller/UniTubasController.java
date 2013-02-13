@@ -1,11 +1,8 @@
 package nz.ac.otago.edmedia.media.controller;
 
-import nz.ac.otago.edmedia.media.bean.User;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
-import nz.ac.otago.edmedia.page.Page;
 import nz.ac.otago.edmedia.page.PageBean;
 import nz.ac.otago.edmedia.spring.controller.BaseListController;
-import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +28,6 @@ public class UniTubasController extends BaseListController {
     // update cache every 3 days
     private final static long CACHE_UPDATE_INTERVAL = 3 * DateUtils.MILLIS_PER_DAY;
     private final static String DATA_FILENAME = "dataUniTubas-#s-#p.data";
-    private final static String TEMPLATE_FILENAME = "dataUniTubas.ftl";
 
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
@@ -50,29 +45,9 @@ public class UniTubasController extends BaseListController {
         if (s == 0)
             s = pageBean.getDefaultPageSize();
         File cacheRoot = new File(getUploadLocation().getUploadDir(), "cache");
-        if (!cacheRoot.exists()) {
-            boolean result = cacheRoot.mkdirs();
-            if (!result)
-                logger.error("Failed to create directory " + cacheRoot.getAbsolutePath());
-        }
         File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
-        if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL)) {
-            // generate data
-            Map<String, Object> dataModel = new HashMap<String, Object>();
-            SearchCriteria criteria = new SearchCriteria.Builder()
-                    .eq("isGuest", false)
-                    .sizeGt("medias", 0)
-                    .orderBy("lastName")
-                    .orderBy("firstName")
-                    .build();
-            Page page = service.pagination(User.class, pageBean.getP(), pageBean.getS(), criteria);
-            file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
-            page.setRequest(request);
-            dataModel.put("pager", page);
-            dataModel.put("baseUrl", ServletUtil.getContextURL(request));
-            dataModel.put("this_url", request.getRequestURI());
-            MediaUtil.generateData(this.getServletContext(), dataModel, TEMPLATE_FILENAME, file);
-        }
+        if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL))
+            file = MediaUtil.generateUniTubas(MediaUtil.getFreemarkerConfig(this.getServletContext()), service, getUploadLocation(), pageBean, ServletUtil.getContextURL(request));
         String content = IOUtils.toString(new FileReader(file));
         model.put("content", content);
         return getModelAndView(model, request);

@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,7 +33,6 @@ public class MediaController extends BaseListController {
     // update cache every 30 minutes
     private final static long CACHE_UPDATE_INTERVAL = 30 * DateUtils.MILLIS_PER_MINUTE;
     private final static String DATA_FILENAME = "dataMedia-#s-#p.data";
-    private final static String TEMPLATE_FILENAME = "dataMedia.ftl";
 
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
@@ -74,26 +72,12 @@ public class MediaController extends BaseListController {
             File cacheRoot = new File(getUploadLocation().getUploadDir(), "cache");
             if (!cacheRoot.exists()) {
                 boolean result = cacheRoot.mkdirs();
-                if(!result)
+                if (!result)
                     logger.error("Failed to create directory " + cacheRoot.getAbsolutePath());
             }
             File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
-            if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL)) {
-                // generate data
-                Map<String, Object> dataModel = new HashMap<String, Object>();
-                SearchCriteria criteria = new SearchCriteria.Builder()
-                        .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
-                        .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
-                        .orderBy("uploadTime", false)
-                        .build();
-                Page page = service.pagination(Media.class, pageBean.getP(), pageBean.getS(), criteria);
-                file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
-                page.setRequest(request);
-                dataModel.put("pager", page);
-                dataModel.put("baseUrl", ServletUtil.getContextURL(request));
-                dataModel.put("this_url", request.getRequestURI());
-                MediaUtil.generateData(this.getServletContext(), dataModel, TEMPLATE_FILENAME, file);
-            }
+            if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL))
+                file = MediaUtil.generateMedia(MediaUtil.getFreemarkerConfig(getServletContext()), service, getUploadLocation(), pageBean, ServletUtil.getContextURL(request));
             String content = IOUtils.toString(new FileReader(file));
             model.put("content", content);
         } else {

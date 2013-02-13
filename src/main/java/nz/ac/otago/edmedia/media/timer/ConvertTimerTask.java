@@ -3,15 +3,19 @@ package nz.ac.otago.edmedia.media.timer;
 import nz.ac.otago.edmedia.media.bean.Media;
 import nz.ac.otago.edmedia.media.converter.MediaConverter;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
+import nz.ac.otago.edmedia.page.PageBean;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,18 +30,15 @@ import java.util.concurrent.Executors;
 public class ConvertTimerTask extends BaseTimerTask {
 
     private final static Logger log = LoggerFactory.getLogger(ConvertTimerTask.class);
-
     private final static int DEFAULT_MAXIMUM_THREAD_NUMBER = 5;
-
     private final static int DEFAULT_MAXIMUM_PROCESS_TIMES = 9;
-
     private static boolean isRunning = false;
-
     private MediaConverter mediaConverter;
-
     private int maxThreadNumber;
-
     private int maxProcessTimes;
+    private boolean update = true;
+    private long updateHour = -1;
+    private ExecutorService executor;
 
     public void setMediaConverter(MediaConverter mediaConverter) {
         this.mediaConverter = mediaConverter;
@@ -56,9 +57,6 @@ public class ConvertTimerTask extends BaseTimerTask {
         else
             this.maxProcessTimes = DEFAULT_MAXIMUM_PROCESS_TIMES;
     }
-
-
-    private ExecutorService executor;
 
     /**
      * Run timer task.
@@ -128,6 +126,21 @@ public class ConvertTimerTask extends BaseTimerTask {
                 if (StringUtils.isNotBlank(media.getConvertTo()))
                     convertToOtherFormat(media);
             }
+            // update home page every day
+            if (needUpdate()) {
+                log.info("updating home page");
+                MediaUtil.generateHome(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, appURL);
+                //log.info("update uniTubas page");
+                //MediaUtil.generateUniTubas(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, pageBean, appURL);
+            }
+            // update media page every hour
+            if (outputLog) {
+                PageBean pageBean = new PageBean();
+                pageBean.setS(pageBean.getDefaultPageSize());
+                pageBean.setP(pageBean.getDefaultPageNumber());
+                log.info("updating media page");
+                MediaUtil.generateMedia(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, pageBean, appURL);
+            }
         } catch (Exception e) {
             log.error("Exception when converting new media file.", e);
         } finally {
@@ -195,6 +208,23 @@ public class ConvertTimerTask extends BaseTimerTask {
         } catch (DataAccessException e) {
             log.error("Can not convert to other format", e);
         }
+    }
+
+    private boolean needUpdate() {
+        boolean result = false;
+        Date now = new Date();
+        if (update) {
+            if (updateHour == -1) {
+                result = true;
+                updateHour = 0;
+                update = false;
+            } else if (updateHour == DateUtils.getFragmentInHours(now, Calendar.DAY_OF_YEAR)) {
+                result = true;
+                update = false;
+            }
+        } else if (updateHour != DateUtils.getFragmentInHours(now, Calendar.DAY_OF_YEAR))
+            update = true;
+        return result;
     }
 
 }

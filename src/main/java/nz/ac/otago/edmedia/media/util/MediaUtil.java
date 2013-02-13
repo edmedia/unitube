@@ -7,6 +7,8 @@ import nz.ac.otago.edmedia.auth.bean.AuthUser;
 import nz.ac.otago.edmedia.auth.bean.Course;
 import nz.ac.otago.edmedia.auth.util.AuthUtil;
 import nz.ac.otago.edmedia.media.bean.*;
+import nz.ac.otago.edmedia.page.Page;
+import nz.ac.otago.edmedia.page.PageBean;
 import nz.ac.otago.edmedia.spring.bean.UploadLocation;
 import nz.ac.otago.edmedia.spring.service.BaseService;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
@@ -38,6 +40,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -87,6 +90,7 @@ public class MediaUtil {
     public static final int MEDIA_ACTION_UPDATE = 2;
     public static final int MEDIA_ACTION_VIEW = 3;
     public static final int MEDIA_ACTION_DELETE = 4;
+    private static final String FREEMARKER_CONFIG = "freemarkerConfig";
     private final static Logger log = LoggerFactory.getLogger(MediaUtil.class);
     private static final Map<String, String> map = new HashMap<String, String>() {
         {
@@ -787,6 +791,28 @@ public class MediaUtil {
         return result;
     }
 
+    public static int getMediaNum(User user) {
+        int mediaNum = 0;
+        for (Media media : user.getMedias()) {
+            if (media.isPublicAvailable())
+                mediaNum++;
+        }
+        return mediaNum;
+    }
+
+    public static int getAlbumNum(User user) {
+        int albumNum = 0;
+        for (UserAlbum ua : user.getUserAlbums()) {
+            // if access type is public, owner is this user, and is not empty
+            if ((ua.getAlbum() != null)
+                    && (ua.getAlbum().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    && (ua.getAlbum().getOwner().getId().equals(user.getId()))
+                    && (ua.getAlbum().getMediaNum() > 0))
+                albumNum++;
+        }
+        return albumNum;
+    }
+
     public static boolean canView(Media media, User user) {
         boolean result = false;
         if ((media != null) && (user != null)) {
@@ -1238,19 +1264,6 @@ public class MediaUtil {
     }
 
     /**
-     * Check if given media file is public and finished media file
-     *
-     * @param media media
-     * @return true if given media file is public and finished media file
-     */
-    public static boolean isPublicFinished(Media media) {
-        boolean result = false;
-        if ((media != null) && (media.getAccessType() == MEDIA_ACCESS_TYPE_PUBLIC) && (media.getStatus() == MEDIA_PROCESS_STATUS_FINISHED))
-            result = true;
-        return result;
-    }
-
-    /**
      * Check if a media file is visible in an album
      *
      * @param album album
@@ -1402,21 +1415,211 @@ public class MediaUtil {
     }
 
     /**
+     * Get freemarker config from ApplicationContext
+     *
+     * @param ctx application context
+     * @return freemarker config
+     */
+    public static FreeMarkerConfigurer getFreemarkerConfig(ApplicationContext ctx) {
+        if ((ctx != null) && ctx.containsBean(FREEMARKER_CONFIG))
+            return (FreeMarkerConfigurer) ctx.getBean(FREEMARKER_CONFIG);
+        return null;
+    }
+
+    /**
+     * Get freemarker config from ServletContext
+     *
+     * @param ctx servlet context
+     * @return freemarker config
+     */
+    public static FreeMarkerConfigurer getFreemarkerConfig(ServletContext ctx) {
+        if (ctx != null) {
+            WebApplicationContext webCtx = BeanUtil.getWebApplicationContext(ctx);
+            if ((webCtx != null) && webCtx.containsBean(FREEMARKER_CONFIG)) {
+                return (FreeMarkerConfigurer) webCtx.getBean(FREEMARKER_CONFIG);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get cache root, create it if not exist yet
+     *
+     * @param uploadLocation upload location
+     * @return cache root
+     */
+    public static File getCacheRoot(UploadLocation uploadLocation) {
+        File cacheRoot = new File(uploadLocation.getUploadDir(), "cache");
+        if (!cacheRoot.exists()) {
+            boolean result = cacheRoot.mkdirs();
+            if (!result)
+                log.error("Failed to create directory " + cacheRoot.getAbsolutePath());
+        }
+        return cacheRoot;
+    }
+
+    /**
+     * Generate home page
+     *
+     * @param cfg            freemarker config
+     * @param service        service
+     * @param uploadLocation upload location
+     * @param appUrl         app url
+     */
+    public static void generateHome(FreeMarkerConfigurer cfg, BaseService service, UploadLocation uploadLocation, String appUrl) {
+        int displayNumber = 5;
+        int chooseNum = 30;
+        String dataFilename = "dataHome.data";
+        String templateFilename = "dataHome.ftl";
+        File cacheRoot = getCacheRoot(uploadLocation);
+        File file = new File(cacheRoot, dataFilename);
+
+        // generate data
+        Map<String, Object> dataModel = new HashMap<String, Object>();
+        {   // most featured videos
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .eq("mediaType", MediaUtil.MEDIA_TYPE_VIDEO)
+                    .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                    .gt("duration", 3 * 60 * 1000) // 3 minutes
+                            //.gt("accessTimes", 10) // accessed at least 10 times
+                    .build();
+            List list = service.search(Media.class, criteria);
+            if (!list.isEmpty()) {
+                int displayNum = list.size();
+                if (displayNum > displayNumber)
+                    displayNum = displayNumber;
+
+                Object[] featured = new Object[displayNum];
+                int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
+                for (int i = 0; i < displayNum; i++) {
+                    featured[i] = list.get(randomArray[i]);
+                }
+                dataModel.put("featured", featured);
+            }
+        }
+        {   // most viewed
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                    .orderBy("accessTimes", false)
+                    .result(0, chooseNum)
+                    .build();
+            List list = service.search(Media.class, criteria);
+            if (!list.isEmpty()) {
+                int displayNum = list.size();
+                if (displayNum > displayNumber)
+                    displayNum = displayNumber;
+
+                Object[] mostViewed = new Object[displayNum];
+                int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
+                for (int i = 0; i < displayNum; i++) {
+                    mostViewed[i] = list.get(randomArray[i]);
+                }
+                dataModel.put("mostViewed", mostViewed);
+            }
+        }
+        {   // most recent
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                    .orderBy("uploadTime", false)
+                    .result(0, chooseNum)
+                    .build();
+            List list = service.search(Media.class, criteria);
+            if (!list.isEmpty()) {
+                int displayNum = list.size();
+                if (displayNum > displayNumber)
+                    displayNum = displayNumber;
+
+                Object[] mostRecent = new Object[displayNum];
+                int[] randomArray = CommonUtil.randomArray(list.size(), displayNum);
+                for (int i = 0; i < displayNum; i++) {
+                    mostRecent[i] = list.get(randomArray[i]);
+                }
+                dataModel.put("mostRecent", mostRecent);
+            }
+        }
+        dataModel.put("baseUrl", appUrl);
+        MediaUtil.generateData(cfg, dataModel, templateFilename, file);
+    }
+
+    /**
+     * Generate uniTubas page
+     *
+     * @param cfg            freemarker config
+     * @param service        service
+     * @param uploadLocation upload location
+     * @param pageBean       page bean
+     * @param appUrl         app url
+     * @return generated file
+     */
+    public static File generateUniTubas(FreeMarkerConfigurer cfg, BaseService service, UploadLocation uploadLocation, PageBean pageBean, String appUrl) {
+        String dataFilename = "dataUniTubas-#s-#p.data";
+        String templateFilename = "dataUniTubas.ftl";
+        File cacheRoot = getCacheRoot(uploadLocation);
+
+        // generate data
+        Map<String, Object> dataModel = new HashMap<String, Object>();
+        SearchCriteria criteria = new SearchCriteria.Builder()
+                .eq("isGuest", false)
+                .sizeGt("medias", 0)
+                .orderBy("lastName")
+                .orderBy("firstName")
+                .build();
+        Page page = service.pagination(User.class, pageBean.getP(), pageBean.getS(), criteria);
+        File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
+        dataModel.put("pager", page);
+        dataModel.put("baseUrl", appUrl);
+        dataModel.put("this_url", appUrl + "uniTubas.do");
+        MediaUtil.generateData(cfg, dataModel, templateFilename, file);
+        return file;
+    }
+
+    /**
+     * Generate media page
+     *
+     * @param cfg            freemarker config
+     * @param service        service
+     * @param uploadLocation upload location
+     * @param pageBean       page bean
+     * @param appUrl         app url
+     * @return generated file
+     */
+    public static File generateMedia(FreeMarkerConfigurer cfg, BaseService service, UploadLocation uploadLocation, PageBean pageBean, String appUrl) {
+        String dataFilename = "dataMedia-#s-#p.data";
+        String templateFilename = "dataMedia.ftl";
+        File cacheRoot = getCacheRoot(uploadLocation);
+
+        // generate data
+        Map<String, Object> dataModel = new HashMap<String, Object>();
+        SearchCriteria criteria = new SearchCriteria.Builder()
+                .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                .eq("status", MediaUtil.MEDIA_PROCESS_STATUS_FINISHED)
+                .orderBy("uploadTime", false)
+                .build();
+        Page page = service.pagination(Media.class, pageBean.getP(), pageBean.getS(), criteria);
+        File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
+        dataModel.put("pager", page);
+        dataModel.put("baseUrl", appUrl);
+        dataModel.put("this_url", appUrl + "media.do");
+        MediaUtil.generateData(cfg, dataModel, templateFilename, file);
+        return file;
+    }
+
+    /**
      * Generate data for specific page.
      *
-     * @param ctx          Servlet context
+     * @param cfg          freemarker config
      * @param dataModel    data model
      * @param templateFile template file
      * @param outputFile   output file
      */
-    public static void generateData(ServletContext ctx,
-                                    Map dataModel,
-                                    String templateFile,
-                                    File outputFile) {
-        WebApplicationContext webCtx = BeanUtil.getWebApplicationContext(ctx);
-        if ((webCtx != null) && webCtx.containsBean("freemarkerConfig")) {
-            // get freemarker config
-            FreeMarkerConfigurer cfg = (FreeMarkerConfigurer) webCtx.getBean("freemarkerConfig");
+    private static void generateData(FreeMarkerConfigurer cfg,
+                                     Map dataModel,
+                                     String templateFile,
+                                     File outputFile) {
+        if ((cfg != null) && StringUtils.isNotBlank(templateFile) && (outputFile != null)) {
             try {
                 // Get or create a template
                 Template temp = cfg.getConfiguration().getTemplate(templateFile);
@@ -1425,13 +1628,20 @@ public class MediaUtil {
                 temp.process(dataModel, out);
                 out.flush();
             } catch (IOException ioe) {
-                log.error("IOException when generating data for home page", ioe);
+                log.error("IOException when generating data for page " + templateFile, ioe);
             } catch (TemplateException te) {
-                log.error("TemplateException when generating data for home page", te);
+                log.error("TemplateException when generating data for page " + templateFile, te);
             }
         }
     }
 
+    /**
+     * Get user from CAS
+     *
+     * @param appInfo  app info
+     * @param userName user name
+     * @return json object from CAS
+     */
     private static String getUserFromCAS(AppInfo appInfo, String userName) {
         String json = "";
         if ((appInfo != null) && StringUtils.isNotBlank(userName)) {
@@ -1485,6 +1695,12 @@ public class MediaUtil {
         }
     }
 
+    /**
+     * Parse json object to user
+     *
+     * @param json json object
+     * @return authUser
+     */
     private static AuthUser parseUser(String json) {
         AuthUser user = null;
         if (StringUtils.isNotBlank(json)) {

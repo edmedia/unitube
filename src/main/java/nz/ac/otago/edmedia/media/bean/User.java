@@ -371,12 +371,7 @@ public class User extends WebID implements BaseUser {
      * @return how many public finished media files this user has
      */
     public int getMediaNum() {
-        int mediaNum = 0;
-        for (Media media : medias) {
-            if (MediaUtil.isPublicFinished(media))
-                mediaNum++;
-        }
-        return mediaNum;
+        return MediaUtil.getMediaNum(this);
     }
 
     /**
@@ -385,16 +380,7 @@ public class User extends WebID implements BaseUser {
      * @return how many public non-empty albums this user has
      */
     public int getAlbumNum() {
-        int albumNum = 0;
-        for (UserAlbum ua : userAlbums) {
-            // if access type is public, owner is this user, and is not empty
-            if ((ua.getAlbum() != null)
-                    && (ua.getAlbum().getAccessType() == MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
-                    && (ua.getAlbum().getOwner().getId().equals(this.getId()))
-                    && (ua.getAlbum().getMediaNum() > 0))
-                albumNum++;
-        }
-        return albumNum;
+        return MediaUtil.getAlbumNum(this);
     }
 
     /**
