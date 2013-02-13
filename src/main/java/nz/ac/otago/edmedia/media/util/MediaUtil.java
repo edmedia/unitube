@@ -1571,7 +1571,10 @@ public class MediaUtil {
         File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
         dataModel.put("pager", page);
         dataModel.put("baseUrl", appUrl);
-        dataModel.put("this_url", appUrl + "uniTubas.do");
+        if (appUrl.endsWith("/"))
+            dataModel.put("this_url", appUrl + "uniTubas.do");
+        else
+            dataModel.put("this_url", appUrl + "/uniTubas.do");
         MediaUtil.generateData(cfg, dataModel, templateFilename, file);
         return file;
     }
@@ -1602,7 +1605,10 @@ public class MediaUtil {
         File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
         dataModel.put("pager", page);
         dataModel.put("baseUrl", appUrl);
-        dataModel.put("this_url", appUrl + "media.do");
+        if (appUrl.endsWith("/"))
+            dataModel.put("this_url", appUrl + "media.do");
+        else
+            dataModel.put("this_url", appUrl + "/media.do");
         MediaUtil.generateData(cfg, dataModel, templateFilename, file);
         return file;
     }
