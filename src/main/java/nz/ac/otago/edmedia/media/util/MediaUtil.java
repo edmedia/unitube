@@ -1614,6 +1614,39 @@ public class MediaUtil {
     }
 
     /**
+     * Generate albums page
+     *
+     * @param cfg            freemarker config
+     * @param service        service
+     * @param uploadLocation upload location
+     * @param pageBean       page bean
+     * @param appUrl         app url
+     * @return generated file
+     */
+    public static File generateAlbums(FreeMarkerConfigurer cfg, BaseService service, UploadLocation uploadLocation, PageBean pageBean, String appUrl) {
+        String dataFilename = "dataAlbums-#s-#p.data";
+        String templateFilename = "dataAlbums.ftl";
+        File cacheRoot = getCacheRoot(uploadLocation);
+
+        // generate data
+        Map<String, Object> dataModel = new HashMap<String, Object>();
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .sizeGt("albumMedias", 0)
+                    .orderBy("albumName").build();
+            Page page = service.pagination(Album.class, pageBean.getP(), pageBean.getS(), criteria);
+        File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
+        dataModel.put("pager", page);
+        dataModel.put("baseUrl", appUrl);
+        if (appUrl.endsWith("/"))
+            dataModel.put("this_url", appUrl + "albums.do");
+        else
+            dataModel.put("this_url", appUrl + "/albums.do");
+        MediaUtil.generateData(cfg, dataModel, templateFilename, file);
+        return file;
+    }
+
+    /**
      * Generate data for specific page.
      *
      * @param cfg          freemarker config

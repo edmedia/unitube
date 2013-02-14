@@ -130,8 +130,15 @@ public class ConvertTimerTask extends BaseTimerTask {
             if (needUpdate()) {
                 log.info("updating home page");
                 MediaUtil.generateHome(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, appURL);
-                //log.info("update uniTubas page");
-                //MediaUtil.generateUniTubas(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, pageBean, appURL);
+                /*
+                 PageBean pageBean = new PageBean();
+                 pageBean.setS(pageBean.getDefaultPageSize());
+                 pageBean.setP(pageBean.getDefaultPageNumber());
+                 log.info("update uniTubas page");
+                 MediaUtil.generateUniTubas(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, pageBean, appURL);
+                 log.info("updating albums page");
+                 MediaUtil.generateAlbums(MediaUtil.getFreemarkerConfig(ctx), service, uploadLocation, pageBean, appURL);
+                //*/
             }
             // update media page every hour
             if (outputLog) {

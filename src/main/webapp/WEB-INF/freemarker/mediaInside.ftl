@@ -4,7 +4,7 @@
         <@displayPager pager/>
     </#if>
 <#else>
-    ${content}
+${content}
 </#if>
 
 

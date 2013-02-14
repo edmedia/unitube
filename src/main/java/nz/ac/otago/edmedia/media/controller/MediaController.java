@@ -10,7 +10,6 @@ import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
 import nz.ac.otago.edmedia.util.ServletUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,6 +34,7 @@ public class MediaController extends BaseListController {
     private final static long CACHE_UPDATE_INTERVAL = 30 * DateUtils.MILLIS_PER_MINUTE;
     private final static String DATA_FILENAME = "dataMedia-#s-#p.data";
 
+    @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -70,15 +70,11 @@ public class MediaController extends BaseListController {
                 p = pageBean.getDefaultPageNumber();
             if (s == 0)
                 s = pageBean.getDefaultPageSize();
-            File cacheRoot = new File(getUploadLocation().getUploadDir(), "cache");
-            if (!cacheRoot.exists()) {
-                boolean result = cacheRoot.mkdirs();
-                if (!result)
-                    logger.error("Failed to create directory " + cacheRoot.getAbsolutePath());
-            }
+            File cacheRoot = MediaUtil.getCacheRoot(getUploadLocation());
             File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
             if (Boolean.parseBoolean(request.getParameter("clearCache")))
-                file.delete();
+                if (!file.delete())
+                    logger.warn("can't delete cache file " + file.getAbsolutePath());
             if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL))
                 file = MediaUtil.generateMedia(MediaUtil.getFreemarkerConfig(getServletContext()), service, getUploadLocation(), pageBean, ServletUtil.getContextURL(request));
             String content = IOUtils.toString(new FileReader(file));
@@ -92,7 +88,8 @@ public class MediaController extends BaseListController {
             if (user != null) {
                 model.put("user", user);
                 builder = builder.eq("user", user);
-            } else if (mediaType != MediaUtil.MEDIA_TYPE_UNKNOWN) {
+            }
+            if (mediaType != MediaUtil.MEDIA_TYPE_UNKNOWN) {
                 model.put("mediaType", mediaType);
                 builder = builder.eq("mediaType", mediaType);
             }

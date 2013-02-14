@@ -27,13 +27,13 @@
                     <span class="right"><a href="#${accessRule.id?c}" class="delete"
                                            title="Remove this user">X</a></span>
                 </li>
-                <#else>
-                    <li id="ar_${accessRule.id?c}">
-                        <span class="left">${accessRule.userInput?html}</span>
-                        <span class="splitter"> -  </span>
+            <#else>
+                <li id="ar_${accessRule.id?c}">
+                    <span class="left">${accessRule.userInput?html}</span>
+                    <span class="splitter"> -  </span>
                     <span class="right"><a href="#${accessRule.id?c}" class="delete"
                                            title="Remove this user">X</a></span>
-                    </li>
+                </li>
             </#if>
         </#list>
     </#if>
@@ -48,6 +48,8 @@
             <input id="userInput" type="text" size="35"
                    rel="${baseUrl}/myTube/userSearch.do"/>
             <input type="button" value="Share" name="share"/>
+
+            <p>&nbsp;</p>
         </form>
     </div>
 
@@ -72,7 +74,7 @@
         });
 
         // when clicking delete accessRule
-        $('a.delete').click(function() {
+        $('a.delete').click(function () {
             deleteAccessRule($(this));
         });
 
@@ -80,13 +82,13 @@
         $('#userInput').autocomplete({
             minLength: 2,
             source: $('#userInput').attr("rel"),
-            select: function(e, ui) {
+            select: function (e, ui) {
                 log("select " + ui.item.value);
                 $('#userInput').val(ui.item.value);
             }
         });
 
-        $('input:button[name=share]').click(function() {
+        $('input:button[name=share]').click(function () {
             if ($('#userInput').val().length == 0) {
                 info.html("<div>Please input username first.<\/div>").dialog('open');
                 return false;
@@ -95,13 +97,13 @@
         });
 
         // when submitting addAccessRule form
-        $('form[name=addAccessRule]').submit(function() {
+        $('form[name=addAccessRule]').submit(function () {
             // get media id from hidden input, must be set before show dialog
             var id = $('#ar_mediaID').val();
             log("id = " + id);
             var url = this.action + "?mediaID=" + id + "&userInput=" + $('#userInput').val();
             log("addAccessRule url = " + url);
-            $.get(url, function(xml) {
+            $.get(url, function (xml) {
                 if ($("action", xml).attr("success") == "true") {
                     var detail = $("action", xml).attr("detail");
                     log("detail = " + detail);
@@ -135,7 +137,7 @@
                         info.text(detail);
                         info.dialog("open");
                     }
-                    $('a.delete').click(function() {
+                    $('a.delete').click(function () {
                         deleteAccessRule($(this));
                     });
                     $('#userInput').val('');
@@ -150,7 +152,7 @@
                 var id = thisElement.attr('href').substring(1);
                 var url = "${baseUrl}/myTube/accessRuleDelete.do?id=" + id;
                 log("delete accessRule url " + url);
-                $.get(url, function(xml) {
+                $.get(url, function (xml) {
                     if ($("action", xml).attr("success") == "true") {
                         $('#ar_' + id).remove();
                     } else

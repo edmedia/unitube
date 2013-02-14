@@ -912,8 +912,12 @@ span#current-time1, span#current-time2, span#current-slide {
 
 #share-dialog ul li {
     list-style: none;
-    border: 1px solid #f6af3f;
+    border-bottom: 1px solid #ccc;
     padding: 5px 10px;
+}
+
+#share-dialog ul li span.splitter {
+    color: white;
 }
 
 /** jQuery validation error */
@@ -1098,18 +1102,6 @@ td p {
     padding: 0;
 }
 
-.ui-helper-clearfix::before, .ui-helper-clearfix::after {
-    content: "";
-    display: inline-table !important;
-
-}
-
-.ui-widget-content, .ui-widget-header {
-    border: none;
-    background: none;
-}
-
-
 /** playlist styles */
 
 div.media {
@@ -1165,4 +1157,12 @@ span.mediaDetail {
 
 .ui-widget-content table a:hover {
     color: #0CF;
+}
+
+#tabs.ui-widget-content {
+    border: none;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 1em 0 1em 0.5em;
 }

@@ -8,11 +8,17 @@ import nz.ac.otago.edmedia.page.PageBean;
 import nz.ac.otago.edmedia.spring.controller.BaseListController;
 import nz.ac.otago.edmedia.spring.service.SearchCriteria;
 import nz.ac.otago.edmedia.util.CommonUtil;
+import nz.ac.otago.edmedia.util.ServletUtil;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -24,7 +30,11 @@ import java.util.Map;
  */
 public class AlbumsController extends BaseListController {
 
-    @SuppressWarnings("unchecked")
+    // update cache every 1 day
+    private final static long CACHE_UPDATE_INTERVAL = 1 * DateUtils.MILLIS_PER_DAY;
+    private final static String DATA_FILENAME = "dataAlbums-#s-#p.data";
+
+    @Override
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -40,16 +50,34 @@ public class AlbumsController extends BaseListController {
         if ((user != null) && !user.validCode(u))
             user = null;
         PageBean pageBean = (PageBean) command;
-        Map model = errors.getModel();
-        SearchCriteria.Builder builder = new SearchCriteria.Builder();
-        builder = builder.eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
-                .sizeGt("albumMedias", 0)
-                .orderBy("albumName");
-        if (user != null)
-            builder = builder.eq("owner", user);
-        SearchCriteria criteria = builder.build();
-        Page page = service.pagination(Album.class, pageBean.getP(), pageBean.getS(), criteria);
-        model.put("pager", page);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> model = errors.getModel();
+        // only cache when user is null
+        if (user == null) {
+            int p = pageBean.getP();
+            int s = pageBean.getS();
+            if (p == 0)
+                p = pageBean.getDefaultPageNumber();
+            if (s == 0)
+                s = pageBean.getDefaultPageSize();
+            File cacheRoot = MediaUtil.getCacheRoot(getUploadLocation());
+            File file = new File(cacheRoot, DATA_FILENAME.replace("#s", "" + s).replace("#p", "" + p));
+            if (Boolean.parseBoolean(request.getParameter("clearCache")))
+                if (!file.delete())
+                    logger.warn("can't delete cache file " + file.getAbsolutePath());
+            if (!file.exists() || ((new Date().getTime() - file.lastModified()) > CACHE_UPDATE_INTERVAL))
+                file = MediaUtil.generateAlbums(MediaUtil.getFreemarkerConfig(getServletContext()), service, getUploadLocation(), pageBean, ServletUtil.getContextURL(request));
+            String content = IOUtils.toString(new FileReader(file));
+            model.put("content", content);
+        } else {
+            SearchCriteria criteria = new SearchCriteria.Builder()
+                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                    .eq("owner", user)
+                    .sizeGt("albumMedias", 0)
+                    .orderBy("albumName").build();
+            Page page = service.pagination(Album.class, pageBean.getP(), pageBean.getS(), criteria);
+            model.put("pager", page);
+        }
         if (user != null) {
             model.put("user", user);
             model.put("title", "Albums from " + user.getFirstName() + " " + user.getLastName());
