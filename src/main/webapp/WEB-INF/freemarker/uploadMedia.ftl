@@ -58,11 +58,13 @@
             <input type="radio" name="onTwitter" value="true" checked="checked"/> Yes
             <input type="radio" name="onTwitter" value="false"/> No
         </div>
+        <#--
         <div>
             <span title="Converting a video file to MPEG will allow you to embed it into PowerPoint.">Convert to MPEG?</span>
             <input type="radio" name="convertTo" value="mpg"/> Yes
             <input type="radio" name="convertTo" value="" checked="checked"/> No
         </div>
+        -->
         <div>
             <span title="This will make your file available for download only, not for viewing online">Only for download?</span>
             <input type="radio" name="uploadOnly" value="true"/> Yes

@@ -199,7 +199,7 @@ public class MediaConverter {
         command.append(" ");
         // same quality
         command.append("-sameq ");
-        command.append("-r 20 ");
+        command.append("-r 20 -y ");
 
         String filename = "other." + otherFormat;
         if (input.getName().contains(filename))
