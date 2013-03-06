@@ -50,7 +50,7 @@ ${entity.height!?string}
 <td>
 <a href="${baseUrl}/view?m=${entity.accessCode}">view</a>
 </td>
-<td><a href="mediaDelete.do?id=${entity.id?c}<#if pageNumber??>&amp;p=${pager.pageNumber?c}</#if><#if pageSize??>&amp;s=${pager.pageSize?c}</#if><#if user??>&amp;userID=${user.id?c}</#if>" onclick="return deleteConfirm();">delete</a></td>
+<td><a href="adminMediaDelete.do?id=${entity.id?c}<#if pageNumber??>&amp;p=${pager.pageNumber?c}</#if><#if pageSize??>&amp;s=${pager.pageSize?c}</#if><#if user??>&amp;userID=${user.id?c}</#if>" onclick="return deleteConfirm();">delete</a></td>
 </tr>
 </#list>
 </tbody>
@@ -83,11 +83,11 @@ ${pager.pageNumber}/${pager.lastPageNumber}
 <a href="${baseUrl}/admin.do">Back to Admin List</a>
 -->
 <#if user??>
-<a href="userList.do">Back to user list</a>
+<a href="${baseUrl}/myTube/admin.do">Back to user list</a> |
 </#if>
 <a href="mediaEdit.do?aa=new<#if pageNumber??>&amp;p=${pager.pageNumber?c}</#if><#if pageSize??>&amp;s=${pager.pageSize?c}</#if><#if user??>&amp;userID=${user.id?c}</#if>">Create a new Media</a>
 <#if pager.elements?size &gt; 0>
-<a href="#" onclick="return deleteRecords();">Delete selected Media</a>
+| <a href="#" onclick="return deleteRecords();">Delete selected Media</a>
 </#if>
 </div>
 

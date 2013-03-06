@@ -1540,6 +1540,8 @@ public class MediaUtil {
                 dataModel.put("mostRecent", mostRecent);
             }
         }
+        if (appUrl.endsWith("/"))
+            appUrl = appUrl.substring(0, appUrl.length() - 1);
         dataModel.put("baseUrl", appUrl);
         MediaUtil.generateData(cfg, dataModel, templateFilename, file);
     }
@@ -1570,11 +1572,10 @@ public class MediaUtil {
         Page page = service.pagination(User.class, pageBean.getP(), pageBean.getS(), criteria);
         File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
         dataModel.put("pager", page);
-        dataModel.put("baseUrl", appUrl);
         if (appUrl.endsWith("/"))
-            dataModel.put("this_url", appUrl + "uniTubas.do");
-        else
-            dataModel.put("this_url", appUrl + "/uniTubas.do");
+            appUrl = appUrl.substring(0, appUrl.length() - 1);
+        dataModel.put("baseUrl", appUrl);
+        dataModel.put("this_url", appUrl + "/uniTubas.do");
         MediaUtil.generateData(cfg, dataModel, templateFilename, file);
         return file;
     }
@@ -1603,12 +1604,11 @@ public class MediaUtil {
                 .build();
         Page page = service.pagination(Media.class, pageBean.getP(), pageBean.getS(), criteria);
         File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
+        if (appUrl.endsWith("/"))
+            appUrl = appUrl.substring(0, appUrl.length() - 1);
         dataModel.put("pager", page);
         dataModel.put("baseUrl", appUrl);
-        if (appUrl.endsWith("/"))
-            dataModel.put("this_url", appUrl + "media.do");
-        else
-            dataModel.put("this_url", appUrl + "/media.do");
+        dataModel.put("this_url", appUrl + "/media.do");
         MediaUtil.generateData(cfg, dataModel, templateFilename, file);
         return file;
     }
@@ -1630,18 +1630,17 @@ public class MediaUtil {
 
         // generate data
         Map<String, Object> dataModel = new HashMap<String, Object>();
-            SearchCriteria criteria = new SearchCriteria.Builder()
-                    .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
-                    .sizeGt("albumMedias", 0)
-                    .orderBy("albumName").build();
-            Page page = service.pagination(Album.class, pageBean.getP(), pageBean.getS(), criteria);
+        SearchCriteria criteria = new SearchCriteria.Builder()
+                .eq("accessType", MediaUtil.MEDIA_ACCESS_TYPE_PUBLIC)
+                .sizeGt("albumMedias", 0)
+                .orderBy("albumName").build();
+        Page page = service.pagination(Album.class, pageBean.getP(), pageBean.getS(), criteria);
         File file = new File(cacheRoot, dataFilename.replace("#s", "" + page.getPageSize()).replace("#p", "" + page.getPageNumber()));
         dataModel.put("pager", page);
-        dataModel.put("baseUrl", appUrl);
         if (appUrl.endsWith("/"))
-            dataModel.put("this_url", appUrl + "albums.do");
-        else
-            dataModel.put("this_url", appUrl + "/albums.do");
+            appUrl = appUrl.substring(0, appUrl.length() - 1);
+        dataModel.put("baseUrl", appUrl);
+        dataModel.put("this_url", appUrl + "/albums.do");
         MediaUtil.generateData(cfg, dataModel, templateFilename, file);
         return file;
     }

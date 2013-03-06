@@ -35,12 +35,14 @@
     <#if obj.description?has_content>
     <p>
         <span class="title">Description:</span>
-        <a href="#" class="showMore">+ Show More</a>
-        <a href="#" class="showLess">- Show Less</a>
     </p>
 
     <div class="description">
     ${obj.description}
+    </div>
+    <div class="moreOrFewer">
+        <a href="#" class="showMore">+ Show more</a>
+        <a href="#" class="showFewer">- Show fewer</a>
     </div>
     </#if>
 
@@ -241,30 +243,30 @@
             // if description is very short, just display normally
             if (d_height < max_height) {
                 $('a.showMore').hide();
-                $('a.showLess').hide();
+                $('a.showFewer').hide();
             } else {
                 // otherwise, set height to max height, and display "Show more" link
                 $('div.description').css('height', max_height + 'px');
                 var d_height = $('div.description').height();
                 $('a.showMore').show();
-                $('a.showLess').hide();
+                $('a.showFewer').hide();
                 $('a.showMore').click(function() {
                     $('div.description').css('height', (d_scrollHeight - d_padding_bottom) + 'px');
-                    showMoreOrLess();
+                    showMoreOrFewer();
                     return false;
                 });
-                $('a.showLess').click(function() {
+                $('a.showFewer').click(function() {
                     $('div.description').css('height', d_height + 'px');
-                    showMoreOrLess();
+                    showMoreOrFewer();
                     return false;
                 });
-                function showMoreOrLess() {
+                function showMoreOrFewer() {
                     if ($('div.description').height() >= (d_scrollHeight - d_padding_bottom)) {
                         $('a.showMore').hide();
-                        $('a.showLess').show();
+                        $('a.showFewer').show();
                     } else {
                         $('a.showMore').show();
-                        $('a.showLess').hide();
+                        $('a.showFewer').hide();
                     }
                 }
             }

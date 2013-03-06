@@ -1048,8 +1048,23 @@ div#left {
 div.description {
     overflow: hidden;
     padding-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+div.moreOrFewer {
+    padding-bottom: 10px;
     margin-bottom: 10px;
     border-bottom: 1px #bbb dotted;
+    text-align: center;
+}
+
+div.moreOrFewer a {
+    padding: 3px;
+}
+
+div.moreOrFewer a:hover {
+    border: 1px #bbb solid;
+    background-color: #eee;
 }
 
 /** styles on stats page */

@@ -154,10 +154,7 @@
 </form>
 
 <div id="bottomNav">
-<#--
-<a href="${baseUrl}/admin.do">Back to Admin List</a>
--->
-    <a href="userList.do?aa=list<#if pageNumber??>&amp;p=${pageNumber?c}</#if><#if pageSize??>&amp;s=${pageSize?c}</#if>">Back
+    <a href="adminUserList.do?aa=list<#if pageNumber??>&amp;p=${pageNumber?c}</#if><#if pageSize??>&amp;s=${pageSize?c}</#if>">Back
         to User list</a>
 </div>
 

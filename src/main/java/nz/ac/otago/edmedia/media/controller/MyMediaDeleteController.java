@@ -1,5 +1,6 @@
 package nz.ac.otago.edmedia.media.controller;
 
+import nz.ac.otago.edmedia.auth.bean.AuthUser;
 import nz.ac.otago.edmedia.media.bean.*;
 import nz.ac.otago.edmedia.media.util.MediaUtil;
 import nz.ac.otago.edmedia.spring.bean.IDListBean;
@@ -21,7 +22,6 @@ import java.sql.BatchUpdateException;
 public class MyMediaDeleteController extends BaseDeleteController {
 
     private String internalIpStart;
-
     private String internalIpEnd;
 
     public void setInternalIpStart(String internalIpStart) {
@@ -42,13 +42,14 @@ public class MyMediaDeleteController extends BaseDeleteController {
         if (command != null) {
             // get user info
             User user = MediaUtil.getCurrentUser(service, request);
+            AuthUser authUser = MediaUtil.getAuthUser(request.getSession());
 
             IDListBean idList = (IDListBean) command;
             if (idList.getId() != null) {
                 for (int i = 0; i < idList.getId().length; i++) {
                     Media media = (Media) service.get(getBeanClass(), idList.getId()[i]);
-                    // only owner can delete their own media
-                    if ((media != null) && media.getUser().getId().equals(user.getId())) {
+                    // only owner can delete their own media file, or administrators can delete any media file
+                    if ((media != null) && (media.getUser().getId().equals(user.getId()) || ((authUser != null) && authUser.getIsInstructor()))) {
                         // delete ivOption for image file
                         IVOption ivOption = MediaUtil.getIVOption(media, service);
                         // delete ivOption if exists

@@ -439,6 +439,26 @@
         <property name="service" ref="myBaseService"/>
     </bean>
 
+    <bean id="admin" class="nz.ac.otago.edmedia.media.controller.AdminController">
+    </bean>
+
+    <bean id="adminMediaDelete" class="nz.ac.otago.edmedia.media.controller.MyMediaDeleteController">
+        <property name="viewName" value="redirect:/admin/mediaList.do"/>
+        <property name="internalIpStart" value="${internal.ip.start}"/>
+        <property name="internalIpEnd" value="${internal.ip.end}"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
+        <property name="service" ref="myBaseService"/>
+        <property name="uploadLocation" ref="uploadLocation"/>
+    </bean>
+
+    <bean id="adminUserList" class="nz.ac.otago.edmedia.media.controller.AdminUserListController">
+        <property name="orderBy" value="userName"/>
+        <property name="orderByDesc" value="false"/>
+        <property name="viewName" value="/admin/userList"/>
+        <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.User"/>
+        <property name="service" ref="myBaseService"/>
+    </bean>
+
     <bean id="stats" class="nz.ac.otago.edmedia.media.controller.StatsController">
         <property name="service" ref="myBaseService"/>
         <property name="uploadLocation" ref="uploadLocation"/>
@@ -526,6 +546,9 @@
                 /avpData.do=avpData
                 /avps.do=avps
                 /myTube/albumMediaReOrder.do=albumMediaReOrder
+                /myTube/admin.do=admin
+                /admin/adminMediaDelete.do=adminMediaDelete
+                /admin/adminUserList.do=adminUserList
                 /admin/stats.do=stats
             </value>
         </property>

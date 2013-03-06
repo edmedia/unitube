@@ -2,6 +2,11 @@
 
 <h2>List all UniTube User</h2>
 
+<form action="" name="searchForm">
+    <input type="text" name="n"/>
+    <input type="submit" value="Search User"/>
+</form>
+
 <#if pager.elements?size = 0>
 <p>No records.</p>
 <#else>
@@ -84,12 +89,8 @@ ${pager.pageNumber}/${pager.lastPageNumber}
 </#if>
 
 <div id="bottomNav">
-<!--
-<a href="${baseUrl}/admin.do">Back to Admin List</a>
--->
-<a href="userEdit.do?aa=new${pager.parameters?html}">Create a new User</a>
 <#if pager.elements?size &gt; 0>
-| <a href="#" onclick="return deleteRecords();">Delete selected User</a>
+<a href="#" onclick="return deleteRecords();">Delete selected User</a>
 </#if>
 </div>
 

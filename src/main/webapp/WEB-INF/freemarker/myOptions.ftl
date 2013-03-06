@@ -13,7 +13,7 @@
     <#if this_url?? && this_url?contains("profile.do")> class="currentPage"</#if>>
         My Profile </a>
 <#if authUser?? && authUser.isInstructor>
-    | <a href="${baseUrl}/admin/userList.do"<#if this_url?? && this_url?contains("userList.do")>
+    | <a href="${baseUrl}/myTube/admin.do"<#if this_url?? && this_url?contains("UserList.do")>
          class="currentPage"</#if>> Admin</a>
 </#if>
 </div>

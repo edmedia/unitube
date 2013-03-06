@@ -20,8 +20,8 @@
     </bean>
 
     <bean id="mediaList" class="nz.ac.otago.edmedia.media.controller.MediaListController">
-        <property name="orderBy" value="title"/>
-        <property name="orderByDesc" value="false"/>
+        <property name="orderBy" value="id"/>
+        <property name="orderByDesc" value="true"/>
         <property name="viewName" value="/admin/mediaList"/>
         <property name="beanClass" value="nz.ac.otago.edmedia.media.bean.Media"/>
         <property name="service" ref="myBaseService"/>
