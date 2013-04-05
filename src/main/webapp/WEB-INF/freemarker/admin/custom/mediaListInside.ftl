@@ -10,7 +10,7 @@
 <#list pager.paramList as param>
 <input type="hidden" name="${param.name?html}" value="${param.value?html}" />
 </#list>
-<table summary="">
+<table summary="" width="100%">
 <thead>
 <tr>
 <th>
@@ -21,6 +21,7 @@
 <th><a href="${orderByLink("mediaType")?html}">Media Type</a></th>
 <th><a href="${orderByLink("width")?html}">Width</a></th>
 <th><a href="${orderByLink("height")?html}">Height</a></th>
+<th>Access Type</th>
 <th>Link</th>
 <th></th>
 </tr>
@@ -46,6 +47,14 @@ ${entity.width!?string}
 </td>
 <td>
 ${entity.height!?string}
+</td>
+<td>
+<#if entity.accessType ==10>
+<span title="<@spring.message "media.access.hidden"/>">hidden</span>
+</#if>
+<#if entity.accessType ==20>
+<span title="<@spring.message "media.access.private"/>">private</span>
+</#if>
 </td>
 <td>
 <a href="${baseUrl}/view?m=${entity.accessCode}">view</a>
@@ -83,9 +92,9 @@ ${pager.pageNumber}/${pager.lastPageNumber}
 <a href="${baseUrl}/admin.do">Back to Admin List</a>
 -->
 <#if user??>
-<a href="${baseUrl}/myTube/admin.do">Back to user list</a> |
+<a href="${baseUrl}/myTube/admin.do">Back to user list</a>
 </#if>
-<a href="mediaEdit.do?aa=new<#if pageNumber??>&amp;p=${pager.pageNumber?c}</#if><#if pageSize??>&amp;s=${pager.pageSize?c}</#if><#if user??>&amp;userID=${user.id?c}</#if>">Create a new Media</a>
+
 <#if pager.elements?size &gt; 0>
 | <a href="#" onclick="return deleteRecords();">Delete selected Media</a>
 </#if>

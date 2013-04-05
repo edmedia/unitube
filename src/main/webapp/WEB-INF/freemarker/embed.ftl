@@ -22,7 +22,7 @@
         <#-- images -->
             <#include "viewImages.ftl"/>
         <#elseif (obj.mediaType == 10) || (obj.mediaType == 20)>
-        <div id="avPlayer"></div>
+        <div id="avPlayer__${obj.id?c}"></div>
         <#elseif obj.realFilename?ends_with(".swf")>
         <#-- flash format-->
         <style type="text/css" media="screen">

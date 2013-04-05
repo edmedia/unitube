@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +24,6 @@ import java.util.Map;
 public class MyAlbumListController extends BaseListController {
 
     @Override
-    @SuppressWarnings("unchecked")
     protected ModelAndView handle(HttpServletRequest request,
                                   HttpServletResponse response,
                                   Object command,
@@ -34,16 +32,15 @@ public class MyAlbumListController extends BaseListController {
 
         PageBean pageBean = (PageBean) command;
         User user = MediaUtil.getCurrentUser(service, request);
-        Map model = errors.getModel();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> model = errors.getModel();
         SearchCriteria criteria = new SearchCriteria.Builder()
                 .eq("owner", user)
                 .orderBy("albumName")
                 .build();
         Page page = service.pagination(Album.class, pageBean.getP(), pageBean.getS(), criteria);
-        List userList = service.list(User.class);
         model.put("pager", page);
         model.put("user", user);
-        model.put("userList", userList);
         return getModelAndView(model, request);
     }
 }

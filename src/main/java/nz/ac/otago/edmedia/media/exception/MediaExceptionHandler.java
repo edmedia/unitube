@@ -18,22 +18,21 @@ import java.util.Map;
  */
 public class MediaExceptionHandler extends ExceptionHandler {
 
-    @SuppressWarnings("unchecked")
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response,
                                          Object handler,
                                          Exception ex) {
         if (ex instanceof MaxUploadSizeExceededException) {
             String sizeLimitExceeded = "Our apologies. UniTube can only accept files " +
-                    "that are < 1Gb in size.<br/><br/>" +
+                    "that are < 1GB in size.<br/><br/>" +
                     "If you are attempting to upload video, this typically would be " +
                     "around 1.5 hours of video at a resolution of 640x480 pixels.";
-            Map model = dataModel(request, handler, ex);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> model = dataModel(request, handler, ex);
             model.put("message", sizeLimitExceeded);
             return new ModelAndView(getViewName(), model);
         } else
             return super.resolveException(request, response, handler, ex);
-
     }
 
 }

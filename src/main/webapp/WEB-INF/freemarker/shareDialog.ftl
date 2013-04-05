@@ -78,13 +78,18 @@
             deleteAccessRule($(this));
         });
 
+        var userName = $('#userInput');
         // auto-complete username
-        $('#userInput').autocomplete({
+        userName.autocomplete({
             minLength: 2,
-            source: $('#userInput').attr("rel"),
+            source: userName.attr("rel"),
             select: function (e, ui) {
-                log("select " + ui.item.value);
-                $('#userInput').val(ui.item.value);
+                var value = ui.item.value;
+                log("select " + value);
+                if (value.indexOf(" ") != -1)
+                    value = value.substring(0, value.indexOf(" "));
+                userName.val(value);
+                return false;
             }
         });
 

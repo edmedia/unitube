@@ -30,7 +30,7 @@
 <th><a href="${orderByLink("lastLoginTime")?html}">Last Login Time</a></th>
 <th><a href="${orderByLink("lastLoginIP")?html}">Last Login IP</a></th>
 <th><a href="${orderByLink("isGuest")?html}">Is this user a guest?</a></th>
-<th>All Medias</th>
+<th>All Media</th>
 <th></th>
 </tr>
 </thead>
@@ -61,7 +61,7 @@ ${obj.lastLoginIP!?string}
 ${obj.isGuest!?string}
 </td>
 <td>
-<a href="mediaList.do?userID=${obj.id?c}">all medias (${obj.medias?size})</a>
+<a href="mediaList.do?userID=${obj.id?c}">all media (${obj.medias?size})</a>
 </td>
 <td><a href="#" rel="userDelete.do?id=${obj.id?c}${pager.parameters?html}" class="delete">delete</a></td>
 </tr>
