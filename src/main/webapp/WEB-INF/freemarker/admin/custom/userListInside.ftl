@@ -1,10 +1,9 @@
 <#include "/myOptions.ftl"/>
 
 <h2>List all UniTube User</h2>
-
-<form action="" name="searchForm">
-    <input type="text" name="n"/>
-    <input type="submit" value="Search User"/>
+<form action="" name="search">
+    <input type="text" name="q" class="searchText" x-webkit-speech/>
+    <input type="submit" value="Admin Search"/>
 </form>
 
 <#if pager.elements?size = 0>

@@ -101,7 +101,7 @@ public class MediaUtil {
             put("employeenumber", "studentID");
         }
     };
-    private static final List<String> userFields = Arrays.asList("userName", "firstName", "lastName", "title", "email", "employeeNumber", "employeeType");
+    //private static final List<String> userFields = Arrays.asList("userName", "firstName", "lastName", "title", "email", "employeeNumber", "employeeType");
 
     /**
      * Returns user for given userName and wayf
@@ -317,11 +317,12 @@ public class MediaUtil {
             } else {
                 // delete all files under media dir, exception user uploaded file
                 File[] files = mediaDir.listFiles();
-                for (File file : files)
-                    // if this file is not user uploaded file
-                    if (!file.getAbsolutePath().endsWith(media.getUploadFileUserName()))
-                        if (!FileUtils.deleteQuietly(file))
-                            log.warn("Can't delete file \"{}\"", file);
+                if (files != null)
+                    for (File file : files)
+                        // if this file is not user uploaded file
+                        if (!file.getAbsolutePath().endsWith(media.getUploadFileUserName()))
+                            if (!FileUtils.deleteQuietly(file))
+                                log.warn("Can't delete file \"{}\"", file);
             }
         }
     }
@@ -563,14 +564,14 @@ public class MediaUtil {
      * @param accessTokenSecret access token secret
      * @param status            status
      * @return true if successful, false otherwise
-     */
-    public static boolean updateTwitter(String consumerKey,
-                                        String consumerSecret,
-                                        String accessToken,
-                                        String accessTokenSecret,
-                                        String status) {
-        return updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, null, 0, null, null, status);
-    }
+     */          /**
+     public static boolean updateTwitter(String consumerKey,
+     String consumerSecret,
+     String accessToken,
+     String accessTokenSecret,
+     String status) {
+     return updateTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret, null, 0, null, null, status);
+     }               //*/
 
     /**
      * Search media files
@@ -589,7 +590,23 @@ public class MediaUtil {
         if (mediaType != MediaUtil.MEDIA_TYPE_UNKNOWN)
             criteria.add(Restrictions.eq("mediaType", mediaType));
         criteria.addOrder(Property.forName("uploadTime").desc());
-        log.debug("search media for \"" + words + "\"");
+        log.debug("search public finished media for \"" + words + "\"");
+        return luceneSearch(session, criteria, fields, words, searchClass);
+    }
+
+    /**
+     * Search media files for admin
+     *
+     * @param words     keyword
+     * @param session   session
+     * @return a list of all media files
+     */
+    public static List searchMedia(String words, Session session) {
+        Class searchClass = Media.class;
+        String[] fields = new String[]{"title", "description", "tags"};
+        Criteria criteria = session.createCriteria(searchClass);
+        criteria.addOrder(Property.forName("uploadTime").desc());
+        log.debug("search all media for \"" + words + "\"");
         return luceneSearch(session, criteria, fields, words, searchClass);
     }
 
@@ -881,13 +898,9 @@ public class MediaUtil {
         if (StringUtils.isNotBlank(internalIpStart) && StringUtils.isNotBlank(internalIpEnd))
             if (within(ipAddress, internalIpStart, internalIpEnd))
                 return false;
-        if (within(ipAddress, "10.0.0.0", "10.255.255.255"))
-            return false;
-        if (within(ipAddress, "172.16.0.0", "172.31.255.255"))
-            return false;
-        if (within(ipAddress, "192.168.0.0", "192.168.255.255"))
-            return false;
-        return true;
+        return !within(ipAddress, "10.0.0.0", "10.255.255.255")
+                && !within(ipAddress, "172.16.0.0", "172.31.255.255")
+                && !within(ipAddress, "192.168.0.0", "192.168.255.255");
     }
 
     private static boolean within(String ipAddress, String start, String end) {
@@ -1721,7 +1734,7 @@ public class MediaUtil {
             String line;
             StringBuilder buf = new StringBuilder();
             while ((line = r.readLine()) != null)
-                buf.append(line + "\n");
+                buf.append(line).append("\n");
             return buf.toString();
         } finally {
             try {

@@ -48,7 +48,7 @@
             <input id="userInput" type="text" size="35"
                    rel="${baseUrl}/myTube/userSearch.do"/>
             <input type="button" value="Share" name="share"/>
-
+            <p>You can add multiple users at one time, by typing in their usernames, separated by a comma, i.e. addme65p,kilhi345,whoev34p. Don't add more than 25 users in one go.</p>
             <p>&nbsp;</p>
         </form>
     </div>

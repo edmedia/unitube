@@ -1,6 +1,6 @@
 
 
-<h2>List all Media<#if user??> for ${user.meaningfulName}</#if></h2>
+<h2>List all Media<#if user??> for ${user.meaningfulName?html} (${user.firstName?html} ${user.lastName?html})</#if></h2>
 
 <#if pager.elements?size = 0>
 <p>No records.</p>
@@ -21,7 +21,7 @@
 <th><a href="${orderByLink("mediaType")?html}">Media Type</a></th>
 <th><a href="${orderByLink("width")?html}">Width</a></th>
 <th><a href="${orderByLink("height")?html}">Height</a></th>
-<th>Access Type</th>
+<th><a href="${orderByLink("accessType")?html}">Access Type</a></th>
 <th>Link</th>
 <th></th>
 </tr>
@@ -30,10 +30,10 @@
 <#list pager.elements as entity>
 <tr>
 <td><input type="checkbox" name="id" value="${entity.id?c}"/></td>
-<td><a href="mediaEdit.do?id=${entity.id?c}<#if pageNumber??>&amp;p=${pager.pageNumber?c}</#if><#if pageSize??>&amp;s=${pager.pageSize?c}</#if><#if user??>&amp;userID=${user.id?c}</#if>">${entity.meaningfulName}</a></td>
+<td>${entity.meaningfulName?html}</td>
 <td>
     <#if entity.mediaType == 1>
-    Other Meida
+    Other Media
     <#elseif entity.mediaType == 5>
     Image
     <#elseif entity.mediaType == 10>
@@ -54,6 +54,20 @@ ${entity.height!?string}
 </#if>
 <#if entity.accessType ==20>
 <span title="<@spring.message "media.access.private"/>">private</span>
+    <#if entity.accessRules?has_content>
+    <p>Only owner and those people have access</p>
+    <ul>
+    <#list entity.accessRules as ar>
+    <#if ar.user?has_content>
+    <li>${ar.user.userName?html} (${ar.user.firstName?html} ${ar.user.lastName?html})</li>
+     <#else>
+    <li>${ar.userInput?html}</li>
+    </#if>
+    </#list>
+    </ul>
+    <#else>
+    <p>Only owner has access. </p>
+    </#if>
 </#if>
 </td>
 <td>

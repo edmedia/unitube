@@ -47,10 +47,10 @@
         height: height,
         bufferlength: 5,
         events: {
- onBeforePlay: function(event) {
- log('on before play');
- }
- },
+            onBeforePlay: function (event) {
+                log('on before play');
+            }
+        },
         file: "${mediaFileLink?js_string}",
     <#if obj.mediaType ==10>
         provider: 'sound',

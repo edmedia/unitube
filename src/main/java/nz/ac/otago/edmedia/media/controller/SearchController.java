@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class SearchController extends BaseListController {
 
-    private final static String QUERY_KEY = "q";
+    public final static String QUERY_KEY = "q";
     private final static String MEDIA_TYPE_KEY = "t";
 
     @Override
